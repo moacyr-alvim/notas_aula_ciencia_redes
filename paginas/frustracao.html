@@ -39,7 +39,8 @@
       <ul>
         <li><b>O índice de frustração $f$</b> é o menor número de links contrariados por uma divisão dos vértices em dois grupos (positivos dentro, negativos entre). Equivalentemente, é o menor número de links cujo sinal é preciso trocar, ou que é preciso apagar, para a rede ficar equilibrada. Harary (1959) o chamou de <em>line index of balance</em>. É um número inteiro, e $f=0$ é a rede equilibrada.</li>
         <li><b>A frustração espectral $\lambda_1$</b> é o menor autovalor do laplaciano com sinais $L=B^\top B=\bar D-A_\sigma$. Pelo quociente de Rayleigh,
-        $$\lambda_1=\min_{v\ne0}\frac{\sum_{\text{links}}(v_i-\sigma_{ij}v_j)^2}{\sum_iv_i^2}.$$
+        $$\lambda_1=\min_{v\ne0}\frac{\sum_{\text{links}}(v_i-\sigma_{ij}v_j)^2}{\sum_iv_i^2},$$
+        onde $\sigma_{ij}=\pm1$ é o sinal do link $ij$. Num link positivo a parcela é $(v_i-v_j)^2$, que se anula com valores iguais nas pontas; num negativo, $(v_i+v_j)^2$, que se anula com valores opostos.
         Kunegis e colaboradores (2010) o chamaram de <em>conflito algébrico</em>. É um número real $\ge0$, e $\lambda_1=0$ é a rede equilibrada.</li>
       </ul>
       <p>As duas são zero exatamente no mesmo caso. Fora dele, medem coisas parecidas, mas não iguais. Uma terceira régua, mais antiga e mais grosseira, é a <b>fração de triângulos equilibrados</b>, proposta por Cartwright e Harary (1956): nas Gahuku-Gama, $59$ dos $68$ triângulos são equilibrados. Em redes sociais grandes com sinais, como as de avaliação de usuários estudadas por Leskovec, Huttenlocher e Kleinberg (2010), essa fração é bem maior do que se os sinais fossem sorteados ao acaso.</p>
