@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Difusão em redes — O laplaciano em redes</title>
-  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/style.css?v=55ab22b5">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-  <script src="../assets/site.js"></script>
+  <script src="../assets/site.js?v=d64d5c9e"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <style>
@@ -176,7 +176,7 @@
         <li><b>Clube de caratê.</b> Comece no vértice $0$ (o instrutor, grau $16$) e depois no $16$ (grau $2$, na borda). No primeiro passo, quanto sobra no vértice inicial em cada caso? E o número de passos até tudo se igualar, muda muito?</li>
         <li><b>Estrela.</b> Comece no centro: quase tudo se iguala logo no primeiro passo. Comece numa folha: leva perto de uma dezena de passos. O exercício 4 explica por quê.</li>
         <li><b>Caminho.</b> Comece numa ponta. A outra ponta demora a receber alguma coisa, e o equilíbrio é lento: num caminho de $n$ vértices, o número de passos cresce como $n^2$ (exercício 6).</li>
-        <li><b>Dois grupos.</b> Dentro do grupo de partida tudo se iguala depressa; entre os grupos fica um patamar, que só se desfaz devagar, pelo único laço. Esse é o assunto de <a href="componentes.html">Componentes e gargalos</a>.</li>
+        <li><b>Dois grupos.</b> Dentro do grupo de partida tudo se iguala depressa; entre os grupos fica um patamar, que só se desfaz devagar, pelo único laço. Esse é o assunto de <a href="componentes.html">Laplaciano, componentes e gargalos</a>.</li>
         <li><b>Passo grande demais.</b> Na estrela, começando no centro, passe $c\times d_{\max}$ de $1$: o centro fica negativo já no primeiro passo. Continue aumentando: acima de um certo valor, as diferenças crescem em vez de diminuir. No caminho, esse valor é quase o próprio $1$.</li>
         <li>Com $c\le1/d_{\max}$, olhe o <b>maior valor</b> na leitura: ele nunca sobe. E a <b>soma</b> nunca muda, qualquer que seja $c$.</li>
       </ol>
@@ -191,11 +191,11 @@
         <li>O último a morrer é o de $\lambda_2$, e é ele que dita quantos passos leva o equilíbrio. Como $(1-c\lambda_2)^k\approx e^{-c\lambda_2k}$ quando $c\lambda_2$ é pequeno,
         $$\text{passos até o equilíbrio}\sim\frac{1}{c\,\lambda_2}.$$</li>
       </ul>
-      <p>Se a rede é conexa, $\lambda_2>0$ (veja <a href="componentes.html">Componentes e gargalos</a>) e tudo converge para a média. $\lambda_2$ tem nome: <b>conectividade algébrica</b>, ou valor de Fiedler. A leitura da demo mostra $\lambda_2$ e $1/(c\lambda_2)$. E o que acontece quando $c$ é grande demais também se lê aqui: se $c\lambda_{\max}>2$, o fator $1-c\lambda_{\max}$ é menor que $-1$, e esse modo cresce em módulo, trocando de sinal a cada passo.</p>
+      <p>Se a rede é conexa, $\lambda_2>0$ (veja <a href="componentes.html">Laplaciano, componentes e gargalos</a>) e tudo converge para a média. $\lambda_2$ tem nome: <b>conectividade algébrica</b>, ou valor de Fiedler. A leitura da demo mostra $\lambda_2$ e $1/(c\lambda_2)$. E o que acontece quando $c$ é grande demais também se lê aqui: se $c\lambda_{\max}>2$, o fator $1-c\lambda_{\max}$ é menor que $-1$, e esse modo cresce em módulo, trocando de sinal a cada passo.</p>
 
       <aside class="box">
         <p class="tag">Nas próximas páginas</p>
-        <p>O que um $\lambda_2$ pequeno diz sobre a forma da rede, e como o autovetor $q_2$ aponta os dois lados de um gargalo (<a href="componentes.html">Componentes e gargalos</a>, <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>). A mesma iteração $u_{k+1}=Wu_k$ com pesos quaisquer, como modelo de formação de opinião (<em>Consenso de DeGroot</em>). E o que muda quando quem se espalha é um caminhante, que escolhe um vizinho ao acaso (<em>Passeio aleatório</em>).</p>
+        <p>O que um $\lambda_2$ pequeno diz sobre a forma da rede, e como o autovetor $q_2$ aponta os dois lados de um gargalo (<a href="componentes.html">Laplaciano, componentes e gargalos</a>, <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>). A mesma iteração $u_{k+1}=Wu_k$ com pesos quaisquer, como modelo de formação de opinião (<em>Consenso de DeGroot</em>). E o que muda quando quem se espalha é um caminhante, que escolhe um vizinho ao acaso (<em>Passeio aleatório</em>).</p>
       </aside>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
@@ -292,7 +292,7 @@
         <div>
           <h4>Para onde ir depois</h4>
           <ul>
-            <li><a href="componentes.html">Componentes e gargalos</a></li>
+            <li><a href="componentes.html">Laplaciano, componentes e gargalos</a></li>
             <li>Consenso (DeGroot) <span class="soon">(em breve)</span></li>
             <li>Passeio aleatório e L normalizado <span class="soon">(em breve)</span></li>
             <li><a href="lapsinal.html">Laplaciano com sinais</a></li>
@@ -302,8 +302,8 @@
     </main>
   </div>
 
-  <script src="../assets/redes-core.js"></script>
-  <script src="../assets/difusao-demo.js"></script>
-  <script src="../assets/pyrunner.js"></script>
+  <script src="../assets/redes-core.js?v=6d61ffc2"></script>
+  <script src="../assets/difusao-demo.js?v=9aabdbb6"></script>
+  <script src="../assets/pyrunner.js?v=54fb0c98"></script>
 </body>
 </html>

@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Componentes e gargalos — O laplaciano em redes</title>
-  <link rel="stylesheet" href="../assets/style.css">
+  <title>Laplaciano, componentes e gargalos — O laplaciano em redes</title>
+  <link rel="stylesheet" href="../assets/style.css?v=55ab22b5">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-  <script src="../assets/site.js"></script>
+  <script src="../assets/site.js?v=d64d5c9e"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <style>
@@ -26,7 +26,7 @@
     <nav class="toc" id="toc" aria-label="Nesta página"></nav>
     <main>
       <header>
-        <h1>Componentes e gargalos</h1>
+        <h1>Laplaciano, componentes e gargalos</h1>
         <p class="lede">Os menores autovalores de $L$ contam a forma da rede. Quantos autovalores são zero diz quantos pedaços ela tem. Se o segundo, $\lambda_2$, é quase zero, a rede está quase partida: há um gargalo, e a difusão leva muitos passos para atravessá-lo.</p>
         <p class="meta">Continuação de <a href="difusao.html">Difusão em redes</a>, de onde vêm $L=B^\top B$, a positividade $u^\top Lu=\|Bu\|^2$ e os modos $(1-c\lambda)^k$.</p>
       </header>
@@ -40,6 +40,10 @@
       $$L=\begin{pmatrix}L_1&0&0\\0&L_2&0\\0&0&L_3\end{pmatrix}.$$
       Cada bloco tem o seu próprio autovalor $0$, com o vetor constante daquele bloco.</p>
       <p><b>Na difusão</b>, cada componente é um mundo à parte. Nada passa de uma para outra, a soma se conserva em cada uma, e o estado final é a <em>média de cada componente</em>: pelos modos, todos os termos com $\lambda>0$ morrem e sobra a projeção de $u_0$ nos indicadores das componentes. Se a rede tem mais de um pedaço, $\lambda_2=0$ e ela nunca chega a uma média geral.</p>
+      <aside class="box">
+        <p class="tag">Com sinais nos laços</p>
+        <p>Numa rede com laços positivos e negativos, a mesma construção $L=B^\top B$, com uma matriz de incidência que enxerga os sinais, faz o autovalor zero contar outra coisa: as componentes <em>equilibradas</em>, as que se dividem em dois lados sem traidores. É o <a href="lapsinal.html">Laplaciano com sinais</a>.</p>
+      </aside>
 
       <h2 id="rayleigh" data-toc="λ₂ como um mínimo">$\lambda_2$ como um mínimo</h2>
       <p>Para falar de "quase partida", precisamos de uma descrição de $\lambda_2$ que não dependa de calcular autovetores. Tome qualquer $v$ ortogonal ao vetor constante, $v\perp\mathbf 1$. Escrevendo $v$ na base ortonormal dos autovetores, o coeficiente de $q_1=\mathbf 1/\sqrt n$ é zero: $v=\sum_{j\ge2}a_jq_j$. Então
@@ -186,14 +190,15 @@
           <ul>
             <li><a href="fiedler.html">Comunidades pelo vetor de Fiedler</a></li>
             <li>Passeio aleatório e L normalizado <span class="soon">(em breve)</span></li>
+            <li><a href="lapsinal.html">Laplaciano com sinais</a></li>
           </ul>
         </div>
       </nav>
     </main>
   </div>
 
-  <script src="../assets/redes-core.js"></script>
-  <script src="../assets/corte-demo.js"></script>
-  <script src="../assets/pyrunner.js"></script>
+  <script src="../assets/redes-core.js?v=6d61ffc2"></script>
+  <script src="../assets/corte-demo.js?v=0c4e5d05"></script>
+  <script src="../assets/pyrunner.js?v=54fb0c98"></script>
 </body>
 </html>

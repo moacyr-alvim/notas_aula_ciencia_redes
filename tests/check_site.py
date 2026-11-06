@@ -57,7 +57,7 @@ for p in pages:
     check(f"{rel}: delimitadores $$ e $ pareados", n % 2 == 0 and m % 2 == 0, f"($$:{n}, $:{m})")
     for ref in ps.refs:
         if re.match(r"(https?:|mailto:|#|data:)", ref): continue
-        path = (p.parent / ref.split("#")[0]).resolve()
+        path = (p.parent / ref.split("#")[0].split("?")[0]).resolve()
         check(f"{rel}: referência {ref}", path.exists())
         if "#" in ref and ref.endswith(tuple("abcdefghijklmnopqrstuvwxyz0123456789-")) and ref.split("#")[0].endswith(".html"):
             tgt = parsed.get(path) or (lambda q: (q.feed(path.read_text(encoding="utf-8")), q)[1])(P())
@@ -94,6 +94,15 @@ for path in sorted(parsed):
     pedidas = set(re.findall(r"katex@([0-9.]+)", path.read_text(encoding="utf-8")))
     if pedidas:
         check(f"{path.relative_to(root)}: pede KaTeX {KATEX}", pedidas == {KATEX}, f"pediu {sorted(pedidas)}")
+
+# os carimbos ?v= dos assets batem com o conteúdo atual (senão o navegador pode usar uma versão velha do cache)
+import hashlib
+for path in sorted(parsed):
+    for ref in parsed[path].refs:
+        m = re.match(r"((?:\.\./)?assets/[^?#]+\.(?:js|css))(?:\?v=([0-9a-f]+))?$", ref)
+        if m:
+            atual = hashlib.sha1((path.parent / m.group(1)).resolve().read_bytes()).hexdigest()[:8]
+            check(f"{path.relative_to(root)}: {m.group(1)} com carimbo atual", m.group(2) == atual, "rode python3 tests/carimbar_versoes.py")
 
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

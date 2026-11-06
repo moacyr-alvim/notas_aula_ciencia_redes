@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Laplaciano com sinais — O laplaciano em redes</title>
-  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/style.css?v=55ab22b5">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-  <script src="../assets/site.js"></script>
+  <script src="../assets/site.js?v=d64d5c9e"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <style>
@@ -28,7 +28,7 @@
       <header>
         <h1>Laplaciano com sinais</h1>
         <p class="lede">A mesma construção do laplaciano, $L=B^\top B$, agora com uma matriz de incidência que enxerga os sinais. O laço negativo ganha dois $+1$ na sua linha. Sai uma matriz positiva de novo, mas com um papel novo: o menor autovalor, $\lambda_1$, é zero exatamente quando a rede é equilibrada, e mede quanto falta para ela se polarizar em dois lados.</p>
-        <p class="meta">Junta duas páginas: <a href="difusao.html">Difusão em redes</a> (de onde vêm $L=B^\top B$, os passos de Euler e os modos) e <a href="sinais.html">Redes com sinais e equilíbrio</a> (de onde vêm o equilíbrio, o teorema de Harary e a troca de sinais).</p>
+        <p class="meta">Junta três páginas: <a href="difusao.html">Difusão em redes</a> (de onde vêm $L=B^\top B$, os passos de Euler e os modos), <a href="componentes.html">Laplaciano, componentes e gargalos</a> (o autovalor zero e o quociente de Rayleigh) e <a href="sinais.html">Redes com sinais e equilíbrio</a> (de onde vêm o equilíbrio, o teorema de Harary e a troca de sinais).</p>
       </header>
 
       <h2 id="incidencia" data-toc="A incidência com sinais">A incidência com sinais</h2>
@@ -80,7 +80,7 @@
         <div class="body">
           <p><b>Equilibrada ⇒ $\lambda_1=0$.</b> Pelo teorema de Harary, há cores $s_i=\pm1$ com $\sigma_{ij}=s_is_j$ em todo laço. Então $s_i-\sigma_{ij}s_j=s_i-s_is_j^2=0$ em todo laço, logo $s^\top Ls=\sum(s_i-\sigma_{ij}s_j)^2=0$. Como $L$ é positiva, isso obriga $Ls=0$: $s$ é autovetor de autovalor $0$.</p>
           <p><b>$\lambda_1=0$ ⇒ equilibrada.</b> Seja $u\ne0$ com $Lu=0$. Então $0=u^\top Lu=\sum(u_i-\sigma_{ij}u_j)^2$, e cada parcela é zero: $u_i=\sigma_{ij}u_j$ em todo laço. Em particular $|u_i|=|u_j|$ nas duas pontas de cada laço e, como a rede é conexa, $|u_i|$ é o mesmo número $a>0$ em todos os vértices. Ponha $s_i=u_i/a=\pm1$. A condição vira $s_i=\sigma_{ij}s_j$, isto é, $\sigma_{ij}=s_is_j$: as cores $s$ agrupam a rede. Pelo teorema de Harary, ela é equilibrada. $\blacksquare$</p>
-          <p>O mesmo argumento, aplicado a cada componente conexa, mostra que <b>o número de autovalores nulos é o número de componentes equilibradas</b>. Numa rede só de laços positivos todas as componentes são equilibradas, e isso é o resultado de <a href="componentes.html">Componentes e gargalos</a>.</p>
+          <p>O mesmo argumento, aplicado a cada componente conexa, mostra que <b>o número de autovalores nulos é o número de componentes equilibradas</b>. Numa rede só de laços positivos todas as componentes são equilibradas, e isso é o resultado de <a href="componentes.html">Laplaciano, componentes e gargalos</a>.</p>
         </div>
       </details>
 
@@ -228,6 +228,7 @@
           <h4>Ajuda ler antes</h4>
           <ul>
             <li><a href="difusao.html">Difusão em redes</a></li>
+            <li><a href="componentes.html">Laplaciano, componentes e gargalos</a></li>
             <li><a href="sinais.html">Redes com sinais e equilíbrio</a></li>
           </ul>
         </div>
@@ -242,8 +243,8 @@
     </main>
   </div>
 
-  <script src="../assets/redes-core.js"></script>
-  <script src="../assets/lapsinal-demo.js"></script>
-  <script src="../assets/pyrunner.js"></script>
+  <script src="../assets/redes-core.js?v=6d61ffc2"></script>
+  <script src="../assets/lapsinal-demo.js?v=1f40a6a6"></script>
+  <script src="../assets/pyrunner.js?v=54fb0c98"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-/* Demo da página "Componentes e gargalos": clique num laço para cortá-lo (ou religá-lo) e veja o espectro de L.
+/* Demo da página "Laplaciano, componentes e gargalos": clique num laço para cortá-lo (ou religá-lo) e veja o espectro de L.
  * Esquerda: a rede. Se é conexa, os vértices são coloridos pelo vetor de Fiedler q₂ (azul > 0, vermelho < 0);
  * se está partida, cada componente ganha uma cor.  Direita: os n autovalores de L em ordem.  Depende de redes-core.js. */
 (function () {

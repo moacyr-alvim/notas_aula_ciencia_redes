@@ -31,7 +31,7 @@
       desc: "A iteração u ← Wu com pesos quaisquer: cada um passa a ser uma média ponderada de quem escuta, inclusive em redes dirigidas. Quando há consenso, quão depressa e qual opinião vence." },
     { id: "sincr", lane: "din", col: 2, label: "Sincronização\n(Kuramoto)", href: null, trails: ["dinamica"],
       desc: "Osciladores acoplados pela rede. Perto da sincronia, a dinâmica linearizada é a difusão com o laplaciano." },
-    { id: "comp", lane: "esp", col: 1, label: "Componentes\ne gargalos", href: "paginas/componentes.html", trails: ["basico", "espectro"],
+    { id: "comp", lane: "esp", col: 1, label: "Laplaciano,\ncomponentes e gargalos", href: "paginas/componentes.html", trails: ["basico", "espectro"],
       desc: "O autovalor 0 conta os pedaços da rede; o quociente de Rayleigh e a cota do gargalo mostram por que um λ₂ pequeno denuncia uma rede quase partida. Demo de cortar laços e Python." },
     { id: "fiedler", lane: "esp", col: 2, label: "Comunidades pelo\nvetor de Fiedler", href: "paginas/fiedler.html", trails: ["basico", "espectro"],
       desc: "A bisseção escrita com ±1, relaxada até virar o autovetor q₂, e arredondada pelo sinal, pela mediana ou por varredura. O caratê e o modelo de blocos. Demo e Python." },
@@ -50,9 +50,9 @@
   NODES.push(
     { id: "sinais", lane: "sin", col: 0, label: "Redes com sinais\ne equilíbrio", href: "paginas/sinais.html", trails: ["sinais"],
       desc: "Laços positivos e negativos, as tríades de Heider, equilíbrio por ciclos e o teorema de estrutura de Harary (equilibrada ⇔ agrupável em dois), com prova pela árvore geradora. As tribos Gahuku-Gama. Demo e Python." },
-    { id: "lapsinal", lane: "sin", col: 1, label: "Laplaciano\ncom sinais", href: "paginas/lapsinal.html", trails: ["sinais"],
+    { id: "lapsinal", lane: "sin", col: 2, label: "Laplaciano\ncom sinais", href: "paginas/lapsinal.html", trails: ["sinais"],
       desc: "A incidência com sinais (dois +1 no laço negativo), L = BᵀB = D̄ − A_σ, o teorema λ₁ = 0 ⇔ equilibrada, a troca de sinais como mudança de base, λ₁ como conflito algébrico e as opiniões que polarizam ou se apagam. Demo e Python." },
-    { id: "frustr", lane: "sin", col: 2, label: "Quão longe\ndo equilíbrio", href: null, trails: ["sinais"],
+    { id: "frustr", lane: "sin", col: 3, label: "Quão longe\ndo equilíbrio", href: null, trails: ["sinais"],
       desc: "O índice de frustração, por que calculá-lo é difícil, e o menor autovalor do laplaciano com sinais como cota e como aproximação." },
     { id: "davis", lane: "sin", col: 1, row: 1, label: "Equilíbrio fraco\n(Davis)", href: null, trails: ["sinais"],
       desc: "Aceitar a tríade − − − e permitir mais de dois grupos: agrupável em k grupos ⇔ nenhum ciclo com exatamente um laço negativo." }
@@ -62,11 +62,11 @@
     ["difusao", "consenso"], ["consenso", "sincr"],
     ["difusao", "comp"], ["comp", "fiedler"], ["fiedler", "desenho"], ["difusao", "modos"], ["modos", "desenho"],
     ["difusao", "passeio"], ["passeio", "pagerank"], ["passeio", "resist"],
-    ["sinais", "lapsinal"], ["difusao", "lapsinal"], ["lapsinal", "frustr"], ["sinais", "davis"]
+    ["sinais", "lapsinal"], ["comp", "lapsinal"], ["lapsinal", "frustr"], ["sinais", "davis"]
   ];
 
   // geometria
-  var G = { nodeW: 158, nodeH: 44, colStep: 208, laneH: 88, rowStep: 56, padLeft: 150, padTop: 14, padRight: 14, padBottom: 14 };
+  var G = { nodeW: 176, nodeH: 44, colStep: 222, laneH: 88, rowStep: 56, padLeft: 150, padTop: 14, padRight: 14, padBottom: 14 };
 
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 

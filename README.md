@@ -76,6 +76,13 @@ Qualquer pacote do Pyodide que o código importe (por exemplo `networkx`) é bai
 **Uma rede nova na demo**: acrescente uma entrada em `REDES` no `assets/redes-core.js`
 (`n`, `edges` e `pos` em [0,1]²). Os testes passam a cobri-la automaticamente.
 
+## Cache dos arquivos
+
+O GitHub Pages deixa os arquivos em cache por alguns minutos. Para o navegador não misturar uma página nova
+com um script velho, as páginas pedem `assets/arquivo.js?v=<hash>`. Depois de mexer em qualquer arquivo de
+`assets/`, rode `python3 tests/carimbar_versoes.py` antes do commit; `tests/check_site.py` (que roda no GitHub)
+falha se algum carimbo estiver desatualizado.
+
 ## Testes
 
 ```bash
