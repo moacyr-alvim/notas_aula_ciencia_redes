@@ -88,9 +88,11 @@ print("  grupo 2:", [nomes[i] for i in range(n) if melhor[i] < 0])
 # --- desenho
 G = nx.Graph()
 G.add_nodes_from(range(n))
-for i, j, x in lacos:
-    G.add_edge(i, j, w=1.0 if x > 0 else 2.2)
-xy = nx.kamada_kawai_layout(G, dist=dict(nx.shortest_path_length(G, weight="w")))
+G.add_edges_from([(i, j) for i, j, _ in lacos])
+# posições fixas (as mesmas da demo), para o desenho não depender de sorteio nem do scipy
+xy = dict(enumerate(np.array([[0.806, 0.528], [0.704, 0.43], [0.501, 0.724], [0.466, 0.9], [0.401, 0.338], [0.416, 0.622],
+                              [0.335, 0.518], [0.32, 0.749], [0.183, 0.23], [0.269, 0.1], [0.189, 0.578], [0.269, 0.647],
+                              [0.299, 0.304], [0.454, 0.168], [0.697, 0.285], [0.817, 0.362]]) * [1, -1]))
 plt.figure(figsize=(7, 5.5))
 nx.draw_networkx_edges(G, xy, edgelist=[(i, j) for i, j, x in lacos if x > 0], edge_color="C0", width=1.5)
 nx.draw_networkx_edges(G, xy, edgelist=[(i, j) for i, j, x in lacos if x < 0], edge_color="C3", style="dashed", width=1)
