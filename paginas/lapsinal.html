@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laplaciano com sinais — O laplaciano em redes</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <style>
+    #demo-lsin canvas { height: 360px; }
+    #l-hover { margin-top: .4rem; font-size: .9rem; color: var(--ink-soft); min-height: 1.4em; }
+    .legend .dot { display: inline-block; width: .8rem; height: .8rem; border-radius: 50%; vertical-align: middle; margin-right: .35rem; border: 1px solid var(--ink-soft); }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Laplaciano com sinais</h1>
+        <p class="lede">A mesma construção do laplaciano, $L=B^\top B$, agora com uma matriz de incidência que enxerga os sinais. O laço negativo ganha dois $+1$ na sua linha. Sai uma matriz positiva de novo, mas com um papel novo: o menor autovalor, $\lambda_1$, é zero exatamente quando a rede é equilibrada, e mede quanto falta para ela se polarizar em dois lados.</p>
+        <p class="meta">Junta duas páginas: <a href="difusao.html">Difusão em redes</a> (de onde vêm $L=B^\top B$, os passos de Euler e os modos) e <a href="sinais.html">Redes com sinais e equilíbrio</a> (de onde vêm o equilíbrio, o teorema de Harary e a troca de sinais).</p>
+      </header>
+
+      <h2 id="incidencia" data-toc="A incidência com sinais">A incidência com sinais</h2>
+      <p>No laplaciano comum, a linha do laço $ij$ em $B$ tem um $-1$ e um $+1$, e $(Bu)_e=u_j-u_i$ mede o desacordo entre as pontas: é zero quando $u_i=u_j$. Numa rede com sinais, um laço negativo "quer" o contrário: que as pontas tenham valores <em>opostos</em>, $u_i=-u_j$. Então a sua linha leva dois $+1$:</p>
+      <ul>
+        <li>laço positivo $ij$: $-1$ na coluna $i$ e $+1$ na coluna $j$, e $(Bu)_e=u_j-u_i$;</li>
+        <li>laço negativo $ij$: $+1$ na coluna $i$ e $+1$ na coluna $j$, e $(Bu)_e=u_i+u_j$.</li>
+      </ul>
+      <p>Nos dois casos, $(Bu)_e$ é zero quando o laço está satisfeito: $u_i=\sigma_{ij}u_j$. No laço negativo não há orientação para escolher, porque a linha é simétrica. E a definição é a mesma de antes:
+      $$\boxed{\,L=B^\top B.\,}$$</p>
+
+      <figure class="fig">
+<svg viewBox="0 0 520 150" role="img" aria-labelledby="fg1t" style="width:100%;height:auto;max-width:480px;display:block;margin:0 auto">
+  <title id="fg1t">Triângulo com os laços 1–2 e 2–3 positivos e o laço 1–3 negativo.</title>
+  <g stroke-width="2.4" stroke-linecap="round">
+    <line x1="260" y1="28" x2="120" y2="120" style="stroke:var(--carac)"/>
+    <line x1="260" y1="28" x2="400" y2="120" style="stroke:var(--carac)"/>
+    <line x1="120" y1="120" x2="400" y2="120" style="stroke:var(--choque)" stroke-dasharray="7 5"/>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink)" stroke-width="2"><circle cx="260" cy="28" r="18"/><circle cx="120" cy="120" r="18"/><circle cx="400" cy="120" r="18"/></g>
+  <g font-family="sans-serif" font-size="15" style="fill:var(--ink)" text-anchor="middle"><text x="120" y="125">1</text><text x="260" y="33">2</text><text x="400" y="125">3</text></g>
+  <g font-family="sans-serif" font-size="13" text-anchor="middle"><text x="170" y="64" style="fill:var(--carac)">+</text><text x="350" y="64" style="fill:var(--carac)">+</text><text x="260" y="142" style="fill:var(--choque)">−</text></g>
+</svg>
+<figcaption>O triângulo $+\,+\,-$, desequilibrado: o vértice $2$ é aliado de $1$ e de $3$, que são hostis entre si.</figcaption>
+</figure>
+
+      <p>No triângulo da figura, com os laços na ordem $12$, $23$, $13$:
+      $$B=\begin{pmatrix}-1&1&0\\0&-1&1\\1&0&1\end{pmatrix},\qquad L=B^\top B=\begin{pmatrix}2&-1&1\\-1&2&-1\\1&-1&2\end{pmatrix}.$$
+      Compare com o triângulo todo positivo, que tem $-1$ nas seis posições fora da diagonal: o laço negativo trocou o sinal das duas entradas $L_{13}$ e $L_{31}$.</p>
+
+      <h2 id="positiva" data-toc="O que vem de graça">O que vem de graça, de novo</h2>
+      <ul>
+        <li><b>$L$ é simétrica e positiva.</b> Para qualquer $u$,
+        $$u^\top Lu=\|Bu\|^2=\sum_{\text{laços }+}(u_i-u_j)^2+\sum_{\text{laços }-}(u_i+u_j)^2=\sum_{\text{laços }ij}\big(u_i-\sigma_{ij}u_j\big)^2\ \ge0.$$
+        É o desacordo total, agora medido do jeito certo para cada sinal. Os autovalores são reais e $\ge0$: $0\le\lambda_1\le\lambda_2\le\dots\le\lambda_n$.</li>
+        <li><b>Por dentro, $L=\bar D-A_\sigma$.</b> Aqui $A_\sigma$ é a <b>adjacência com sinais</b> ($A_{ij}=\sigma_{ij}$ se há laço, $0$ se não) e $\bar D$ é a matriz diagonal com o número de laços de cada vértice, sem olhar os sinais (a soma de $|A_{ij}|$ na linha). Na diagonal de $B^\top B$, cada laço que toca $i$ contribui $(\pm1)^2=1$; fora dela, o laço $ij$ contribui $(-1)(+1)=-1$ se é positivo e $(+1)(+1)=+1$ se é negativo, isto é, $-\sigma_{ij}$.</li>
+        <li><b>O que mudou:</b> numa linha de laço negativo os dois números somam $2$, então $B\mathbf 1\ne0$ quando há laço negativo. O vetor constante não é mais, em geral, autovetor de autovalor zero, e $\lambda_1$ pode ser positivo.</li>
+      </ul>
+
+      <h2 id="teorema" data-toc="λ₁ = 0 ⇔ equilibrada">$\lambda_1=0$ exatamente quando a rede é equilibrada</h2>
+      <aside class="box">
+        <p class="tag">Teorema</p>
+        <p>Numa rede com sinais conexa, $\lambda_1(L)=0$ se, e somente se, a rede é equilibrada. Nesse caso, o autovetor de $\lambda_1$ é o vetor de cores $s$ ($s_i=\pm1$) que divide a rede nos dois grupos de Harary.</p>
+      </aside>
+      <p>Esse resultado é conhecido desde os trabalhos de Zaslavsky (1982) sobre matrizes de redes com sinais.</p>
+
+      <details>
+        <summary>Demonstração</summary>
+        <div class="body">
+          <p><b>Equilibrada ⇒ $\lambda_1=0$.</b> Pelo teorema de Harary, há cores $s_i=\pm1$ com $\sigma_{ij}=s_is_j$ em todo laço. Então $s_i-\sigma_{ij}s_j=s_i-s_is_j^2=0$ em todo laço, logo $s^\top Ls=\sum(s_i-\sigma_{ij}s_j)^2=0$. Como $L$ é positiva, isso obriga $Ls=0$: $s$ é autovetor de autovalor $0$.</p>
+          <p><b>$\lambda_1=0$ ⇒ equilibrada.</b> Seja $u\ne0$ com $Lu=0$. Então $0=u^\top Lu=\sum(u_i-\sigma_{ij}u_j)^2$, e cada parcela é zero: $u_i=\sigma_{ij}u_j$ em todo laço. Em particular $|u_i|=|u_j|$ nas duas pontas de cada laço e, como a rede é conexa, $|u_i|$ é o mesmo número $a>0$ em todos os vértices. Ponha $s_i=u_i/a=\pm1$. A condição vira $s_i=\sigma_{ij}s_j$, isto é, $\sigma_{ij}=s_is_j$: as cores $s$ agrupam a rede. Pelo teorema de Harary, ela é equilibrada. $\blacksquare$</p>
+          <p>O mesmo argumento, aplicado a cada componente conexa, mostra que <b>o número de autovalores nulos é o número de componentes equilibradas</b>. Numa rede só de laços positivos todas as componentes são equilibradas, e isso é o resultado de <a href="componentes.html">Componentes e gargalos</a>.</p>
+        </div>
+      </details>
+
+      <h2 id="troca" data-toc="Troca de sinais">A troca de sinais é uma mudança de base</h2>
+      <p>Na página anterior, trocar os sinais de todos os laços com uma ponta só num conjunto $X$ não mudava o equilíbrio. Em termos de matrizes, escolha $s_i=-1$ em $X$ e $s_i=+1$ fora, e ponha $S=\mathrm{diag}(s)$. O laço $ij$ ganha o sinal $s_i\sigma_{ij}s_j$ (troca se e só se exatamente uma ponta está em $X$), e o novo laplaciano é
+      $$L'=S\,L\,S.$$
+      Como $S^\top=S$ e $S^2=I$, $S$ é uma matriz ortogonal, e $L'$ tem <b>os mesmos autovalores</b> que $L$, com autovetores $Sq$. Dois usos:</p>
+      <ul>
+        <li>Se a rede é equilibrada, a troca em volta de um dos grupos deixa tudo positivo. Então o espectro de $L$ é o do laplaciano comum da rede sem sinais, e o autovetor de $0$ é $S\mathbf 1=s$. Uma rede equilibrada é uma rede comum "disfarçada".</li>
+        <li>$\lambda_1$ não depende de como se escolhe a "direção" de cada vértice, só do padrão de equilíbrio. É uma propriedade da rede, e não de uma escolha de sinais para os vértices.</li>
+      </ul>
+
+      <h2 id="medida" data-toc="λ₁ mede o conflito">$\lambda_1$ mede quão longe do equilíbrio</h2>
+      <p>Sem a exigência $v\perp\mathbf 1$ (que antes vinha do autovalor $0$ conhecido), o quociente de Rayleigh dá
+      $$\lambda_1=\min_{v\ne0}\frac{v^\top Lv}{v^\top v}=\min_{v\ne0}\frac{\sum_{\text{laços}}(v_i-\sigma_{ij}v_j)^2}{\sum_iv_i^2}.$$
+      Compare com o <b>índice de frustração</b> $f$ da página anterior, o menor número de laços que uma pintura em duas cores contraria. Para um vetor de cores $s$ ($s_i=\pm1$), cada laço satisfeito contribui $0$ para $s^\top Ls$ e cada laço contrariado contribui $(\pm2)^2=4$. Então
+      $$f=\min_{s_i=\pm1}\ \tfrac14\,s^\top Ls,$$
+      exatamente como a bisseção em <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>, só que sem exigir grupos do mesmo tamanho. Relaxando $s_i=\pm1$ para "qualquer real com $\|v\|^2=n$", o mínimo cai para $n\lambda_1$:
+      $$\boxed{\,f\ \ge\ \frac{n\,\lambda_1}{4}.\,}$$
+      E a receita é a mesma: calcular o autovetor $q_1$ e arredondar pelo sinal para obter uma divisão em dois grupos.</p>
+
+      <aside class="box">
+        <p class="tag">Nomes</p>
+        <p>O número $\lambda_1$ do laplaciano com sinais é chamado por Kunegis e colaboradores (2010) de <b>conflito algébrico</b>, por analogia com a conectividade algébrica $\lambda_2$ do laplaciano comum. A versão combinatória, o índice de frustração, foi proposta por Harary (1959) com o nome de <em>line index of balance</em>. Os dois medem a mesma coisa em direções opostas ao que a palavra "polarização" sugere: <b>$\lambda_1=0$ é a rede perfeitamente polarizável</b>, com dois lados sem traidores; $\lambda_1$ grande é muito conflito, uma rede que não se deixa dividir em dois lados. Em trabalhos sobre polarização de opiniões, $\lambda_1$ pequeno é lido como "rede quase polarizada".</p>
+      </aside>
+
+      <p><b>Nas Gahuku-Gama</b>, $\lambda_1\approx1{,}040$ e a cota dá $f\ge16\cdot1{,}040/4\approx4{,}16$, isto é, $f\ge5$. O valor exato é $f=7$. O sinal de $q_1$ produz uma divisão que contraria $8$ laços: separa GAVEV, KOTUN, NAGAD, GAMA <em>e SEUVE</em> do resto, a um laço da melhor divisão. Como na bisseção espectral, a relaxação acerta quase tudo, e o que ela erra é um vértice em cima do muro.</p>
+
+      <h2 id="opinioes" data-toc="Opiniões com antagonismo">Opiniões com aliados e rivais</h2>
+      <p>Use $L$ nos mesmos passos de Euler da <a href="difusao.html#euler">página de difusão</a>, $u_{k+1}=u_k-c\,Lu_k$, agora lendo $u_i$ como uma <em>opinião</em> entre $-1$ e $+1$. Em cada vértice,
+      $$u_i^{\text{novo}}=(1-c\,\bar d_i)\,u_i+c\sum_{j\text{ vizinho}}\sigma_{ij}\,u_j.$$
+      Um aliado puxa a minha opinião para a dele; um rival puxa para o <em>oposto</em> da dele. Esse é o modelo de Altafini (2013) para consenso com interações antagônicas. Com $c\le1/\bar d_{\max}$, os módulos dos pesos de cada linha somam $1$, e a maior opinião em módulo nunca cresce. O que acontece no fim depende de $\lambda_1$:</p>
+      <ul>
+        <li><b>Rede equilibrada ($\lambda_1=0$):</b> a combinação $s^\top u$ não muda (porque $s^\top L=0$), os outros modos morrem, e as opiniões convergem para
+        $$u_k\ \to\ \frac{s^\top u_0}{n}\,s:$$
+        <b>polarização</b>. Os dois grupos terminam com opiniões de mesmo módulo e sinais opostos. Na difusão comum, todos chegavam à mesma média; aqui cada lado chega à sua, uma o negativo da outra.</li>
+        <li><b>Rede desequilibrada ($\lambda_1>0$):</b> todos os modos morrem, o mais lento como $(1-c\lambda_1)^k$, e <b>todas as opiniões vão a zero</b>. Não há como satisfazer todos os laços, e a disputa termina em neutralidade. Quanto maior $\lambda_1$, mais depressa isso acontece; com $\lambda_1$ pequeno, a rede passa muito tempo quase polarizada antes de se apagar.</li>
+      </ul>
+
+      <h2 id="demo" data-toc="Veja polarizar">Veja polarizar ou se apagar</h2>
+      <p>À esquerda, a rede: laços positivos em azul, negativos em vermelho tracejado, e os laços que a divisão pelo sinal de $q_1$ contraria com sombra cinza. A cor de cada vértice é a sua opinião no passo $k$ (verde-azulado positiva, dourado negativa, mais forte quanto maior o módulo). À direita, as opiniões ao longo dos passos, partindo de valores sorteados, coloridas pelo lado que $q_1$ atribui a cada vértice. Na rede equilibrada, as linhas pontilhadas marcam a polarização prevista, $\pm s^\top u_0/n$. <b>Clique num laço para trocar o sinal.</b></p>
+
+      <div class="demo" id="demo-lsin">
+        <div class="controls">
+          <label>rede <select id="l-rede" aria-label="Escolha da rede"></select></label>
+          <button id="l-restaura" type="button">Voltar aos sinais originais</button>
+          <button id="l-novas" type="button">Sortear novas opiniões</button>
+        </div>
+        <div class="controls">
+          <label>passo k <input type="range" id="l-k" min="0" max="50" step="1" value="0" aria-label="Número do passo"> <output id="l-kv">0</output></label>
+          <button id="l-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="l-rede-canvas" role="img" aria-label="A rede com sinais, com cada vértice colorido pela opinião no passo k"></canvas>
+          <canvas id="l-op-canvas" role="img" aria-label="As opiniões de todos os vértices ao longo dos passos"></canvas>
+        </div>
+        <div id="l-hover" aria-live="polite"></div>
+        <div class="readout" id="l-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>laço positivo</span>
+          <span><i style="border-color:var(--choque);border-top-style:dashed"></i>laço negativo</span>
+          <span><span class="dot" style="background:#2a9d8f"></span>opinião &gt; 0 <span class="dot" style="background:#c9a227"></span>opinião &lt; 0</span>
+          <span>sombra cinza: laço contrariado pelo sinal de $q_1$</span>
+        </div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li><b>Duas facções.</b> A rede é equilibrada: $\lambda_1=0$, as opiniões se separam em dois valores opostos e a leitura mostra $s^\top u$ parado. Sorteie outras opiniões iniciais: o valor final muda, a forma não.</li>
+        <li>Agora <b>troque o sinal de um laço</b>. $\lambda_1$ fica positivo, mas pequeno, e as opiniões primeiro parecem polarizar e depois descem devagar até zero. Destroque e veja a polarização voltar.</li>
+        <li><b>Gahuku-Gama.</b> $\lambda_1\approx1{,}04$: as opiniões se apagam em poucas dezenas de passos. Compare a divisão pelo sinal de $q_1$ (as sombras cinzas são os $8$ laços contrariados) com a melhor divisão da página anterior.</li>
+        <li><b>Ciclo de 5.</b> Ponha todos os laços negativos: $\lambda_1=2-2\cos(\pi/5)\approx0{,}38$ (exercício 5). Ponha só um negativo: é o mesmo $\lambda_1$. Por quê? (Dica: troca de sinais.)</li>
+        <li><b>Triângulo.</b> Passe pelos quatro tipos de Heider: $\lambda_1=0$ nos dois equilibrados e $\lambda_1=1$ nos dois desequilibrados (exercício 1).</li>
+      </ol>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>A célula monta a incidência com sinais das Gahuku-Gama, confere $L=\bar D-A_\sigma$, calcula $\lambda_1$ e compara a cota $n\lambda_1/4$ com o índice de frustração exato. Depois roda as opiniões com antagonismo duas vezes: na rede real, onde tudo vai a zero, e numa versão em que os $7$ laços contrariados pela melhor divisão tiveram o sinal trocado, que é equilibrada e polariza.</p>
+
+      <div class="pycell" data-title="Laplaciano com sinais nas Gahuku-Gama"
+           data-starter="../py/lapsinal_lacunas.py"
+           data-solution="../py/lapsinal_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O triângulo $+\,+\,-$</p>
+        <p>(a) Mostre que $(1,0,-1)$, $(1,2,1)$ e $(1,-1,1)$ são autovetores de $L$ do triângulo da figura, e ache os autovalores. (b) Compare $\lambda_1$ com o do triângulo todo positivo e confira a cota $f\ge n\lambda_1/4$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $L(1,0,-1)^\top=(2-1,\,-1+1,\,1-2)^\top=(1,0,-1)^\top$, então $\lambda=1$. $L(1,2,1)^\top=(2-2+1,\,-1+4-1,\,1-2+2)^\top=(1,2,1)^\top$, $\lambda=1$. $L(1,-1,1)^\top=(4,-4,4)^\top$, $\lambda=4$. Os autovalores são $1,1,4$.</p>
+          <p>(b) O triângulo todo positivo tem autovalores $0,3,3$: $\lambda_1=0$, equilibrado. Aqui $\lambda_1=1$. Com $n=3$, a cota dá $f\ge3/4$, isto é, $f\ge1$; e de fato basta um laço contrariado (por exemplo, os três na mesma cor contrariam só o negativo).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Por dentro de $B^\top B$</p>
+        <p>Mostre, entrada por entrada, que $B^\top B=\bar D-A_\sigma$, e que $u^\top Lu=\sum_{\text{laços}}(u_i-\sigma_{ij}u_j)^2$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$(B^\top B)_{ij}=\sum_eB_{ei}B_{ej}$. Para $i=j$: cada laço que toca $i$ tem $B_{ei}=\pm1$ e contribui $1$, então a soma é o número de laços de $i$, $\bar d_i$. Para $i\ne j$: só o laço entre $i$ e $j$ contribui, com $(-1)(+1)=-1$ se for positivo e $(+1)(+1)=+1$ se for negativo; nos dois casos, $-\sigma_{ij}$. Para a forma quadrática: $u^\top Lu=\|Bu\|^2=\sum_e(Bu)_e^2$, e $(Bu)_e$ é $u_j-u_i$ ou $u_i+u_j$; ao quadrado, $(u_i-\sigma_{ij}u_j)^2$ nos dois casos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Troca de sinais</p>
+        <p>Com $S=\mathrm{diag}(s)$, $s_i=\pm1$, mostre que $SLS$ é o laplaciano com sinais da rede com os sinais $s_i\sigma_{ij}s_j$, e que tem os mesmos autovalores que $L$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$(SLS)_{ij}=s_iL_{ij}s_j$. Na diagonal, $s_i^2\bar d_i=\bar d_i$: o número de laços não muda. Fora dela, $s_i(-\sigma_{ij})s_j=-(s_i\sigma_{ij}s_j)$, que é a entrada do laplaciano com os sinais novos. Como $S^{-1}=S=S^\top$, $SLS=S^{-1}LS$ é semelhante a $L$: mesmo polinômio característico, mesmos autovalores. Os autovetores são $Sq$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Opiniões numa rede equilibrada</p>
+        <p>Numa rede conexa e equilibrada, com cores $s$, mostre que $s^\top u_k$ é a mesma em todos os passos e conclua que, com $c&lt;1/\bar d_{\max}$, $u_k\to(s^\top u_0/n)\,s$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$Ls=0$ e $L$ é simétrica, então $s^\top L=(Ls)^\top=0$ e $s^\top u_{k+1}=s^\top u_k-c\,s^\top Lu_k=s^\top u_k$. Pela troca de sinais, $L=S L_0 S$ com $L_0$ o laplaciano comum da rede sem sinais, e os passos para $u$ são os passos da difusão comum para $Su$. Na <a href="difusao.html#modos">página de difusão</a>, $Su_k$ converge para a média de $Su_0$ vezes $\mathbf 1$, que é $(s^\top u_0/n)\mathbf 1$. Multiplicando por $S$: $u_k\to(s^\top u_0/n)\,s$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. O ciclo com um conflito</p>
+        <p>(a) Num ciclo de $n$ vértices com todos os laços negativos, $L=2I+A_{\text{ciclo}}$. Use os autovalores $2\cos(2\pi m/n)$ da adjacência do ciclo para mostrar que $\lambda_1=0$ se $n$ é par e $\lambda_1=2-2\cos(\pi/n)$ se $n$ é ímpar. (b) Mostre, por troca de sinais, que um ciclo ímpar com um único laço negativo tem o mesmo $\lambda_1$. (c) O que a cota $f\ge n\lambda_1/4$ diz para $n$ grande?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Os autovalores de $L$ são $2+2\cos(2\pi m/n)$. O menor vem do cosseno mais próximo de $-1$. Para $n$ par, $m=n/2$ dá $\cos\pi=-1$ e $\lambda_1=0$. Para $n$ ímpar, o mais próximo é $m=(n\pm1)/2$, com $\cos(\pi\pm\pi/n)=-\cos(\pi/n)$, e $\lambda_1=2-2\cos(\pi/n)$.</p>
+          <p>(b) A troca em volta de $X=\{$vértices de índice ímpar$\}$ troca o sinal dos laços com uma ponta só em $X$. Num ciclo ímpar, isso são todos os laços menos um (o que liga os vértices $n-1$ e $0$, ambos de índice par). Partindo de todos negativos, sobra um único negativo. Mesmo espectro.</p>
+          <p>(c) $n\lambda_1/4\approx n\pi^2/(4n^2)=\pi^2/(4n)$, que tende a zero, enquanto $f=1$. Um único laço contrariado num ciclo longo quase não pesa em $\lambda_1$: o conflito fica diluído por $n$ vértices, e as opiniões levam da ordem de $n^2$ passos para se apagar. Por isso a cota é boa para dizer que há conflito, mas pode subestimar muito quantos laços contrariados ele exige.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="difusao.html">Difusão em redes</a></li>
+            <li><a href="sinais.html">Redes com sinais e equilíbrio</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li>Quão longe do equilíbrio <span class="soon">(em breve)</span></li>
+            <li>Equilíbrio fraco (Davis) <span class="soon">(em breve)</span></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/redes-core.js"></script>
+  <script src="../assets/lapsinal-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

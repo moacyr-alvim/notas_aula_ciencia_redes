@@ -239,6 +239,20 @@
     return out;
   }
 
+  /* incidência com sinais (m × n): laço positivo i–j: −1 em i, +1 em j  (Bu = u_j − u_i);
+   *                                 laço negativo i–j: +1 em i, +1 em j  (Bu = u_i + u_j) */
+  function incidenciaSinais(n, edges) {
+    var B = zeros(edges.length, n);
+    edges.forEach(function (e, k) { B[k][e[0]] = e[2] > 0 ? -1 : 1; B[k][e[1]] = 1; });
+    return B;
+  }
+  /* laplaciano com sinais: L = D̄ − A_σ, com D̄ = número de laços de cada vértice (sem olhar o sinal) */
+  function laplacianoSinais(n, edges) {
+    var L = zeros(n);
+    edges.forEach(function (e) { var i = e[0], j = e[1], s = e[2]; L[i][i] += 1; L[j][j] += 1; L[i][j] -= s; L[j][i] -= s; });
+    return L;
+  }
+
   /* Tribos Gahuku-Gama (Read, 1954): 16 tribos do planalto central da Nova Guiné; +1 aliança, −1 hostilidade.
    * Posições: Kamada–Kawai com distância 1 nos laços positivos e 2,2 nos negativos. */
   var GAMA_NOMES = ["GAVEV", "KOTUN", "OVE", "ALIKA", "NAGAM", "GAHUK", "MASIL", "UKUDZ", "NOTOH", "KOHIK", "GEHAM", "ASARO", "UHETO", "SEUVE", "NAGAD", "GAMA"];
@@ -315,7 +329,8 @@
              graus: d, dmax: Math.max.apply(null, d), fonte: R.fonte };
   }
 
-  return { pinturaArvore: pinturaArvore, cicloFundamental: cicloFundamental, cicloImpar: cicloImpar, sinalEntre: sinalEntre, frustracao: frustracao,
+  return { incidenciaSinais: incidenciaSinais, laplacianoSinais: laplacianoSinais,
+           pinturaArvore: pinturaArvore, cicloFundamental: cicloFundamental, cicloImpar: cicloImpar, sinalEntre: sinalEntre, frustracao: frustracao,
            triangulos: triangulos, gama: gama, SINAIS: SINAIS,
            corte: corte, divide: divide, acertos: acertos, rng: rng, blocos: blocos, molas: molas, faccoes: faccoes,
            componentes: componentes, adjacency: adjacency, degrees: degrees, incidence: incidence, btb: btb, laplacian: laplacian, eigSym: eigSym,

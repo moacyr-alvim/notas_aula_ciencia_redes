@@ -50,8 +50,8 @@
   NODES.push(
     { id: "sinais", lane: "sin", col: 0, label: "Redes com sinais\ne equilíbrio", href: "paginas/sinais.html", trails: ["sinais"],
       desc: "Laços positivos e negativos, as tríades de Heider, equilíbrio por ciclos e o teorema de estrutura de Harary (equilibrada ⇔ agrupável em dois), com prova pela árvore geradora. As tribos Gahuku-Gama. Demo e Python." },
-    { id: "lapsinal", lane: "sin", col: 1, label: "Laplaciano\ncom sinais", href: null, trails: ["sinais"],
-      desc: "A incidência com sinais, L = BᵀB = D − A_σ, e o teorema: o menor autovalor é zero exatamente quando a rede é equilibrada. A troca de sinais como mudança de base." },
+    { id: "lapsinal", lane: "sin", col: 1, label: "Laplaciano\ncom sinais", href: "paginas/lapsinal.html", trails: ["sinais"],
+      desc: "A incidência com sinais (dois +1 no laço negativo), L = BᵀB = D̄ − A_σ, o teorema λ₁ = 0 ⇔ equilibrada, a troca de sinais como mudança de base, λ₁ como conflito algébrico e as opiniões que polarizam ou se apagam. Demo e Python." },
     { id: "frustr", lane: "sin", col: 2, label: "Quão longe\ndo equilíbrio", href: null, trails: ["sinais"],
       desc: "O índice de frustração, por que calculá-lo é difícil, e o menor autovalor do laplaciano com sinais como cota e como aproximação." },
     { id: "davis", lane: "sin", col: 1, row: 1, label: "Equilíbrio fraco\n(Davis)", href: null, trails: ["sinais"],
@@ -62,7 +62,7 @@
     ["difusao", "consenso"], ["consenso", "sincr"],
     ["difusao", "comp"], ["comp", "fiedler"], ["fiedler", "desenho"], ["difusao", "modos"], ["modos", "desenho"],
     ["difusao", "passeio"], ["passeio", "pagerank"], ["passeio", "resist"],
-    ["sinais", "lapsinal"], ["lapsinal", "frustr"], ["sinais", "davis"]
+    ["sinais", "lapsinal"], ["difusao", "lapsinal"], ["lapsinal", "frustr"], ["sinais", "davis"]
   ];
 
   // geometria

@@ -191,5 +191,47 @@ for (let sd = 1; sd <= 200; sd++) {
 }
 check("teorema de estrutura em 200 redes sorteadas: árvore sem conflito ⇔ agrupável ⇔ sem ciclo ímpar", teo);
 
+// ---------- página Laplaciano com sinais ----------
+const matsq = (A, B) => A.map(r => B[0].map((_, j) => r.reduce((a, x, k) => a + x * B[k][j], 0)));
+const tr = A => A[0].map((_, j) => A.map(r => r[j]));
+let okBL = true, okTeo = true, okSw = true;
+for (let sd = 1; sd <= 150; sd++) {
+  const Rr = K.rng(1000 + sd), n = 7, e = [];
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (Rr() < 0.5) e.push([i, j, Rr() < 0.5 ? 1 : -1]);
+  if (!e.length) continue;
+  const L = K.laplacianoSinais(n, e), B = K.incidenciaSinais(n, e);
+  if (!same(matsq(tr(B), B), L)) okBL = false;
+  const ev = K.eigSym(L).values, nb = (() => { // componentes equilibradas
+    const comp = K.componentes(n, e), nc = Math.max(...comp) + 1; let c = 0;
+    for (let k = 0; k < nc; k++) { const vs = comp.map((x, i) => x === k ? i : -1).filter(i => i >= 0), idx = {}; vs.forEach((v, t) => idx[v] = t);
+      const es = e.filter(x => comp[x[0]] === k).map(x => [idx[x[0]], idx[x[1]], x[2]]); if (K.cicloImpar(vs.length, es) === null) c++; }
+    return c; })();
+  if (ev.filter(x => Math.abs(x) < 1e-9).length !== nb) okTeo = false;
+  // troca de sinais em volta de X: S L S tem o mesmo espectro e é o laplaciano da rede trocada
+  const sx = Array.from({ length: n }, () => Rr() < 0.5 ? 1 : -1), eT = e.map(x => [x[0], x[1], x[2] * sx[x[0]] * sx[x[1]]]);
+  const SLS = L.map((r, i) => r.map((x, j) => sx[i] * x * sx[j]));
+  if (!same(SLS, K.laplacianoSinais(n, eT)) || !K.eigSym(SLS).values.every((x, i) => near(x, ev[i], 1e-9))) okSw = false;
+}
+check("laplaciano com sinais: BᵀB = D̄ − A_σ (150 redes sorteadas)", okBL);
+check("teorema: nº de autovalores nulos = nº de componentes equilibradas", okTeo);
+check("troca de sinais: S L S = laplaciano da rede trocada, mesmo espectro", okSw);
+const Lt = K.laplacianoSinais(3, [[0, 1, 1], [1, 2, 1], [0, 2, -1]]), et = K.eigSym(Lt).values;
+check("triângulo + + −: autovalores 1, 1, 4", near(et[0], 1, 1e-10) && near(et[1], 1, 1e-10) && near(et[2], 4, 1e-10));
+for (const nn of [5, 7, 9]) { const e = []; for (let i = 0; i < nn; i++) e.push([i, (i + 1) % nn, -1]);
+  check(`ciclo ímpar de ${nn} todo negativo: λ₁ = 2 − 2cos(π/n)`, near(K.eigSym(K.laplacianoSinais(nn, e)).values[0], 2 - 2 * Math.cos(Math.PI / nn), 1e-10)); }
+const e6 = []; for (let i = 0; i < 6; i++) e6.push([i, (i + 1) % 6, -1]);
+check("ciclo par de 6 todo negativo: λ₁ = 0", near(K.eigSym(K.laplacianoSinais(6, e6)).values[0], 0, 1e-10));
+const LG = K.laplacianoSinais(16, GG.edges), eG = K.eigSym(LG), l1G = eG.values[0];
+check("Gahuku-Gama: λ₁ ≈ 1,0403, f = 7 ≥ nλ₁/4 ≈ 4,16", near(l1G, 1.0403, 1e-4) && 7 >= 16 * l1G / 4 && near(16 * l1G / 4, 4.161, 1e-3));
+const sq = eG.vectors[0].map(x => x >= 0 ? 1 : -1);
+check("Gahuku-Gama: o sinal de q₁ contraria 8 laços e põe SEUVE junto de GAVEV, KOTUN, NAGAD, GAMA", GG.edges.filter(e => sq[e[0]] * sq[e[1]] !== e[2]).length === 8 && GG.nomes.filter((_, i) => sq[i] === sq[0]).join(",") === "GAVEV,KOTUN,SEUVE,NAGAD,GAMA");
+// Altafini: c ≤ 1/d_max não aumenta max|u|; equilibrada polariza, desequilibrada apaga
+const cG = 0.9 / 10, Sg = K.itera(LG, Array.from({ length: 16 }, (_, i) => Math.sin(7 * i + 1)), cG, 400);
+let mono = true; for (let k = 1; k < Sg.length; k++) if (Math.max(...Sg[k].map(Math.abs)) > Math.max(...Sg[k - 1].map(Math.abs)) + 1e-12) mono = false;
+check("Altafini (d_max = 10): max|u| nunca cresce, e no Gahuku-Gama tudo vai a zero", mono && Math.max(...Sg[400].map(Math.abs)) < 1e-12);
+const LF = K.laplacianoSinais(8, K.SINAIS.faccoes.make().edges), u0f = Array.from({ length: 8 }, (_, i) => Math.sin(3 * i + 2)), sf = [1, 1, 1, 1, -1, -1, -1, -1];
+const Sf2 = K.itera(LF, u0f, 0.9 / 4, 500), alvo = sf.reduce((a, x, i) => a + x * u0f[i], 0) / 8;
+check("duas facções: sᵀu se conserva e o limite é (sᵀu₀/n)·s", Sf2.every(u => near(sf.reduce((a, x, i) => a + x * u[i], 0), 8 * alvo, 1e-10)) && Sf2[500].every((x, i) => near(x, alvo * sf[i], 1e-9)));
+
 console.log("\nfalhas:", fails);
 process.exit(fails ? 1 : 0);

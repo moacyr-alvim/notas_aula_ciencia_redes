@@ -77,5 +77,15 @@ check("sinais: dados da célula = dados/gama.txt", (emb == _np.loadtxt(root / "d
 s, _ = rodar("sinais_lacunas.py")
 check("sinais (lacunas): roda sem completar", "contrariam a pintura: 1" in s)
 
+# laplaciano com sinais
+s, _ = rodar("lapsinal_solucao.py")
+check("lapsinal: L = D̄ − A_σ, λ₁ = 1,0403", "L = D̄ - A_σ ? True" in s and "λ₁ = 1.0403" in s)
+check("lapsinal: f = 7 ≥ nλ₁/4 = 4,16; sinal de q₁ contraria 8", "f = 7;  cota n λ₁ / 4 = 4.16" in s and "contraria 8 laços" in s)
+pol = re.search(r"prevista: ±([0-9.]+);  depois de 200 passos: \[([^\]]*)\]", s)
+vals = [abs(float(x)) for x in pol.group(2).split()]
+check("lapsinal: versão equilibrada polariza em ± (sᵀu₀)/n", all(abs(v - float(pol.group(1))) < 1e-4 for v in vals), pol.group(1))
+s, _ = rodar("lapsinal_lacunas.py")
+check("lapsinal (lacunas): roda sem completar", "L = D̄ - A_σ ? False" in s)
+
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)
