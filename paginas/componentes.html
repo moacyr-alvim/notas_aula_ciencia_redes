@@ -94,7 +94,7 @@
         <li><b>Contar pedaços.</b> Em qualquer rede, corte laços até ela se partir. O número de pontos vermelhos é sempre o número de componentes. No clube de caratê, o vértice $11$ tem um laço só, com o $0$: corte esse laço e ele vira uma componente sozinho.</li>
         <li><b>A ponte.</b> Em "dois grupos", corte a ponte $5$–$6$. Antes, $\lambda_2\approx0{,}26$ (bem menor que os outros autovalores: dez deles valem $6$ e o maior, cerca de $7{,}7$); depois, $\lambda_2=0$. O vetor de Fiedler já pintava cada grupo de uma cor antes do corte.</li>
         <li><b>Quase partir.</b> No anel, corte um laço: a rede continua inteira (vira um caminho), mas $\lambda_2$ cai de $0{,}268$ para $0{,}068$, quase um quarto, e o equilíbrio fica quatro vezes mais lento (exercício 4). Corte um segundo laço e ela se parte.</li>
-        <li><b>As facções do caratê.</b> Olhe as cores antes de cortar qualquer coisa: o sinal de $q_2$ já divide o clube em dois lados. Os onze laços que ligam as duas facções em que o clube de fato se dividiu são $0$–$31$, $1$–$30$, $2$–$9$, $2$–$27$, $2$–$28$, $2$–$32$, $8$–$30$, $8$–$32$, $8$–$33$, $13$–$33$ e $19$–$33$. Corte os onze e veja as duas componentes. Como o sinal de $q_2$ prevê a divisão é o assunto de <em>Comunidades pelo vetor de Fiedler</em>.</li>
+        <li><b>As facções do caratê.</b> Olhe as cores antes de cortar qualquer coisa: o sinal de $q_2$ já divide o clube em dois lados. Os onze laços que ligam as duas facções em que o clube de fato se dividiu são $0$–$31$, $1$–$30$, $2$–$9$, $2$–$27$, $2$–$28$, $2$–$32$, $8$–$30$, $8$–$32$, $8$–$33$, $13$–$33$ e $19$–$33$. Corte os onze e veja as duas componentes. Como o sinal de $q_2$ prevê a divisão é o assunto de <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>.</li>
         <li><b>A estrela.</b> Cortar qualquer laço isola uma folha. Na grade, quantos laços é preciso cortar para separar um canto? E para dividir a grade ao meio?</li>
       </ol>
 
@@ -103,7 +103,7 @@
         <li><b>Contar pedaços:</b> a multiplicidade do autovalor $0$. Num programa, contar componentes por busca em largura é mais barato; o interesse do espectro está no que vem a seguir.</li>
         <li><b>Medir gargalos e robustez:</b> $\lambda_2$, a <b>conectividade algébrica</b>, é uma medida contínua de quão longe a rede está de se partir. Retirar um laço nunca aumenta $\lambda_2$; o quanto ele cai mede quão crítico é aquele laço. Fiedler mostrou que, se a rede não é completa, $\lambda_2$ não passa do número mínimo de vértices que é preciso retirar para desconectá-la. No caratê, retirar o vértice $0$ isola o $11$, e de fato $\lambda_2\approx0{,}47\le1$.</li>
         <li><b>Velocidade de espalhamento:</b> difusão, consenso e passeios aleatórios se misturam em $\sim1/(c\lambda_2)$ passos. Redes com $\lambda_2$ grande espalham depressa; com $\lambda_2$ pequeno, ficam presas em grupos.</li>
-        <li><b>Achar comunidades:</b> o vetor $q_2$ aponta os dois lados do gargalo (próxima página).</li>
+        <li><b>Achar comunidades:</b> o vetor $q_2$ aponta os dois lados do gargalo (<a href="fiedler.html">próxima página</a>).</li>
       </ul>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
@@ -184,7 +184,7 @@
         <div>
           <h4>Para onde ir depois</h4>
           <ul>
-            <li>Comunidades pelo vetor de Fiedler <span class="soon">(em breve)</span></li>
+            <li><a href="fiedler.html">Comunidades pelo vetor de Fiedler</a></li>
             <li>Passeio aleatório e L normalizado <span class="soon">(em breve)</span></li>
           </ul>
         </div>

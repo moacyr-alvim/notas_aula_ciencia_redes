@@ -54,5 +54,15 @@ check("gargalo: 1/(cλ₂) ≈ 341 passos com ε = 0,05", "= 341" in s)
 s, _ = rodar("gargalo_lacunas.py")
 check("gargalo (lacunas): roda sem completar", "inf" in s)
 
+# comunidades pelo vetor de Fiedler
+s, _ = rodar("fiedler_solucao.py")
+check("fiedler: sinal dá lados 19/15, corte 10, erra 2 e 8", "lados 19 e 15   corte = 10   erram: [2, 8]" in s)
+check("fiedler: mediana reproduz as facções (corte 11, sem erros)", "mediana: lados 17 e 17   corte = 11   erram: []" in s)
+check("fiedler: cota nλ₂/4 = 3,98", "= 3.98 laços" in s)
+ac = [float(x) for x in re.findall(r"^\s*[0-9.]+\s+([01]\.[0-9]+)$", s, re.M)]
+check("fiedler: acertos caem de ~1 para ~0,5 com p_out", ac[0] > 0.97 and ac[-1] < 0.65, str(ac))
+s, _ = rodar("fiedler_lacunas.py")
+check("fiedler (lacunas): roda sem completar", "corte =  0" in s)
+
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

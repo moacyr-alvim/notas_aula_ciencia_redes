@@ -126,5 +126,31 @@ check("Rayleigh: vᵀLv/vᵀv ≥ λ₂ para v ⊥ 1, com igualdade em q₂", ra
 // estrela: λ₂ = 1 ≤ conectividade de vértices (1); completo: λ₂ = n
 check("estrela: λ₂ = 1; completo de 6: λ₂ = 6", near(est.lambda2, 1, 1e-10) && near(K.eigSym(Lc).values[1], 6, 1e-10));
 
+// ---------- página Comunidades pelo vetor de Fiedler ----------
+const fac = K.faccoes();
+check("facções: 17 e 17, e 11 laços entre elas", fac.filter(Boolean).length === 17 && K.corte(kar.edges, fac) === 11);
+let q2c = kar.eig.vectors[1].slice(); if (q2c.reduce((a, x, i) => a + x * (fac[i] ? 1 : -1), 0) < 0) q2c = q2c.map(x => -x);
+const dS = K.divide(q2c, kar.edges, "sinal"), dM = K.divide(q2c, kar.edges, "mediana"), dV = K.divide(q2c, kar.edges, "varredura");
+const errosDe = d => d.map((x, i) => x !== fac[i] ? i : -1).filter(i => i >= 0).join(",");
+check("caratê, sinal de q₂: lados 19/15, corte 10, erra 2 e 8", dS.filter(Boolean).length === 19 && K.corte(kar.edges, dS) === 10 && errosDe(dS) === "2,8");
+check("caratê, mediana de q₂: exatamente as facções", errosDe(dM) === "" && K.corte(kar.edges, dM) === 11);
+const lV = dV.filter(Boolean).length, menorV = Math.min(lV, 34 - lV), grupoV = dV.map((x, i) => x === (lV < 17) ? i : -1).filter(i => i >= 0).join(",");
+check("caratê, varredura: separa o grupinho {4,5,6,10,16} com corte 4", menorV === 5 && K.corte(kar.edges, dV) === 4 && grupoV === "4,5,6,10,16", grupoV);
+check("caratê: a cota nλ₂/4 ≈ 3,98 vale para as bisseções", 34 * kar.lambda2 / 4 <= 11 && near(34 * kar.lambda2 / 4, 3.98, 0.01));
+const troca = fac.slice(); troca[8] = !troca[8]; troca[9] = !troca[9];
+check("caratê: trocar 8 e 9 de lado dá uma bisseção com corte 10", troca.filter(Boolean).length === 17 && K.corte(kar.edges, troca) === 10);
+// corte = sᵀLs/4 com s = ±1
+const sv = fac.map(x => x ? 1 : -1), Ls = mv(kar.L, sv);
+check("corte = sᵀLs/4 para s = ±1", near(sv.reduce((a, x, i) => a + x * Ls[i], 0) / 4, 11));
+// varredura minimiza mesmo a razão entre os cortes por limiar
+let melhorR = Infinity; const ordQ = q2c.map((_, i) => i).sort((a, b) => q2c[a] - q2c[b]);
+for (let j = 1; j < 34; j++) { const l = new Array(34).fill(false); ordQ.slice(j).forEach(i => l[i] = true); melhorR = Math.min(melhorR, K.corte(kar.edges, l) * 34 / (j * (34 - j))); }
+check("varredura: acha a menor razão corte·n/(|S||S̄|) entre os limiares", near(K.corte(kar.edges, dV) * 34 / (5 * 29), melhorR, 1e-12));
+// modelo de blocos: reprodutível e com acertos altos quando p_out é pequeno
+const b1 = K.blocos(16, 0.4, 0.05, 7), b2 = K.blocos(16, 0.4, 0.05, 7);
+check("blocos: mesma semente, mesma rede", JSON.stringify(b1.edges) === JSON.stringify(b2.edges) && b1.pos.every(p => p[0] >= 0 && p[0] <= 1 && p[1] >= 0 && p[1] <= 1));
+let acs = 0; for (let sd = 1; sd <= 10; sd++) { const B = K.blocos(16, 0.4, 0.02, sd), e = K.eigSym(K.laplacian(32, B.edges)); acs += K.acertos(K.divide(e.vectors[1], B.edges, "mediana"), B.grupo); }
+check("blocos (p_in 0,4, p_out 0,02): mediana de q₂ acerta ≥ 95%", acs / 320 >= 0.95, (acs / 320).toFixed(3));
+
 console.log("\nfalhas:", fails);
 process.exit(fails ? 1 : 0);

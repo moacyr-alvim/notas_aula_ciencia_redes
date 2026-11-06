@@ -111,6 +111,70 @@
     return out;
   }
 
+  /* ---------- comunidades: cortes e divisões a partir de um vetor ---------- */
+  /* corte: quantos laços ligam vértices de lados diferentes (lado[i] booleano) */
+  function corte(edges, lado) { var c = 0; edges.forEach(function (e) { if (lado[e[0]] !== lado[e[1]]) c += e.length > 2 ? e[2] : 1; }); return c; }
+  /* divisões a partir de q: pelo sinal; pela mediana (metade para cada lado); pela melhor varredura,
+   * que testa os n − 1 cortes "os j maiores valores de q de um lado" e fica com o de menor razão corte·n/(|S||S̄|) */
+  function divide(q, edges, regra) {
+    var n = q.length, ordem = q.map(function (_, i) { return i; }).sort(function (a, b) { return q[a] - q[b]; }), lado = new Array(n).fill(false), j;
+    if (regra === "sinal") { for (j = 0; j < n; j++) lado[j] = q[j] > 0; return lado; }
+    if (regra === "mediana") { for (j = Math.ceil(n / 2); j < n; j++) lado[ordem[j]] = true; return lado; }
+    var melhor = Infinity, mj = 1, tent = new Array(n).fill(false), c;
+    for (j = n - 1; j >= 1; j--) {           // põe os n − j maiores de um lado, um de cada vez, atualizando o corte
+      tent[ordem[j]] = true;
+      c = corte(edges, tent);
+      var r = c * n / ((n - j) * j);
+      if (r < melhor - 1e-12) { melhor = r; mj = j; }
+    }
+    for (j = mj; j < n; j++) lado[ordem[j]] = true;
+    return lado;
+  }
+  /* acertos de uma divisão contra os grupos verdadeiros (os rótulos podem estar trocados) */
+  function acertos(lado, verdade) {
+    var a = 0; lado.forEach(function (x, i) { if (x === verdade[i]) a++; });
+    return Math.max(a, lado.length - a);
+  }
+
+  /* gerador de números pseudoaleatórios com semente (mulberry32) */
+  function rng(seed) {
+    var t = seed >>> 0;
+    return function () { t = (t + 0x6D2B79F5) >>> 0; var x = t; x = Math.imul(x ^ (x >>> 15), x | 1); x ^= x + Math.imul(x ^ (x >>> 7), x | 61); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
+  }
+  /* modelo estocástico de blocos: dois grupos de k vértices; laço com probabilidade pin dentro e pout entre */
+  function blocos(k, pin, pout, seed) {
+    var R = rng(seed), n = 2 * k, e = [], grupo = [], i, j;
+    for (i = 0; i < n; i++) grupo.push(i >= k);
+    for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) if (R() < (grupo[i] === grupo[j] ? pin : pout)) e.push([i, j]);
+    return { n: n, edges: e, grupo: grupo, pos: molas(n, e, seed + 1) };
+  }
+  /* desenho por molas (Fruchterman–Reingold), sem olhar os grupos; posições normalizadas para [0,1]² */
+  function molas(n, e, seed) {
+    var R = rng(seed), P = [], i, it;
+    for (i = 0; i < n; i++) P.push([R(), R()]);
+    var kk = Math.sqrt(1 / n), T = 0.1;
+    for (it = 0; it < 300; it++) {
+      var D = P.map(function () { return [0, 0]; });
+      for (i = 0; i < n; i++) for (var j = i + 1; j < n; j++) {
+        var dx = P[i][0] - P[j][0], dy = P[i][1] - P[j][1], d = Math.max(1e-4, Math.hypot(dx, dy)), f = kk * kk / d;
+        D[i][0] += dx / d * f; D[i][1] += dy / d * f; D[j][0] -= dx / d * f; D[j][1] -= dy / d * f;
+      }
+      e.forEach(function (l) {
+        var a = l[0], b = l[1], dx = P[a][0] - P[b][0], dy = P[a][1] - P[b][1], d = Math.max(1e-4, Math.hypot(dx, dy)), f = d * d / kk;
+        D[a][0] -= dx / d * f; D[a][1] -= dy / d * f; D[b][0] += dx / d * f; D[b][1] += dy / d * f;
+      });
+      for (i = 0; i < n; i++) { var m = Math.max(1e-9, Math.hypot(D[i][0], D[i][1])), s = Math.min(m, T); P[i][0] += D[i][0] / m * s; P[i][1] += D[i][1] / m * s; }
+      T = Math.max(0.002, T * 0.985);
+    }
+    var xs = P.map(function (p) { return p[0]; }), ys = P.map(function (p) { return p[1]; });
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys), sc = Math.max(x1 - x0, y1 - y0) || 1;
+    return P.map(function (p) { return [0.06 + 0.88 * (p[0] - x0 + (sc - (x1 - x0)) / 2) / sc, 0.06 + 0.88 * (p[1] - y0 + (sc - (y1 - y0)) / 2) / sc]; });
+  }
+
+  /* facções reais do clube de caratê (atributo "club" do networkx): true = Officer */
+  var KARATE_OFFICER = [9, 14, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33];
+  function faccoes() { var f = new Array(34).fill(false); KARATE_OFFICER.forEach(function (i) { f[i] = true; }); return f; }
+
   /* ---------- catálogo de redes ---------- */
   function caminho(n) {
     var e = [], p = [], i;
@@ -169,7 +233,8 @@
              graus: d, dmax: Math.max.apply(null, d), fonte: R.fonte };
   }
 
-  return { componentes: componentes, adjacency: adjacency, degrees: degrees, incidence: incidence, btb: btb, laplacian: laplacian, eigSym: eigSym,
+  return { corte: corte, divide: divide, acertos: acertos, rng: rng, blocos: blocos, molas: molas, faccoes: faccoes,
+           componentes: componentes, adjacency: adjacency, degrees: degrees, incidence: incidence, btb: btb, laplacian: laplacian, eigSym: eigSym,
            passo: passo, itera: itera, modos: modos, coefs: coefs, evolve: evolve,
            caminho: caminho, anel: anel, estrela: estrela, grade: grade, doisGrupos: doisGrupos, carate: carate,
            REDES: REDES, prepara: prepara };
