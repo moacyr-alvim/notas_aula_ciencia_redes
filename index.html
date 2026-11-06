@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O laplaciano em redes — mapa de conceitos</title>
+  <meta name="description" content="O laplaciano de grafos para ciência de redes: difusão, espectro, comunidades e passeios aleatórios, com demos interativas e Python no navegador.">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html">O laplaciano em redes</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="wide">
+    <section class="hero">
+      <h1>O laplaciano em redes</h1>
+      <p>Uma matriz, $L=D-A$, e muitas perguntas sobre uma rede: como algo se espalha por ela, quantos pedaços ela tem, onde estão os gargalos, quais são as comunidades, para onde vai um caminhante perdido.</p>
+      <p>O texto não precisa ser lido em ordem. Escolha um nó do mapa, ou um percurso, e comece por aí. Páginas com borda azul já existem; as tracejadas ainda vão ser escritas.</p>
+    </section>
+
+    <div class="chips" id="chips" role="group" aria-label="Percursos de leitura"></div>
+    <div class="mapwrap" id="mapa"></div>
+    <p class="mapinfo" id="info" aria-live="polite">Passe o mouse (ou use Tab) sobre um nó para ver do que ele trata. As setas vão do que ajuda a ler antes para o que vem depois.</p>
+    <div id="trail-list"></div>
+
+    <h2>Disponível agora</h2>
+    <ul class="pages">
+      <li><a href="paginas/difusao.html"><b>Difusão em redes</b><span>De onde há mais para onde há menos: a equação u′ = −cLu, o que ela garante e a solução modo a modo. Demo com o clube de caratê e Python.</span></a></li>
+    </ul>
+
+    <p class="meta">Material da disciplina de ciência de redes. Algumas páginas também aparecem, com outro sotaque, nas <a href="https://moacyr-alvim.github.io/notas_aula_edp/">notas de EDP</a>.</p>
+  </div>
+
+  <script src="assets/mapa.js"></script>
+  <script>
+    Mapa.mount({ map: "mapa", chips: "chips", info: "info", list: "trail-list" });
+  </script>
+</body>
+</html>

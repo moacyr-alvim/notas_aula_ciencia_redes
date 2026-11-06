@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Difusão em redes — O laplaciano em redes</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <style>
+    #demo-difusao canvas { height: 340px; }
+    #d-hover { margin-top: .4rem; font-size: .9rem; color: var(--ink-soft); min-height: 1.4em; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Difusão em redes</h1>
+        <p class="lede">Alguma coisa se espalha por uma rede: calor entre salas, dinheiro entre contas, uma opinião entre amigos que conversam. Se a regra é "pelos laços, de onde há mais para onde há menos, e mais depressa quanto maior a diferença", sai uma única equação, e com ela aparece o laplaciano da rede, $L=D-A$.</p>
+        <p class="meta">Primeira página. Precisa de álgebra linear (autovalores de matrizes simétricas) e de um pouco de EDOs lineares. O mesmo assunto, puxado para o lado das EDPs, está nas <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/difusao-grafos.html">notas de EDP</a>.</p>
+      </header>
+
+      <h2 id="regra" data-toc="A regra">A regra: o desnível empurra</h2>
+      <p>A rede tem $n$ vértices e uma matriz de adjacência $A$: $A_{ij}=1$ se $i$ e $j$ estão ligados e $0$ se não. Os laços não têm direção, então $A$ é simétrica. Em cada vértice mora uma quantidade $u_i(t)$.</p>
+      <p>Pense em tanques de água ligados por canos. Por cada cano passa água do tanque mais cheio para o mais vazio, com vazão proporcional ao desnível. Para o vértice $i$, o vizinho $j$ manda $c\,(u_j-u_i)$ por unidade de tempo: positivo se $j$ tem mais, negativo se tem menos. Somando sobre os vizinhos,
+      $$\boxed{\,\dot u_i=c\sum_{j}A_{ij}\,(u_j-u_i).\,}$$
+      A constante $c>0$ mede quão bem os canos conduzem. Em palavras: <em>cada um anda na direção dos vizinhos</em>, e anda mais depressa quanto mais longe deles estiver.</p>
+
+      <figure class="fig">
+<svg viewBox="0 0 520 220" role="img" aria-labelledby="fg1t" style="width:100%;height:auto;max-width:520px;display:block;margin:0 auto">
+  <title id="fg1t">Um vértice com valor 2 e três vizinhos com valores 5, 3 e 1. Chegam 3 do vizinho com 5 e 1 do vizinho com 3; sai 1 para o vizinho com 1.</title>
+  <defs><marker id="sf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1 L9,5 L0,9 z" style="fill:var(--choque)"/></marker></defs>
+  <g style="stroke:var(--rule)" stroke-width="2"><line x1="90" y1="110" x2="260" y2="110"/><line x1="420" y1="50" x2="260" y2="110"/><line x1="420" y1="170" x2="260" y2="110"/></g>
+  <g style="stroke:var(--choque)" stroke-width="2.4" marker-end="url(#sf)">
+    <line x1="122" y1="96" x2="222" y2="96"/>
+    <line x1="393" y1="40" x2="300" y2="75"/>
+    <line x1="300" y1="145" x2="393" y2="180"/>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink)" stroke-width="2.2"><circle cx="260" cy="110" r="24"/><circle cx="90" cy="110" r="22"/><circle cx="420" cy="50" r="22"/><circle cx="420" cy="170" r="22"/></g>
+  <g font-family="sans-serif" font-size="16" style="fill:var(--ink)" text-anchor="middle">
+    <text x="260" y="116" font-weight="bold">2</text><text x="90" y="116">5</text><text x="420" y="56">3</text><text x="420" y="176">1</text>
+  </g>
+  <g font-family="sans-serif" font-size="13" style="fill:var(--choque)" text-anchor="middle">
+    <text x="172" y="86">chega 3c</text><text x="362" y="30">chega 1c</text><text x="372" y="208">sai 1c</text>
+  </g>
+  <text x="90" y="150" font-family="sans-serif" font-size="12" style="fill:var(--ink-soft)" text-anchor="middle">vizinho</text>
+  <text x="260" y="152" font-family="sans-serif" font-size="12" style="fill:var(--ink-soft)" text-anchor="middle">vértice i</text>
+</svg>
+<figcaption>O vértice $i$ tem $u_i=2$ e três vizinhos, com $5$, $3$ e $1$. As setas mostram para onde vai a quantidade em cada laço. No total, $\dot u_i=c\,[(5-2)+(3-2)+(1-2)]=3c$: o vértice sobe, porque está abaixo da maior parte da vizinhança.</figcaption>
+</figure>
+
+      <p>A mesma regra aparece com outros nomes: lei de Fourier (calor), de Fick (partículas), de Ohm (carga). Em redes sociais é o modelo mais simples de influência entre opiniões contínuas, e em tempo discreto ele vira o <em>consenso de DeGroot</em> (página futura).</p>
+
+      <aside class="box atencao">
+        <p class="tag">Difusão não é contágio</p>
+        <p>Aqui a quantidade é <em>redistribuída</em>: o que um vértice ganha, outro perdeu. Num boato ou numa epidemia, quem conta não esquece, e o total cresce. São modelos diferentes. A difusão é o mais simples dos dois e é o que o laplaciano descreve de forma exata. Para contágio, a matriz que importa é $A$ (o maior autovalor dela), não $L$.</p>
+      </aside>
+
+      <h2 id="laplaciano" data-toc="Aparece o laplaciano">Aparece o laplaciano</h2>
+      <p>Abra a soma: $\sum_j A_{ij}u_j$ é $(Au)_i$, e $\sum_j A_{ij}u_i=u_i\sum_jA_{ij}=d_i\,u_i$, onde $d_i$ é o <b>grau</b> do vértice. Então
+      $$\dot u_i=c\,\big((Au)_i-d_iu_i\big),\qquad\text{isto é,}\qquad \boxed{\,\dot u=-c\,L\,u,\qquad L=D-A,\,}$$
+      com $D$ a matriz diagonal dos graus. $L$ é o <b>laplaciano da rede</b>. A equação é um sistema linear de EDOs, uma para cada vértice, acopladas pelos laços.</p>
+
+      <figure class="fig">
+<svg viewBox="0 0 520 100" role="img" aria-labelledby="fg2t" style="width:100%;height:auto;max-width:480px;display:block;margin:0 auto">
+  <title id="fg2t">Caminho de três vértices: 1 ligado a 2, 2 ligado a 3.</title>
+  <g style="stroke:var(--ink-soft)" stroke-width="2.4"><line x1="92" y1="50" x2="238" y2="50"/><line x1="282" y1="50" x2="428" y2="50"/></g>
+  <g style="fill:var(--paper);stroke:var(--ink)" stroke-width="2.2"><circle cx="70" cy="50" r="22"/><circle cx="260" cy="50" r="22"/><circle cx="450" cy="50" r="22"/></g>
+  <g font-family="sans-serif" font-size="16" style="fill:var(--ink)" text-anchor="middle"><text x="70" y="56">1</text><text x="260" y="56">2</text><text x="450" y="56">3</text></g>
+</svg>
+<figcaption>O menor exemplo que tem graça: o caminho de três vértices.</figcaption>
+</figure>
+
+      <p>Para o caminho da figura,
+      $$A=\begin{pmatrix}0&1&0\\1&0&1\\0&1&0\end{pmatrix},\qquad D=\begin{pmatrix}1&0&0\\0&2&0\\0&0&1\end{pmatrix},\qquad L=\begin{pmatrix}1&-1&0\\-1&2&-1\\0&-1&1\end{pmatrix}.$$
+      Lendo $L$: na diagonal, os graus; fora dela, $-1$ onde há laço; e <b>cada linha soma zero</b>. Se os laços têm pesos $w_{ij}$ (intensidade da relação, capacidade do cano), troque $A_{ij}$ por $w_{ij}$ e o grau pela soma dos pesos: nada mais muda.</p>
+
+      <details>
+        <summary>Por que "laplaciano"?</summary>
+        <div class="body">
+          <p>Numa grade quadrada de espaçamento $h$, cada vértice tem quatro vizinhos e $(Lu)_i=4u_i-(\text{soma dos quatro vizinhos})$. É, a menos do fator $h^2$ e do sinal, a aproximação usual de $\Delta u=u_{xx}+u_{yy}$ por diferenças finitas: $(Lu)_i\approx-h^2\Delta u$. Então $\dot u=-cLu$ é a versão em rede da equação do calor $u_t=k\,\Delta u$. O sinal de menos é a razão de muitos livros chamarem de laplaciano a matriz $A-D$; aqui seguimos o costume de redes, $L=D-A$, que tem autovalores $\ge0$. A passagem para o contínuo está nas notas de EDP, em <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/calor-grafo-anel.html">O grafo em anel e o limite contínuo</a>.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Outro caminho até $L$: pelos laços</summary>
+        <div class="body">
+          <p>Oriente cada laço de qualquer jeito e monte a <b>matriz de incidência</b> $B$, com uma linha por laço: a linha do laço $i\to j$ tem $-1$ na coluna $i$ e $+1$ na coluna $j$. Então $(Bu)_e=u_j-u_i$ é o desnível no laço $e$, o fluxo em cada laço é $-c\,Bu$, e o balanço em cada vértice é $B^\top$ aplicado a esse fluxo. Sai $\dot u=-c\,B^\top B\,u$, e de fato $B^\top B=D-A$. A vantagem dessa forma é que ela deixa evidente $u^\top Lu=\|Bu\|^2\ge0$, que usamos abaixo.</p>
+        </div>
+      </details>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>Toda a quantidade começa num vértice (o de contorno grosso) e a soma total é $1$. Arraste $t$ ou aperte <b>Animar</b>. A cor de cada vértice mostra $u_i$; ao lado, as curvas $u_i(t)$ de todos os vértices, a do vértice inicial em destaque e a média $1/n$ pontilhada. O tempo está em escala logarítmica e $u$ em escala de raiz quadrada, porque o começo é muito rápido e os valores ficam pequenos (perto de $1/n$); marque <b>escalas lineares</b> para ver sem distorção. <b>Clique num vértice</b> para recomeçar com a quantidade toda nele; passe o mouse para ver o valor e destacar a curva. Aqui $c=1$.</p>
+
+      <div class="demo" id="demo-difusao">
+        <div class="controls">
+          <label>rede <select id="d-rede" aria-label="Escolha da rede"></select></label>
+          <label>começa em <select id="d-fonte" aria-label="Vértice onde a quantidade começa"></select></label>
+        </div>
+        <div class="controls">
+          <label>t <input type="range" id="d-t" min="0" max="1" step="0.0025" value="0" aria-label="Tempo"> <output id="d-tv">0,00</output></label>
+          <button id="d-play" type="button">▶ Animar</button>
+          <label><input type="checkbox" id="d-lin"> escalas lineares</label>
+        </div>
+        <div class="panels two">
+          <canvas id="d-rede-canvas" role="img" aria-label="A rede, com cada vértice colorido pelo valor de u"></canvas>
+          <canvas id="d-curvas-canvas" role="img" aria-label="Curvas de u em cada vértice ao longo do tempo"></canvas>
+        </div>
+        <div id="d-hover" aria-live="polite"></div>
+        <div class="readout" id="d-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--choque)"></i>vértice inicial</span>
+          <span><i style="border-color:var(--carac)"></i>vértice sob o mouse</span>
+          <span><i style="border-color:var(--ink-soft)"></i>demais vértices</span>
+          <span>cor do vértice: $u_i^{1/3}$, para que valores pequenos também apareçam</span>
+        </div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li><b>Clube de caratê.</b> Comece no vértice $0$ (o instrutor, grau $16$) e depois no $16$ (grau $2$, na borda). De onde a quantidade se espalha mais depressa no começo? E o tempo para tudo se igualar, muda muito?</li>
+        <li><b>Estrela.</b> Comece no centro e depois numa folha. Do centro, tudo se iguala quase de imediato (por volta de $t=0{,}1$); de uma folha, leva algumas unidades de tempo. O exercício 4 explica por quê.</li>
+        <li><b>Caminho.</b> Comece numa ponta. A outra ponta demora a receber alguma coisa, e o equilíbrio é lento: num caminho de $n$ vértices, o tempo cresce como $n^2$ (exercício 5).</li>
+        <li><b>Dois grupos.</b> Dentro do grupo de partida tudo se iguala depressa; entre os grupos fica um patamar, que só se desfaz devagar, pelo único laço. Esse é o assunto de <em>Componentes e gargalos</em>.</li>
+        <li>Em todas as redes, olhe o <b>maior valor</b> na leitura: ele nunca sobe. E a <b>soma</b> nunca muda.</li>
+      </ol>
+
+      <h2 id="garantias" data-toc="O que a equação garante">O que a equação garante</h2>
+      <ul>
+        <li><b>Nada se perde.</b> As linhas de $L$ somam zero, isto é, $L\mathbf 1=0$. Como $L$ é simétrica, $\frac{d}{dt}\sum_iu_i=-c\,\mathbf 1^\top Lu=-c\,(L\mathbf 1)^\top u=0$. A quantidade só muda de lugar.</li>
+        <li><b>O máximo não sobe, o mínimo não desce.</b> No vértice com o maior $u$, todos os vizinhos estão abaixo ou empatados, então cada parcela $u_j-u_i$ é $\le0$ e $\dot u_i\le0$. O mais rico só pode perder, o mais pobre só pode ganhar. Nenhum vértice ultrapassa o valor que o máximo tinha no início (é o <em>princípio do máximo</em>).</li>
+        <li><b>As diferenças se apagam.</b> A "energia" $\mathcal E(u)=u^\top Lu=\sum_{\text{laços }ij}(u_i-u_j)^2$ mede o desacordo total entre vizinhos. Ela nunca é negativa, e $\frac{d}{dt}\tfrac12\|u\|^2=-c\,u^\top Lu=-c\,\mathcal E(u)\le0$.</li>
+        <li><b>No fim, todos na média</b>, se a rede é conexa. Isso sai da solução modo a modo, logo abaixo. Se não é conexa, cada pedaço vai para a sua própria média.</li>
+      </ul>
+
+      <h2 id="modos" data-toc="A solução, modo a modo">A solução, modo a modo</h2>
+      <p>$L$ é simétrica, então tem autovalores reais e uma base ortonormal de autovetores, $Lq_k=\lambda_kq_k$. Pela energia, $\lambda_k=q_k^\top Lq_k\ge0$; e $\lambda_1=0$, com $q_1=\mathbf 1/\sqrt n$. Ordenando,
+      $$0=\lambda_1\le\lambda_2\le\dots\le\lambda_n.$$
+      Escreva o dado inicial nessa base, $u_0=\sum_ka_kq_k$ com $a_k=q_k^\top u_0$. Cada parcela evolui sozinha, porque $L$ só a multiplica por $\lambda_k$:
+      $$u(t)=e^{-cLt}u_0=\sum_{k=1}^{n}e^{-c\lambda_kt}\,a_k\,q_k.$$
+      O primeiro termo não decai nunca: $a_1q_1=\big(\tfrac1n\sum_iu_{0,i}\big)\mathbf 1$ é a média, em todos os vértices. Os outros morrem, cada um com a sua taxa $c\lambda_k$. Os autovetores de $\lambda$ grande trocam de sinal entre vizinhos (são "ondulados", têm energia alta) e somem primeiro. O último a morrer é o de $\lambda_2$, e é ele que manda no tempo para chegar ao equilíbrio:
+      $$u(t)-\bar u\,\mathbf 1\approx e^{-c\lambda_2t}\,a_2\,q_2,\qquad\text{tempo de equilíbrio}\sim\frac{1}{c\,\lambda_2}.$$
+      Se a rede é conexa, $\lambda_2>0$ (veja <em>Componentes e gargalos</em>) e tudo converge para a média. $\lambda_2$ tem nome: <b>conectividade algébrica</b>, ou valor de Fiedler. A leitura da demo mostra $\lambda_2$ e $1/\lambda_2$ para cada rede.</p>
+
+      <aside class="box">
+        <p class="tag">Nas próximas páginas</p>
+        <p>O que um $\lambda_2$ pequeno diz sobre a forma da rede, e como o autovetor $q_2$ aponta os dois lados de um gargalo (<em>Componentes e gargalos</em>, <em>Comunidades pelo vetor de Fiedler</em>). E o que muda quando quem se espalha é um caminhante, que escolhe um vizinho ao acaso (<em>Passeio aleatório</em>).</p>
+      </aside>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Monte $L=D-A$ para o clube de caratê, ponha toda a quantidade no vértice $0$ e resolva modo a modo. O segundo gráfico mostra a distância ao equilíbrio em escala logarítmica: depois de um começo rápido, ela vira uma reta com a inclinação de $e^{-\lambda_2t}$. Ao rodar, confira que a soma fica em $1$, que o maior valor nunca sobe e que $\lambda_2\approx0{,}4685$.</p>
+      <p>Atenção a um detalhe do networkx: <code>karate_club_graph()</code> vem com pesos nos laços (em quantos contextos o par se encontrava). Para usar só "ligado ou não", passe <code>weight=None</code>. Com os pesos, o $\lambda_2$ muda; experimente.</p>
+
+      <div class="pycell" data-title="Difusão no clube de caratê"
+           data-starter="../py/difusao_lacunas.py"
+           data-solution="../py/difusao_solucao.py"></div>
+
+      <p>Para pensar: troque o vértice inicial pelo $16$. O que muda no primeiro gráfico, e o que <em>não</em> muda no segundo? (Dica: a inclinação final depende do vértice inicial?)</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O caminho de três vértices</p>
+        <p>Ache os autovalores e autovetores de $L$ do caminho de três vértices (acima). Interprete cada autovetor como um "jeito de estar fora do equilíbrio".</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\lambda=0,\,1,\,3$, com $q_1=(1,1,1)/\sqrt3$, $q_2=(1,0,-1)/\sqrt2$, $q_3=(1,-2,1)/\sqrt6$. Confira, por exemplo, $L(1,-2,1)^\top=(3,-6,3)^\top$.</p>
+          <p>$q_1$ é o equilíbrio. $q_2$ é "uma ponta contra a outra", e decai com taxa $c$. $q_3$ é "o meio contra as pontas", o mais ondulado, e decai com taxa $3c$: o vértice do meio conversa com os dois lados ao mesmo tempo, por isso esse desequilíbrio se desfaz mais depressa.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Conservação e energia</p>
+        <p>(a) Mostre que $u^\top Lu=\sum_{\text{laços }ij}(u_i-u_j)^2$. (b) Conclua que $\sum_iu_i$ é constante e que $\|u\|^2$ decresce ao longo das soluções de $\dot u=-cLu$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $u^\top Lu=\sum_id_iu_i^2-\sum_{i,j}A_{ij}u_iu_j$. Cada laço $ij$ aparece duas vezes na segunda soma (como $ij$ e como $ji$) e contribui com $u_i^2+u_j^2$ na primeira (uma vez em $d_i$, outra em $d_j$). Por laço: $u_i^2+u_j^2-2u_iu_j=(u_i-u_j)^2$.</p>
+          <p>(b) $\frac{d}{dt}\mathbf 1^\top u=-c\,\mathbf 1^\top Lu=-c\,(L\mathbf 1)^\top u=0$. E $\frac{d}{dt}\tfrac12\|u\|^2=u^\top\dot u=-c\,u^\top Lu\le0$ pelo item (a).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Todos ligados a todos</p>
+        <p>No grafo completo de $n$ vértices, mostre que $L=nI-\mathbf 1\mathbf 1^\top$ e ache os autovalores. Em quanto tempo $u$ chega perto da média?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Cada vértice tem grau $n-1$ e há $-1$ em toda a parte fora da diagonal: $L=(n-1)I-(\mathbf 1\mathbf 1^\top-I)=nI-\mathbf 1\mathbf 1^\top$. Então $L\mathbf 1=n\mathbf 1-n\mathbf 1=0$ e, para qualquer $v\perp\mathbf 1$, $Lv=nv$. Os autovalores são $0$ (uma vez) e $n$ ($n-1$ vezes). Todo desequilíbrio decai com a mesma taxa $cn$, em tempo da ordem de $1/(cn)$: quanto mais gente, mais depressa, porque cada um conversa com todos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. A estrela</p>
+        <p>Na estrela com centro $0$ e folhas $1,\dots,n-1$: (a) mostre que todo $v$ com $v_0=0$ e $\sum_{j\ge1}v_j=0$ é autovetor de $L$ com autovalor $1$, e que $w=(n-1,-1,\dots,-1)$ é autovetor com autovalor $n$. (b) Explique o que a demo mostrou: começando no centro, o equilíbrio chega em tempo $\sim1/(cn)$; começando numa folha, em tempo $\sim1/c$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Para $v$: numa folha, $(Lv)_j=v_j-v_0=v_j$; no centro, $(Lv)_0=(n-1)v_0-\sum_jv_j=0=v_0$. Logo $Lv=v$, e esses $v$ formam um espaço de dimensão $n-2$. Para $w$: $(Lw)_0=(n-1)(n-1)+(n-1)=n(n-1)=n\,w_0$ e, numa folha, $(Lw)_j=w_j-w_0=-1-(n-1)=-n=n\,w_j$. Com $\mathbf 1$, são $n$ autovetores: os autovalores são $0$, $1$ ($n-2$ vezes) e $n$.</p>
+          <p>(b) Começando no centro, $u_0=e_0=\tfrac1n(\mathbf 1+w)$: só aparecem a média e o modo de $\lambda=n$, então $u(t)=\tfrac1n\big(\mathbf 1+e^{-cnt}w\big)$ e o equilíbrio chega em tempo $1/(cn)$. Começando na folha $1$, $u_0=e_1$ tem componente nos modos de $\lambda=1$ (a diferença entre essa folha e as outras), que decaem só com taxa $c$. O centro espalha depressa porque está ligado a todos; uma folha só fala com o centro, e o centro precisa redistribuir para as outras folhas.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Por que o caminho é lento</p>
+        <p>No caminho de $n$ vértices (numerados $0,\dots,n-1$), mostre que $v_i=\cos\!\big(\pi(i+\tfrac12)/n\big)$ é autovetor de $L$ com autovalor $2-2\cos(\pi/n)$. Conclua que o tempo de equilíbrio cresce como $n^2$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $\theta=\pi/n$, nos vértices de dentro $(Lv)_i=2v_i-v_{i-1}-v_{i+1}$, e a identidade $\cos(x-\theta)+\cos(x+\theta)=2\cos\theta\cos x$ dá $(Lv)_i=(2-2\cos\theta)\,v_i$. Nas pontas há um vizinho só; mas $v$ foi escolhido para que $v_{-1}=v_0$ e $v_n=v_{n-1}$ (os "vizinhos fantasmas" fora do caminho têm o mesmo valor da ponta), e então $(Lv)_0=v_0-v_1=2v_0-v_{-1}-v_1$, e a mesma conta vale.</p>
+          <p>Esse é o modo mais lento ($\lambda_2$: meio período de cosseno ao longo do caminho). Para $n$ grande, $2-2\cos(\pi/n)\approx\pi^2/n^2$, então o tempo de equilíbrio $1/(c\lambda_2)\approx n^2/(c\pi^2)$. Dobrar o comprimento do caminho quadruplica o tempo: é a escala "difusiva", a mesma do calor numa barra. Na demo, com $n=8$: $\lambda_2\approx0{,}152$ e $1/\lambda_2\approx6{,}6$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li>Álgebra linear: autovalores e autovetores de matrizes simétricas</li>
+            <li>EDOs lineares: $\dot u=Mu$ e a exponencial de matriz</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li>Componentes e gargalos <span class="soon">(em breve)</span></li>
+            <li>Consenso (DeGroot) <span class="soon">(em breve)</span></li>
+            <li>Passeio aleatório e L normalizado <span class="soon">(em breve)</span></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/redes-core.js"></script>
+  <script src="../assets/difusao-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>
