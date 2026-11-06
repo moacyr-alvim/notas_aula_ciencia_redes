@@ -94,5 +94,37 @@ const v8 = Array.from({ length: 8 }, (_, i) => Math.cos(Math.PI * (i + 0.5) / 8)
 check("caminho de 8: cos(π(i+½)/n) é autovetor de λ₂", mv(cam.L, v8).every((x, i) => near(x, cam.lambda2 * v8[i], 1e-12)));
 check("caminho de 8: c = 0,52 já é instável (cλ_max > 2)", 0.52 * cam.lambdaMax > 2);
 
+// ---------- página Componentes e gargalos ----------
+const nulos = (n, e) => K.eigSym(K.laplacian(n, e)).values.filter(x => x === 0).length;
+const ncomp = (n, e) => Math.max(...K.componentes(n, e)) + 1;
+const ex1 = [[0, 1], [1, 2], [3, 4]];
+check("exercício 1: 3 componentes e 3 autovalores nulos", ncomp(6, ex1) === 3 && nulos(6, ex1) === 3);
+const Lx = K.laplacian(6, ex1); let ux = [3, 0, 0, 2, 0, 5]; for (let k = 0; k < 400; k++) ux = K.passo(Lx, ux, 0.45);
+check("exercício 1: converge para (1,1,1,1,1,5)", ux.every((x, i) => near(x, [1, 1, 1, 1, 1, 5][i], 1e-9)));
+const corteK = [[0, 31], [1, 30], [2, 9], [2, 27], [2, 28], [2, 32], [8, 30], [8, 32], [8, 33], [13, 33], [19, 33]];
+const restoK = K.carate().edges.filter(e => !corteK.some(c => c[0] === e[0] && c[1] === e[1]));
+check("caratê: cortar os 11 laços entre facções deixa 2 componentes e 2 autovalores nulos", restoK.length === 67 && ncomp(34, restoK) === 2 && nulos(34, restoK) === 2);
+const sem11 = K.carate().edges.filter(e => e[0] !== 11 && e[1] !== 11);
+check("caratê: o vértice 11 tem um laço só, e cortá-lo o isola", K.carate().edges.length - sem11.length === 1 && ncomp(34, sem11) === 2);
+const gr = K.prepara("grupos"), semPonte = gr.edges.filter(e => !(e[0] === 5 && e[1] === 6));
+check("dois grupos: cortar a ponte 5–6 dá 2 componentes", semPonte.length === gr.edges.length - 1 && ncomp(12, semPonte) === 2 && nulos(12, semPonte) === 2);
+check("dois grupos (k = 6, porta 1): λ₂ = 0,2583 ≤ 2/k", near(gr.lambda2, 0.25834, 1e-5) && gr.lambda2 <= 2 / 6);
+const an = K.anel(12), anCut = an.edges.slice(1);
+const l2a = K.eigSym(K.laplacian(12, an.edges)).values[1], l2c = K.eigSym(K.laplacian(12, anCut)).values[1];
+check("anel de 12 → caminho: λ₂ de 0,268 para 0,068 (≈ 1/4)", near(l2a, 2 - 2 * Math.cos(2 * Math.PI / 12), 1e-10) && near(l2c, 2 - 2 * Math.cos(Math.PI / 12), 1e-10), (l2c / l2a).toFixed(3));
+// cota do gargalo λ₂ ≤ corte·n/(|S||S̄|), no caratê com as facções
+check("caratê: λ₂ = 0,4685 ≤ 11·34/(17·17) = 1,294", kar.lambda2 <= 11 * 34 / 289 && near(11 * 34 / 289, 1.294, 1e-3));
+// Rayleigh: para v ⊥ 1, vᵀLv/vᵀv ≥ λ₂
+let rayOk = true;
+for (let t = 0; t < 50; t++) {
+  let v = Array.from({ length: 34 }, (_, i) => Math.sin(1.3 * i * (t + 1) + t)); const m = v.reduce((a, b) => a + b, 0) / 34; v = v.map(x => x - m);
+  const Lv = mv(kar.L, v), r = v.reduce((a, x, i) => a + x * Lv[i], 0) / v.reduce((a, x) => a + x * x, 0);
+  rayOk = rayOk && r >= kar.lambda2 - 1e-12;
+}
+const q2k = kar.eig.vectors[1], Lq2 = mv(kar.L, q2k);
+check("Rayleigh: vᵀLv/vᵀv ≥ λ₂ para v ⊥ 1, com igualdade em q₂", rayOk && near(q2k.reduce((a, x, i) => a + x * Lq2[i], 0), kar.lambda2, 1e-10));
+// estrela: λ₂ = 1 ≤ conectividade de vértices (1); completo: λ₂ = n
+check("estrela: λ₂ = 1; completo de 6: λ₂ = 6", near(est.lambda2, 1, 1e-10) && near(K.eigSym(Lc).values[1], 6, 1e-10));
+
 console.log("\nfalhas:", fails);
 process.exit(fails ? 1 : 0);

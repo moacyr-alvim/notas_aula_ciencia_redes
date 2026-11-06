@@ -44,5 +44,15 @@ check("difusão: o maior valor só desce, ninguém fica negativo", all(a >= b fo
 s, _ = rodar("difusao_lacunas.py")
 check("difusão (lacunas): roda e avisa que ainda falta completar", "L = D - A ? False" in s)
 
+# gargalo: dois grupos com porta eps
+s, _ = rodar("gargalo_solucao.py")
+linhas = re.findall(r"^\s*([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)$", s, re.M)
+rel = [float(b) / float(c) for _, b, c in linhas]
+check("gargalo: λ₂ ≤ 2ε/k sempre, e λ₂ ≈ 2ε/k para ε pequeno", all(r <= 1 + 1e-3 for r in rel) and rel[0] > 0.99, str([round(r, 3) for r in rel[:3]]))
+check("gargalo: o sinal de q₂ separa os grupos", "------++++++" in s or "++++++------" in s)
+check("gargalo: 1/(cλ₂) ≈ 341 passos com ε = 0,05", "= 341" in s)
+s, _ = rodar("gargalo_lacunas.py")
+check("gargalo (lacunas): roda sem completar", "inf" in s)
+
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

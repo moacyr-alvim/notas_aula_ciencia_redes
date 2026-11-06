@@ -101,6 +101,16 @@
     return u;
   }
 
+  /* componentes conexas (união-busca): devolve o rótulo 0, 1, 2, … de cada vértice, na ordem em que aparecem */
+  function componentes(n, edges) {
+    var p = [], i; for (i = 0; i < n; i++) p.push(i);
+    var f = function (x) { while (p[x] !== x) { p[x] = p[p[x]]; x = p[x]; } return x; };
+    edges.forEach(function (e) { p[f(e[0])] = f(e[1]); });
+    var rot = {}, out = [], c = 0;
+    for (i = 0; i < n; i++) { var r = f(i); if (!(r in rot)) rot[r] = c++; out.push(rot[r]); }
+    return out;
+  }
+
   /* ---------- catálogo de redes ---------- */
   function caminho(n) {
     var e = [], p = [], i;
@@ -159,7 +169,7 @@
              graus: d, dmax: Math.max.apply(null, d), fonte: R.fonte };
   }
 
-  return { adjacency: adjacency, degrees: degrees, incidence: incidence, btb: btb, laplacian: laplacian, eigSym: eigSym,
+  return { componentes: componentes, adjacency: adjacency, degrees: degrees, incidence: incidence, btb: btb, laplacian: laplacian, eigSym: eigSym,
            passo: passo, itera: itera, modos: modos, coefs: coefs, evolve: evolve,
            caminho: caminho, anel: anel, estrela: estrela, grade: grade, doisGrupos: doisGrupos, carate: carate,
            REDES: REDES, prepara: prepara };
