@@ -11,14 +11,16 @@
   var LANES = [
     { id: "din",   label: "Dinâmicas\nna rede" },
     { id: "esp",   label: "Espectro e\nestrutura" },
-    { id: "pas",   label: "Passeios\naleatórios" }
+    { id: "pas",   label: "Passeios\naleatórios" },
+    { id: "sin",   label: "Redes com\nsinais" }
   ];
 
   var TRAILS = [
     { id: "basico",   label: "Primeiro contato" },
     { id: "dinamica", label: "Dinâmicas" },
     { id: "espectro", label: "Espectro e comunidades" },
-    { id: "passeios", label: "Passeios aleatórios" }
+    { id: "passeios", label: "Passeios aleatórios" },
+    { id: "sinais",   label: "Redes com sinais" }
   ];
 
   // href: null  =>  "em breve"
@@ -45,10 +47,22 @@
       desc: "A rede como circuito elétrico: a pseudoinversa de L, a resistência entre dois vértices e o tempo de ida e volta do caminhante." }
   ];
 
+  NODES.push(
+    { id: "sinais", lane: "sin", col: 0, label: "Redes com sinais\ne equilíbrio", href: "paginas/sinais.html", trails: ["sinais"],
+      desc: "Laços positivos e negativos, as tríades de Heider, equilíbrio por ciclos e o teorema de estrutura de Harary (equilibrada ⇔ agrupável em dois), com prova pela árvore geradora. As tribos Gahuku-Gama. Demo e Python." },
+    { id: "lapsinal", lane: "sin", col: 1, label: "Laplaciano\ncom sinais", href: null, trails: ["sinais"],
+      desc: "A incidência com sinais, L = BᵀB = D − A_σ, e o teorema: o menor autovalor é zero exatamente quando a rede é equilibrada. A troca de sinais como mudança de base." },
+    { id: "frustr", lane: "sin", col: 2, label: "Quão longe\ndo equilíbrio", href: null, trails: ["sinais"],
+      desc: "O índice de frustração, por que calculá-lo é difícil, e o menor autovalor do laplaciano com sinais como cota e como aproximação." },
+    { id: "davis", lane: "sin", col: 1, row: 1, label: "Equilíbrio fraco\n(Davis)", href: null, trails: ["sinais"],
+      desc: "Aceitar a tríade − − − e permitir mais de dois grupos: agrupável em k grupos ⇔ nenhum ciclo com exatamente um laço negativo." }
+  );
+
   var EDGES = [
     ["difusao", "consenso"], ["consenso", "sincr"],
     ["difusao", "comp"], ["comp", "fiedler"], ["fiedler", "desenho"], ["difusao", "modos"], ["modos", "desenho"],
-    ["difusao", "passeio"], ["passeio", "pagerank"], ["passeio", "resist"]
+    ["difusao", "passeio"], ["passeio", "pagerank"], ["passeio", "resist"],
+    ["sinais", "lapsinal"], ["lapsinal", "frustr"], ["sinais", "davis"]
   ];
 
   // geometria

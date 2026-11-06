@@ -87,6 +87,13 @@ python3 tests/check_site.py         # links, âncoras, ids, tags e fórmulas
 O que **não** é coberto: a renderização real no navegador e o carregamento do Pyodide pelo CDN.
 Vale abrir cada página uma vez depois de publicar.
 
+## Sobre os dados
+
+`dados/gama.txt`: tribos Gahuku-Gama (Read, 1954), duas matrizes 16 × 16 empilhadas, primeiro a de alianças
+(positiva) e depois a de hostilidades (negativa). A ordem das tribos é GAVEV, KOTUN, OVE, ALIKA, NAGAM, GAHUK,
+MASIL, UKUDZ, NOTOH, KOHIK, GEHAM, ASARO, UHETO, SEUVE, NAGAD, GAMA. Os testes conferem que a célula de Python e a
+demo usam exatamente esses dados.
+
 ## Sobre o clube de caratê
 
 A demo e a célula de Python usam a rede de Zachary (1977) **sem pesos**, como em `nx.karate_club_graph()`

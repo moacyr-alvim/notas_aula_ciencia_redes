@@ -64,5 +64,18 @@ check("fiedler: acertos caem de ~1 para ~0,5 com p_out", ac[0] > 0.97 and ac[-1]
 s, _ = rodar("fiedler_lacunas.py")
 check("fiedler (lacunas): roda sem completar", "corte =  0" in s)
 
+# redes com sinais: Gahuku-Gama
+s, _ = rodar("sinais_solucao.py")
+check("sinais: 29 positivos e 29 negativos", "16 tribos, 29 laços positivos e 29 negativos" in s)
+check("sinais: 11 conflitos com a pintura da árvore, não equilibrada", "contrariam a pintura: 11" in s and "equilibrada? False" in s)
+check("sinais: 68 triângulos, 9 desequilibrados (7 com ---)", "68 triângulos, 9 desequilibrados" in s and s.count("(---)") == 7)
+check("sinais: a melhor divisão em dois contraria 7 laços e separa GAVEV, KOTUN, NAGAD, GAMA", "duas cores: 7" in s and "grupo 1: ['GAVEV', 'KOTUN', 'NAGAD', 'GAMA']" in s)
+# os dados embutidos na célula são os de dados/gama.txt
+import numpy as _np
+emb = _np.loadtxt(io.StringIO(re.search(r'dados = """(.*?)"""', (root / "py" / "sinais_solucao.py").read_text(encoding="utf-8"), re.S).group(1)), dtype=int)
+check("sinais: dados da célula = dados/gama.txt", (emb == _np.loadtxt(root / "dados" / "gama.txt", dtype=int)).all())
+s, _ = rodar("sinais_lacunas.py")
+check("sinais (lacunas): roda sem completar", "contrariam a pintura: 1" in s)
+
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

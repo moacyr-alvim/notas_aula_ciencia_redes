@@ -152,5 +152,44 @@ check("blocos: mesma semente, mesma rede", JSON.stringify(b1.edges) === JSON.str
 let acs = 0; for (let sd = 1; sd <= 10; sd++) { const B = K.blocos(16, 0.4, 0.02, sd), e = K.eigSym(K.laplacian(32, B.edges)); acs += K.acertos(K.divide(e.vectors[1], B.edges, "mediana"), B.grupo); }
 check("blocos (p_in 0,4, p_out 0,02): mediana de q₂ acerta ≥ 95%", acs / 320 >= 0.95, (acs / 320).toFixed(3));
 
+// ---------- página Redes com sinais e equilíbrio ----------
+const GG = K.gama();
+const fs = require("fs"), path = require("path");
+const Mg = fs.readFileSync(path.join(__dirname, "..", "dados", "gama.txt"), "utf8").trim().split("\n").map(l => l.trim().split(/\s+/).map(Number));
+const Eg = []; for (let i = 0; i < 16; i++) for (let j = i + 1; j < 16; j++) { const v = Mg[i][j] - Mg[16 + i][j]; if (v) Eg.push([i, j, v]); }
+check("Gahuku-Gama: as arestas embutidas são as de dados/gama.txt", JSON.stringify(Eg) === JSON.stringify(GG.edges));
+check("Gahuku-Gama: matrizes simétricas e sem par com os dois sinais", Mg.every((r, i) => r.every((x, j) => x === Mg[i < 16 ? j : 16 + j][i < 16 ? i : i - 16])) && Mg.slice(0, 16).every((r, i) => r.every((x, j) => !(x && Mg[16 + i][j]))));
+check("Gahuku-Gama: 29 positivos, 29 negativos, conexa", GG.edges.filter(e => e[2] > 0).length === 29 && GG.edges.filter(e => e[2] < 0).length === 29 && ncomp(16, GG.edges) === 1);
+const TG = K.pinturaArvore(16, GG.edges, 0);
+check("Gahuku-Gama: 11 conflitos com a árvore a partir de GAVEV; a árvore tem n − 1 = 15 laços", TG.conflitos.length === 11 && TG.naArvore.filter(Boolean).length === 15);
+const cg = K.cicloImpar(16, GG.edges);
+check("Gahuku-Gama: o ciclo ímpar mais curto é um triângulo de três negativos", cg.length === 3 && cg.every((v, i) => K.sinalEntre(GG.edges, v, cg[(i + 1) % 3]) < 0), cg.map(i => GG.nomes[i]).join("-"));
+const tg = K.triangulos(16, GG.edges), td = tg.filter(t => t.produto < 0);
+check("Gahuku-Gama: 68 triângulos, 9 desequilibrados (7 de três negativos, 2 de um negativo)", tg.length === 68 && td.length === 9 && td.filter(t => t.negativos === 3).length === 7 && td.filter(t => t.negativos === 1).length === 2);
+const fg = K.frustracao(16, GG.edges);
+check("Gahuku-Gama: índice de frustração 7, separando GAVEV, KOTUN, NAGAD, GAMA", fg.indice === 7 && GG.nomes.filter((_, i) => fg.cor[i] === fg.cor[0]).join(",") === "GAVEV,KOTUN,NAGAD,GAMA");
+// três grupos: só MASIL–NAGAM e MASIL–UHETO (positivos) ficam contrariados
+const g3 = { GAVEV: 0, KOTUN: 0, NAGAD: 0, GAMA: 0, NAGAM: 1, NOTOH: 1, KOHIK: 1, UHETO: 1, SEUVE: 1, OVE: 2, ALIKA: 2, GAHUK: 2, MASIL: 2, UKUDZ: 2, GEHAM: 2, ASARO: 2 };
+const viol3 = GG.edges.filter(e => (e[2] > 0) !== (g3[GG.nomes[e[0]]] === g3[GG.nomes[e[1]]])).map(e => GG.nomes[e[0]] + "-" + GG.nomes[e[1]]);
+check("Gahuku-Gama: com três grupos, só 2 laços contrariados (MASIL–NAGAM e MASIL–UHETO)", viol3.length === 2 && viol3.includes("NAGAM-MASIL") && viol3.includes("MASIL-UHETO"), viol3.join(" "));
+// exemplos pequenos e a prova
+const fa = K.SINAIS.faccoes.make(), Tf = K.pinturaArvore(fa.n, fa.edges, 0);
+check("duas facções: equilibrada, grupos {0,1,2,3} e {4,5,6,7}", K.cicloImpar(fa.n, fa.edges) === null && Tf.cor.slice(0, 4).every(c => c === 1) && Tf.cor.slice(4).every(c => c === -1));
+const tri = s => K.cicloImpar(3, [[0, 1, s[0]], [1, 2, s[1]], [0, 2, s[2]]]) === null;
+check("tríades: +++ e +−− equilibradas; ++− e −−− não", tri([1, 1, 1]) && tri([1, -1, -1]) && tri([-1, 1, -1]) && !tri([1, 1, -1]) && !tri([-1, -1, -1]));
+// teorema, nos dois sentidos, em redes aleatórias: árvore sem conflito ⇔ todo ciclo par (conferido nos triângulos e por troca de sinais)
+let teo = true;
+for (let sd = 1; sd <= 200; sd++) {
+  const Rr = K.rng(sd), n = 7, e = [];
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (Rr() < 0.5) e.push([i, j, Rr() < 0.5 ? 1 : -1]);
+  const T = K.pinturaArvore(n, e, 0), eq = T.conflitos.length === 0, c = K.cicloImpar(n, e);
+  if (eq !== (c === null)) teo = false;
+  if (eq && e.some(x => T.cor[x[0]] * T.cor[x[1]] !== x[2])) teo = false;                  // a pintura agrupa
+  if (!eq) { let neg = 0; c.forEach((v, i) => { if (K.sinalEntre(e, v, c[(i + 1) % c.length]) < 0) neg++; }); if (neg % 2 !== 1) teo = false; }
+  if (eq && K.frustracao(n, e).indice !== 0) teo = false;
+  if (!eq && K.frustracao(n, e).indice === 0) teo = false;
+}
+check("teorema de estrutura em 200 redes sorteadas: árvore sem conflito ⇔ agrupável ⇔ sem ciclo ímpar", teo);
+
 console.log("\nfalhas:", fails);
 process.exit(fails ? 1 : 0);

@@ -70,6 +70,7 @@ need = {
     "paginas/difusao.html": ["demo-difusao", "d-lin", "d-rede", "d-fonte", "d-c", "d-cv", "d-k", "d-kv", "d-play", "d-readout", "d-hover", "d-rede-canvas", "d-curvas-canvas", "tema", "toc"],
     "paginas/componentes.html": ["demo-corte", "g-rede", "g-restaura", "g-readout", "g-hover", "g-rede-canvas", "g-esp-canvas", "tema", "toc"],
     "paginas/fiedler.html": ["demo-fiedler", "f-rede", "f-regra", "f-blocos", "f-pin", "f-pinv", "f-pout", "f-poutv", "f-sorteia", "f-readout", "f-hover", "f-rede-canvas", "f-q-canvas", "tema", "toc"],
+    "paginas/sinais.html": ["demo-sinais", "s-rede", "s-arvore", "s-restaura", "s-readout", "s-hover", "s-rede-canvas", "tema", "toc"],
     "index.html": ["mapa", "chips", "info", "trail-list", "tema"],
 }
 for f in sorted(root.rglob("*.html")):

@@ -175,6 +175,88 @@
   var KARATE_OFFICER = [9, 14, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33];
   function faccoes() { var f = new Array(34).fill(false); KARATE_OFFICER.forEach(function (i) { f[i] = true; }); return f; }
 
+  /* ---------- redes com sinais: laços [i, j, s] com s = +1 ou −1 ---------- */
+  /* Pintura pela árvore de busca em largura, componente por componente: a cor da raiz é +1 e, ao descer pelo
+   * laço u–v da árvore, cor(v) = cor(u)·s. Devolve as cores, a árvore (pai, profundidade, laço de cada vértice)
+   * e os laços em conflito (os que a pintura contraria: cor(i)·cor(j) ≠ s). */
+  function pinturaArvore(n, edges, raiz) {
+    var viz = [], i; for (i = 0; i < n; i++) viz.push([]);
+    edges.forEach(function (e, k) { viz[e[0]].push([e[1], k]); viz[e[1]].push([e[0], k]); });
+    var cor = new Array(n).fill(0), pai = new Array(n).fill(-1), lacoPai = new Array(n).fill(-1), prof = new Array(n).fill(0), naArvore = edges.map(function () { return false; });
+    var ordem = []; if (raiz != null) ordem.push(raiz); for (i = 0; i < n; i++) ordem.push(i);
+    ordem.forEach(function (r) {
+      if (cor[r]) return;
+      cor[r] = 1; var fila = [r];
+      while (fila.length) {
+        var u = fila.shift();
+        viz[u].forEach(function (vk) {
+          var v = vk[0], k = vk[1];
+          if (cor[v]) return;
+          cor[v] = cor[u] * edges[k][2]; pai[v] = u; lacoPai[v] = k; prof[v] = prof[u] + 1; naArvore[k] = true; fila.push(v);
+        });
+      }
+    });
+    var conflitos = []; edges.forEach(function (e, k) { if (cor[e[0]] * cor[e[1]] !== e[2]) conflitos.push(k); });
+    return { cor: cor, pai: pai, lacoPai: lacoPai, prof: prof, naArvore: naArvore, conflitos: conflitos };
+  }
+  /* o ciclo fundamental de um laço fora da árvore: caminho na árvore entre as pontas, mais o próprio laço */
+  function cicloFundamental(T, e) {
+    var a = e[0], b = e[1], ca = [a], cb = [b];
+    while (a !== b) { if (T.prof[a] >= T.prof[b]) { a = T.pai[a]; ca.push(a); } else { b = T.pai[b]; cb.push(b); } }
+    cb.pop(); return ca.concat(cb.reverse());     // vértices do ciclo, em ordem; o laço e fecha do último ao primeiro
+  }
+  /* um ciclo com número ímpar de laços negativos, o mais curto entre os ciclos fundamentais de todas as raízes;
+   * null se a rede é equilibrada */
+  function cicloImpar(n, edges) {
+    var melhor = null;
+    for (var r = 0; r < n; r++) {
+      var T = pinturaArvore(n, edges, r);
+      if (!T.conflitos.length) return null;
+      T.conflitos.forEach(function (k) { var c = cicloFundamental(T, edges[k]); if (!melhor || c.length < melhor.length) melhor = c; });
+    }
+    return melhor;
+  }
+  function sinalEntre(edges, i, j) { for (var k = 0; k < edges.length; k++) { var e = edges[k]; if ((e[0] === i && e[1] === j) || (e[0] === j && e[1] === i)) return e[2]; } return 0; }
+  /* índice de frustração: o menor número de laços que uma pintura em duas cores contraria (força bruta, n ≤ 20) */
+  function frustracao(n, edges) {
+    var melhor = Infinity, mcor = null, m, i;
+    for (m = 0; m < (1 << (n - 1)); m++) {
+      var f = 0;
+      for (i = 0; i < edges.length; i++) {
+        var e = edges[i], a = e[0] ? (m >> (e[0] - 1)) & 1 : 0, b = e[1] ? (m >> (e[1] - 1)) & 1 : 0;
+        if ((a === b) !== (e[2] > 0)) { f++; if (f >= melhor) break; }
+      }
+      if (f < melhor) { melhor = f; mcor = m; }
+    }
+    var cor = []; for (i = 0; i < n; i++) cor.push(i && ((mcor >> (i - 1)) & 1) ? -1 : 1);
+    return { indice: melhor, cor: cor };
+  }
+  /* triângulos e o produto dos sinais em cada um */
+  function triangulos(n, edges) {
+    var S = zeros(n), out = [], i, j, k;
+    edges.forEach(function (e) { S[e[0]][e[1]] = S[e[1]][e[0]] = e[2]; });
+    for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) if (S[i][j]) for (k = j + 1; k < n; k++) if (S[i][k] && S[j][k]) out.push({ v: [i, j, k], produto: S[i][j] * S[i][k] * S[j][k], negativos: [S[i][j], S[i][k], S[j][k]].filter(function (x) { return x < 0; }).length });
+    return out;
+  }
+
+  /* Tribos Gahuku-Gama (Read, 1954): 16 tribos do planalto central da Nova Guiné; +1 aliança, −1 hostilidade.
+   * Posições: Kamada–Kawai com distância 1 nos laços positivos e 2,2 nos negativos. */
+  var GAMA_NOMES = ["GAVEV", "KOTUN", "OVE", "ALIKA", "NAGAM", "GAHUK", "MASIL", "UKUDZ", "NOTOH", "KOHIK", "GEHAM", "ASARO", "UHETO", "SEUVE", "NAGAD", "GAMA"];
+  var GAMA_E = [[0,1,1],[0,2,-1],[0,3,-1],[0,4,-1],[0,5,-1],[0,11,-1],[0,14,1],[0,15,1],[1,2,-1],[1,4,-1],[1,5,-1],[1,8,-1],[1,9,-1],[1,14,1],[1,15,1],[2,3,1],[2,5,1],[2,6,1],[2,7,1],[3,7,1],[4,6,1],[4,8,1],[4,13,1],[4,14,-1],[4,15,-1],[5,6,1],[5,7,1],[5,8,-1],[5,10,1],[5,11,1],[5,12,-1],[5,15,-1],[6,7,1],[6,10,1],[6,11,1],[6,12,1],[7,10,1],[7,11,1],[7,13,-1],[8,9,1],[8,10,-1],[8,12,1],[8,14,-1],[9,10,-1],[9,12,1],[9,14,-1],[10,11,1],[10,12,-1],[10,14,-1],[10,15,-1],[11,13,-1],[11,14,-1],[11,15,-1],[12,13,1],[12,14,-1],[12,15,-1],[13,15,-1],[14,15,1]];
+  var GAMA_P = [[0.806,0.528],[0.704,0.43],[0.501,0.724],[0.466,0.9],[0.401,0.338],[0.416,0.622],[0.335,0.518],[0.32,0.749],[0.183,0.23],[0.269,0.1],[0.189,0.578],[0.269,0.647],[0.299,0.304],[0.454,0.168],[0.697,0.285],[0.817,0.362]];
+  function gama() { return { n: 16, edges: GAMA_E.map(function (e) { return e.slice(); }), pos: GAMA_P.map(function (p) { return p.slice(); }), nomes: GAMA_NOMES.slice() }; }
+
+  /* pequenas redes com sinais para a demo */
+  var SINAIS = {
+    gama: { label: "Tribos Gahuku-Gama (16)", make: gama },
+    faccoes: { label: "Duas facções (8)", make: function () {
+      return { n: 8, edges: [[0,1,1],[1,2,1],[2,3,1],[0,2,1],[4,5,1],[5,6,1],[6,7,1],[4,6,1],[1,5,-1],[3,7,-1],[2,4,-1],[0,6,-1]],
+               pos: [[0.15,0.2],[0.3,0.4],[0.15,0.6],[0.3,0.8],[0.85,0.2],[0.7,0.4],[0.85,0.6],[0.7,0.8]] }; } },
+    triangulo: { label: "Triângulo", make: function () { return { n: 3, edges: [[0,1,1],[1,2,1],[0,2,1]], pos: [[0.5,0.15],[0.15,0.8],[0.85,0.8]] }; } },
+    quadrado: { label: "Quadrado com diagonal", make: function () { return { n: 4, edges: [[0,1,1],[1,2,1],[2,3,1],[0,3,1],[0,2,1]], pos: [[0.2,0.2],[0.8,0.2],[0.8,0.8],[0.2,0.8]] }; } },
+    ciclo5: { label: "Ciclo de 5", make: function () { var e = [], p = []; for (var i = 0; i < 5; i++) { var a = Math.PI / 2 - 2 * Math.PI * i / 5; p.push([0.5 + 0.38 * Math.cos(a), 0.52 - 0.38 * Math.sin(a)]); e.push([i, (i + 1) % 5, 1]); } return { n: 5, edges: e, pos: p }; } }
+  };
+
   /* ---------- catálogo de redes ---------- */
   function caminho(n) {
     var e = [], p = [], i;
@@ -233,7 +315,9 @@
              graus: d, dmax: Math.max.apply(null, d), fonte: R.fonte };
   }
 
-  return { corte: corte, divide: divide, acertos: acertos, rng: rng, blocos: blocos, molas: molas, faccoes: faccoes,
+  return { pinturaArvore: pinturaArvore, cicloFundamental: cicloFundamental, cicloImpar: cicloImpar, sinalEntre: sinalEntre, frustracao: frustracao,
+           triangulos: triangulos, gama: gama, SINAIS: SINAIS,
+           corte: corte, divide: divide, acertos: acertos, rng: rng, blocos: blocos, molas: molas, faccoes: faccoes,
            componentes: componentes, adjacency: adjacency, degrees: degrees, incidence: incidence, btb: btb, laplacian: laplacian, eigSym: eigSym,
            passo: passo, itera: itera, modos: modos, coefs: coefs, evolve: evolve,
            caminho: caminho, anel: anel, estrela: estrela, grade: grade, doisGrupos: doisGrupos, carate: carate,
