@@ -26,17 +26,17 @@
   // href: null  =>  "em breve"
   var NODES = [
     { id: "difusao", lane: "din", col: 0, label: "Difusão\nem redes", href: "paginas/difusao.html", trails: ["basico", "dinamica", "espectro", "passeios"],
-      desc: "Do desnível em cada laço ao passo u ← u − cLu, com L = BᵀB pela matriz de incidência: positividade de graça, escolha do passo, princípio do máximo e os modos. Demo com o clube de caratê e Python." },
+      desc: "Do desnível em cada link ao passo u ← u − cLu, com L = BᵀB pela matriz de incidência: positividade de graça, escolha do passo, princípio do máximo e os modos. Demo com o clube de caratê e Python." },
     { id: "consenso", lane: "din", col: 1, label: "Consenso\n(DeGroot)", href: null, trails: ["dinamica"],
       desc: "A iteração u ← Wu com pesos quaisquer: cada um passa a ser uma média ponderada de quem escuta, inclusive em redes dirigidas. Quando há consenso, quão depressa e qual opinião vence." },
     { id: "sincr", lane: "din", col: 2, label: "Sincronização\n(Kuramoto)", href: null, trails: ["dinamica"],
       desc: "Osciladores acoplados pela rede. Perto da sincronia, a dinâmica linearizada é a difusão com o laplaciano." },
     { id: "comp", lane: "esp", col: 1, label: "Laplaciano,\ncomponentes e gargalos", href: "paginas/componentes.html", trails: ["basico", "espectro"],
-      desc: "O autovalor 0 conta os pedaços da rede; o quociente de Rayleigh e a cota do gargalo mostram por que um λ₂ pequeno denuncia uma rede quase partida. Demo de cortar laços e Python." },
+      desc: "O autovalor 0 conta os pedaços da rede; o quociente de Rayleigh e a cota do gargalo mostram por que um λ₂ pequeno denuncia uma rede quase partida. Demo de cortar links e Python." },
     { id: "fiedler", lane: "esp", col: 2, label: "Comunidades pelo\nvetor de Fiedler", href: "paginas/fiedler.html", trails: ["basico", "espectro"],
       desc: "A bisseção escrita com ±1, relaxada até virar o autovetor q₂, e arredondada pelo sinal, pela mediana ou por varredura. O caratê e o modelo de blocos. Demo e Python." },
     { id: "desenho", lane: "esp", col: 3, label: "Desenhar a rede\ncom autovetores", href: null, trails: ["espectro"],
-      desc: "Coordenadas tiradas dos autovetores de menores autovalores: o desenho que minimiza o comprimento dos laços." },
+      desc: "Coordenadas tiradas dos autovetores de menores autovalores: o desenho que minimiza o comprimento dos links." },
     { id: "modos", lane: "esp", col: 1, row: 1, label: "Anel, grade e\nos modos da rede", href: null, trails: ["espectro"],
       desc: "Nas redes regulares os autovetores são ondas (Fourier). Em redes quaisquer, são as \"ondas\" possíveis daquela rede." },
     { id: "passeio", lane: "pas", col: 1, label: "Passeio aleatório\ne L normalizado", href: null, trails: ["passeios"],
@@ -49,13 +49,13 @@
 
   NODES.push(
     { id: "sinais", lane: "sin", col: 0, label: "Redes com sinais\ne equilíbrio", href: "paginas/sinais.html", trails: ["sinais"],
-      desc: "Laços positivos e negativos, as tríades de Heider, equilíbrio por ciclos e o teorema de estrutura de Harary (equilibrada ⇔ agrupável em dois), com prova pela árvore geradora. As tribos Gahuku-Gama. Demo e Python." },
+      desc: "Links positivos e negativos, as tríades de Heider, equilíbrio por ciclos e o teorema de estrutura de Harary (equilibrada ⇔ agrupável em dois), com prova pela árvore geradora. As tribos Gahuku-Gama. Demo e Python." },
     { id: "lapsinal", lane: "sin", col: 2, label: "Laplaciano\ncom sinais", href: "paginas/lapsinal.html", trails: ["sinais"],
-      desc: "A incidência com sinais (dois +1 no laço negativo), L = BᵀB = D̄ − A_σ, o teorema λ₁ = 0 ⇔ equilibrada, a troca de sinais como mudança de base, λ₁ como conflito algébrico e as opiniões que polarizam ou se apagam. Demo e Python." },
+      desc: "A incidência com sinais (dois +1 no link negativo), L = BᵀB = D̄ − A_σ, o teorema λ₁ = 0 ⇔ equilibrada, a troca de sinais como mudança de base, λ₁ como conflito algébrico e as opiniões que polarizam ou se apagam. Demo e Python." },
     { id: "frustr", lane: "sin", col: 3, label: "Frustração\nespectral", href: "paginas/frustracao.html", trails: ["sinais"],
       desc: "Quão longe do equilíbrio: λ₁ do laplaciano com sinais contra o índice de frustração f. A cota λ₁ ≤ 4f/n, conflito diluído contra concentrado, o tempo de despolarização, a versão normalizada, por que f é difícil. Demo-jogo e Python." },
     { id: "davis", lane: "sin", col: 1, row: 1, label: "Equilíbrio fraco\n(Davis)", href: null, trails: ["sinais"],
-      desc: "Aceitar a tríade − − − e permitir mais de dois grupos: agrupável em k grupos ⇔ nenhum ciclo com exatamente um laço negativo." }
+      desc: "Aceitar a tríade − − − e permitir mais de dois grupos: agrupável em k grupos ⇔ nenhum ciclo com exatamente um link negativo." }
   );
 
   var EDGES = [

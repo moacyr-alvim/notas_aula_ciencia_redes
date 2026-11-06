@@ -30,76 +30,76 @@
     <main>
       <header>
         <h1>Frustração espectral: quão longe do equilíbrio</h1>
-        <p class="lede">Uma rede desequilibrada pode estar quase equilibrada ou muito longe disso. A régua clássica conta laços: o índice de frustração $f$, o menor número de laços que é preciso trocar. Ela é exata, mas difícil de calcular. A régua espectral é o menor autovalor $\lambda_1$ do laplaciano com sinais: fácil de calcular, ligada a $f$ por uma desigualdade, e com um significado próprio, o tempo que a rede leva para deixar de estar polarizada.</p>
+        <p class="lede">Uma rede desequilibrada pode estar quase equilibrada ou muito longe disso. A régua clássica conta links: o índice de frustração $f$, o menor número de links que é preciso trocar. Ela é exata, mas difícil de calcular. A régua espectral é o menor autovalor $\lambda_1$ do laplaciano com sinais: fácil de calcular, ligada a $f$ por uma desigualdade, e com um significado próprio, o tempo que a rede leva para deixar de estar polarizada.</p>
         <p class="meta">Continuação de <a href="lapsinal.html">Laplaciano com sinais</a>, de onde vêm $\lambda_1$, a cota $f\ge n\lambda_1/4$ e as opiniões de Altafini.</p>
       </header>
 
       <h2 id="reguas" data-toc="Duas réguas">Duas réguas</h2>
-      <p>Para uma rede com sinais com $n$ vértices e $m$ laços:</p>
+      <p>Para uma rede com sinais com $n$ vértices e $m$ links:</p>
       <ul>
-        <li><b>O índice de frustração $f$</b> é o menor número de laços contrariados por uma divisão dos vértices em dois grupos (positivos dentro, negativos entre). Equivalentemente, é o menor número de laços cujo sinal é preciso trocar, ou que é preciso apagar, para a rede ficar equilibrada. Harary (1959) o chamou de <em>line index of balance</em>. É um número inteiro, e $f=0$ é a rede equilibrada.</li>
+        <li><b>O índice de frustração $f$</b> é o menor número de links contrariados por uma divisão dos vértices em dois grupos (positivos dentro, negativos entre). Equivalentemente, é o menor número de links cujo sinal é preciso trocar, ou que é preciso apagar, para a rede ficar equilibrada. Harary (1959) o chamou de <em>line index of balance</em>. É um número inteiro, e $f=0$ é a rede equilibrada.</li>
         <li><b>A frustração espectral $\lambda_1$</b> é o menor autovalor do laplaciano com sinais $L=B^\top B=\bar D-A_\sigma$. Pelo quociente de Rayleigh,
-        $$\lambda_1=\min_{v\ne0}\frac{\sum_{\text{laços}}(v_i-\sigma_{ij}v_j)^2}{\sum_iv_i^2}.$$
+        $$\lambda_1=\min_{v\ne0}\frac{\sum_{\text{links}}(v_i-\sigma_{ij}v_j)^2}{\sum_iv_i^2}.$$
         Kunegis e colaboradores (2010) o chamaram de <em>conflito algébrico</em>. É um número real $\ge0$, e $\lambda_1=0$ é a rede equilibrada.</li>
       </ul>
       <p>As duas são zero exatamente no mesmo caso. Fora dele, medem coisas parecidas, mas não iguais. Uma terceira régua, mais antiga e mais grosseira, é a <b>fração de triângulos equilibrados</b>, proposta por Cartwright e Harary (1956): nas Gahuku-Gama, $59$ dos $68$ triângulos são equilibrados. Em redes sociais grandes com sinais, como as de avaliação de usuários estudadas por Leskovec, Huttenlocher e Kleinberg (2010), essa fração é bem maior do que se os sinais fossem sorteados ao acaso.</p>
 
       <h2 id="desigualdade" data-toc="O que as liga">O que liga as duas réguas</h2>
-      <p>Seja $s$ ($s_i=\pm1$) a melhor divisão, a que contraria $f$ laços. Num laço satisfeito, $s_i-\sigma_{ij}s_j=0$; num contrariado, $s_i-\sigma_{ij}s_j=\pm2$. Então $s^\top Ls=4f$, e usando $s$ como vetor de teste no quociente de Rayleigh, com $s^\top s=n$:
+      <p>Seja $s$ ($s_i=\pm1$) a melhor divisão, a que contraria $f$ links. Num link satisfeito, $s_i-\sigma_{ij}s_j=0$; num contrariado, $s_i-\sigma_{ij}s_j=\pm2$. Então $s^\top Ls=4f$, e usando $s$ como vetor de teste no quociente de Rayleigh, com $s^\top s=n$:
       $$\boxed{\,\lambda_1\ \le\ \frac{4f}{n}\,}\qquad\text{ou, lido do outro lado,}\qquad f\ \ge\ \frac{n\,\lambda_1}{4}.$$
-      Em palavras: $\lambda_1$ não passa de quatro vezes o número de laços frustrados <em>por vértice</em>. Para $\lambda_1$ ser grande, é preciso muita frustração; e $\lambda_1$ dá uma cota inferior para $f$ sem ter que testar divisão nenhuma.</p>
-      <p><b>A volta não vale.</b> Não existe constante $C$ com $f/n\le C\,\lambda_1$ em todas as redes. Basta comparar duas redes com exatamente um laço frustrado:</p>
+      Em palavras: $\lambda_1$ não passa de quatro vezes o número de links frustrados <em>por vértice</em>. Para $\lambda_1$ ser grande, é preciso muita frustração; e $\lambda_1$ dá uma cota inferior para $f$ sem ter que testar divisão nenhuma.</p>
+      <p><b>A volta não vale.</b> Não existe constante $C$ com $f/n\le C\,\lambda_1$ em todas as redes. Basta comparar duas redes com exatamente um link frustrado:</p>
       <table class="tabela">
         <thead><tr><th>rede</th><th>$f$</th><th>$4f/n$</th><th>$\lambda_1$</th><th>$\lambda_1$ como fração da cota</th></tr></thead>
         <tbody>
-          <tr><td>completo de $8$, um laço negativo</td><td>1</td><td>0,500</td><td>0,417</td><td>83%</td></tr>
-          <tr><td>ciclo de $15$, um laço negativo</td><td>1</td><td>0,267</td><td>0,044</td><td>16%</td></tr>
+          <tr><td>completo de $8$, um link negativo</td><td>1</td><td>0,500</td><td>0,417</td><td>83%</td></tr>
+          <tr><td>ciclo de $15$, um link negativo</td><td>1</td><td>0,267</td><td>0,044</td><td>16%</td></tr>
         </tbody>
       </table>
-      <p>No ciclo de $n$ vértices com um laço negativo, $\lambda_1=2-2\cos(\pi/n)\approx\pi^2/n^2$ (exercício 5 de <a href="lapsinal.html#exercicios">Laplaciano com sinais</a>), enquanto $4f/n=4/n$: a razão vai a zero quando $n$ cresce.</p>
-      <p>A diferença é <b>onde</b> está o conflito. No ciclo, o conflito pode ser <em>diluído</em>: um vetor $v$ que gira devagar ao longo do ciclo contraria cada laço só um pouquinho, e a soma dos quadrados fica pequena. No grafo completo, os dois vértices do laço negativo estão ligados a todos os outros, que os puxam para o mesmo valor, e não há para onde diluir. O índice $f$ conta laços errados; $\lambda_1$ mede <b>quão difícil é acomodar o conflito</b>, levando em conta a estrutura em volta dele.</p>
+      <p>No ciclo de $n$ vértices com um link negativo, $\lambda_1=2-2\cos(\pi/n)\approx\pi^2/n^2$ (exercício 5 de <a href="lapsinal.html#exercicios">Laplaciano com sinais</a>), enquanto $4f/n=4/n$: a razão vai a zero quando $n$ cresce.</p>
+      <p>A diferença é <b>onde</b> está o conflito. No ciclo, o conflito pode ser <em>diluído</em>: um vetor $v$ que gira devagar ao longo do ciclo contraria cada link só um pouquinho, e a soma dos quadrados fica pequena. No grafo completo, os dois vértices do link negativo estão ligados a todos os outros, que os puxam para o mesmo valor, e não há para onde diluir. O índice $f$ conta links errados; $\lambda_1$ mede <b>quão difícil é acomodar o conflito</b>, levando em conta a estrutura em volta dele.</p>
 
       <h2 id="dinamica" data-toc="O que λ₁ mede na dinâmica">O que $\lambda_1$ mede na dinâmica</h2>
       <p>Na página anterior, as opiniões de Altafini, $u_{k+1}=u_k-c\,Lu_k$ (um aliado puxa para a sua opinião, um rival para o oposto dela), se apagavam numa rede desequilibrada, e o modo mais lento morria como $(1-c\lambda_1)^k$. Isso dá a $\lambda_1$ um significado que $f$ não tem:
       $$\text{tempo de despolarização}\ \approx\ \frac{1}{c\,\lambda_1}\ \text{passos}.$$
-      Com $\lambda_1$ pequeno, a rede passa muito tempo quase polarizada, com dois lados de opiniões opostas, antes de tudo ir a zero. Com $\lambda_1$ grande, a polarização se desfaz depressa. No ciclo de $15$ com um laço negativo, o conflito é real ($f=1$), mas tão diluído que as opiniões levam cerca de $50$ passos para cair a um terço; no completo de $8$, menos de $20$, mesmo com um passo $c$ quatro vezes menor (lá $\bar d_{\max}=7$, aqui $2$). Com o mesmo $c$ nas duas redes, a diferença seria de quase dez vezes.</p>
-      <p>Então a frustração espectral responde a uma pergunta um pouco diferente da do índice clássico. $f$ pergunta: <em>quantos laços estão errados?</em> $\lambda_1$ pergunta: <em>quanto tempo a rede consegue sustentar dois lados?</em></p>
+      Com $\lambda_1$ pequeno, a rede passa muito tempo quase polarizada, com dois lados de opiniões opostas, antes de tudo ir a zero. Com $\lambda_1$ grande, a polarização se desfaz depressa. No ciclo de $15$ com um link negativo, o conflito é real ($f=1$), mas tão diluído que as opiniões levam cerca de $50$ passos para cair a um terço; no completo de $8$, menos de $20$, mesmo com um passo $c$ quatro vezes menor (lá $\bar d_{\max}=7$, aqui $2$). Com o mesmo $c$ nas duas redes, a diferença seria de quase dez vezes.</p>
+      <p>Então a frustração espectral responde a uma pergunta um pouco diferente da do índice clássico. $f$ pergunta: <em>quantos links estão errados?</em> $\lambda_1$ pergunta: <em>quanto tempo a rede consegue sustentar dois lados?</em></p>
 
       <h2 id="normalizado" data-toc="A versão normalizada">Comparar redes diferentes: a versão normalizada</h2>
-      <p>$\lambda_1$ cresce com os graus: duplicar todos os laços duplica $L$ e $\lambda_1$. Para comparar redes de tamanhos ou densidades diferentes, use o <b>laplaciano com sinais normalizado</b>,
+      <p>$\lambda_1$ cresce com os graus: duplicar todos os links duplica $L$ e $\lambda_1$. Para comparar redes de tamanhos ou densidades diferentes, use o <b>laplaciano com sinais normalizado</b>,
       $$\hat L=\bar D^{-1/2}\,L\,\bar D^{-1/2},\qquad\hat\lambda_1=\min_{x\ne0}\frac{x^\top Lx}{x^\top\bar Dx}$$
       (a segunda forma sai de pôr $v=\bar D^{1/2}x$ no quociente de Rayleigh). Ele tem duas propriedades simpáticas:</p>
       <ul>
         <li>$0\le\hat\lambda_1\le2$, qualquer que seja a rede (exercício 2).</li>
         <li>Com $x=s$ (a melhor divisão), $x^\top\bar Dx=\sum_i\bar d_i=2m$, então
         $$\hat\lambda_1\ \le\ \frac{4f}{2m}=2\cdot\frac{f}{m}:$$
-        o $\hat\lambda_1$ não passa do dobro da <b>fração de laços frustrados</b>.</li>
+        o $\hat\lambda_1$ não passa do dobro da <b>fração de links frustrados</b>.</li>
       </ul>
       <p>Nas Gahuku-Gama, $\hat\lambda_1\approx0{,}155$ e $2f/m=14/58\approx0{,}241$.</p>
 
       <details>
         <summary>Para a cultura geral: Cheeger para redes com sinais</summary>
         <div class="body">
-          <p>Para a conectividade algébrica, a desigualdade de Cheeger dava a volta que a cota simples não dava: $\lambda_2$ pequeno obrigava a existir um gargalo. Para redes com sinais existe uma desigualdade do mesmo tipo (Atay e Liu, 2020). Ela compara $\hat\lambda_1$ com uma constante de frustração normalizada, em que os laços contrariados são contados em relação ao tamanho dos grupos, e admite que alguns vértices fiquem de fora da divisão. As duas quantidades ficam controladas uma pela outra a menos de uma raiz quadrada. É ela que explica o ciclo longo: dá para pôr de lado os vértices perto do laço negativo e dividir o resto quase sem frustração.</p>
+          <p>Para a conectividade algébrica, a desigualdade de Cheeger dava a volta que a cota simples não dava: $\lambda_2$ pequeno obrigava a existir um gargalo. Para redes com sinais existe uma desigualdade do mesmo tipo (Atay e Liu, 2020). Ela compara $\hat\lambda_1$ com uma constante de frustração normalizada, em que os links contrariados são contados em relação ao tamanho dos grupos, e admite que alguns vértices fiquem de fora da divisão. As duas quantidades ficam controladas uma pela outra a menos de uma raiz quadrada. É ela que explica o ciclo longo: dá para pôr de lado os vértices perto do link negativo e dividir o resto quase sem frustração.</p>
         </div>
       </details>
 
       <h2 id="dificil" data-toc="Por que f é difícil">Por que $f$ é difícil, e como chegar perto</h2>
-      <p>Numa rede em que <em>todos</em> os laços são negativos, uma divisão satisfaz exatamente os laços que ligam os dois grupos. Então
+      <p>Numa rede em que <em>todos</em> os links são negativos, uma divisão satisfaz exatamente os links que ligam os dois grupos. Então
       $$f=m-\text{(corte máximo da rede)},$$
       e calcular $f$ é pelo menos tão difícil quanto o problema do <b>corte máximo</b>, um dos problemas NP-difíceis clássicos (Karp, 1972). Não se conhece algoritmo que calcule $f$ depressa em qualquer rede. Para as $16$ tribos, testar as $2^{15}=32\,768$ divisões é instantâneo; para $60$ vértices, já seriam $2^{59}\approx6\cdot10^{17}$.</p>
       <p>Na prática, combina-se três ferramentas:</p>
       <ul>
-        <li><b>Cotas inferiores rápidas.</b> A espectral, $f\ge n\lambda_1/4$. E a de empacotamento: se há $k$ ciclos desequilibrados sem laços em comum, cada um exige pelo menos um laço trocado, então $f\ge k$ (exercício 4).</li>
+        <li><b>Cotas inferiores rápidas.</b> A espectral, $f\ge n\lambda_1/4$. E a de empacotamento: se há $k$ ciclos desequilibrados sem links em comum, cada um exige pelo menos um link trocado, então $f\ge k$ (exercício 4).</li>
         <li><b>Um bom ponto de partida:</b> o sinal de $q_1$, o autovetor de $\lambda_1$. É a mesma ideia de relaxar e arredondar da <a href="fiedler.html#relaxar">bisseção espectral</a>.</li>
-        <li><b>Busca local:</b> enquanto mudar algum vértice de lado diminuir o número de laços contrariados, mude. Quando a busca para, cada vértice tem pelo menos tantos laços satisfeitos quanto contrariados, e daí $f\le m/2$ (exercício 3). Mas ela pode parar longe do ótimo.</li>
+        <li><b>Busca local:</b> enquanto mudar algum vértice de lado diminuir o número de links contrariados, mude. Quando a busca para, cada vértice tem pelo menos tantos links satisfeitos quanto contrariados, e daí $f\le m/2$ (exercício 3). Mas ela pode parar longe do ótimo.</li>
       </ul>
       <p>Nas Gahuku-Gama:</p>
       <table class="tabela">
-        <thead><tr><th></th><th>laços contrariados</th></tr></thead>
+        <thead><tr><th></th><th>links contrariados</th></tr></thead>
         <tbody>
           <tr><td>cota espectral $n\lambda_1/4$</td><td>$\ge4{,}16$, isto é, $\ge5$</td></tr>
-          <tr><td>cota de empacotamento ($5$ triângulos desequilibrados sem laços em comum)</td><td>$\ge5$</td></tr>
+          <tr><td>cota de empacotamento ($5$ triângulos desequilibrados sem links em comum)</td><td>$\ge5$</td></tr>
           <tr><td><b>ótimo $f$</b> (força bruta)</td><td><b>7</b></td></tr>
           <tr><td>sinal de $q_1$</td><td>8</td></tr>
           <tr><td>sinal de $q_1$ seguido de busca local</td><td>7</td></tr>
@@ -109,7 +109,7 @@
       <p>O espectro dá ao mesmo tempo uma cota e um bom ponto de partida; a busca local faz o acabamento.</p>
 
       <h2 id="demo" data-toc="O jogo">O jogo: contrarie o menos possível</h2>
-      <p>À esquerda, a rede com sinais. <b>Clique nos vértices para trocá-los de cor</b> e tente chegar ao menor número de laços contrariados (os que têm sombra cinza). Os botões mostram o que fazem o sinal de $q_1$, a busca local (a partir da divisão que estiver na tela) e a força bruta. À direita, as opiniões de Altafini na mesma rede, partindo de valores sorteados: a maior opinião em módulo, em escala logarítmica, e o tracejado com a inclinação de $(1-c\lambda_1)^k$. A leitura compara as duas réguas.</p>
+      <p>À esquerda, a rede com sinais. <b>Clique nos vértices para trocá-los de cor</b> e tente chegar ao menor número de links contrariados (os que têm sombra cinza). Os botões mostram o que fazem o sinal de $q_1$, a busca local (a partir da divisão que estiver na tela) e a força bruta. À direita, as opiniões de Altafini na mesma rede, partindo de valores sorteados: a maior opinião em módulo, em escala logarítmica, e o tracejado com a inclinação de $(1-c\lambda_1)^k$. A leitura compara as duas réguas.</p>
 
       <div class="demo" id="demo-frust">
         <div class="controls">
@@ -128,8 +128,8 @@
         <div id="fr-hover" aria-live="polite"></div>
         <div class="readout" id="fr-readout" aria-live="polite"></div>
         <div class="legend">
-          <span><i style="border-color:var(--carac)"></i>laço positivo</span>
-          <span><i style="border-color:var(--choque);border-top-style:dashed"></i>laço negativo</span>
+          <span><i style="border-color:var(--carac)"></i>link positivo</span>
+          <span><i style="border-color:var(--choque);border-top-style:dashed"></i>link negativo</span>
           <span><span class="dot" style="background:#2a9d8f"></span><span class="dot" style="background:#c9a227"></span>os dois grupos da sua divisão</span>
           <span><i style="border-color:var(--choque)"></i>maior |opinião| · <i style="border-color:var(--ink);border-top-style:dashed"></i>inclinação de λ₁</span>
         </div>
@@ -139,12 +139,12 @@
       <ol>
         <li><b>Gahuku-Gama.</b> Tente chegar a $7$ só clicando. Depois compare com o sinal de $q_1$ ($8$) e com $q_1$ seguido de busca local ($7$). Sorteie cores e rode a busca local várias vezes: às vezes ela para em $7$, às vezes bem acima.</li>
         <li><b>Ciclo de 15 contra completo de 8.</b> Nos dois, $f=1$: o jogo é fácil. Mas olhe o painel da direita e o tempo de despolarização na leitura: cerca de $51$ passos no ciclo e $19$ no completo, embora no completo cada passo use um $c$ quatro vezes menor. Compare $\lambda_1$ com a cota $4f/n$ em cada um.</li>
-        <li><b>Duas facções com um traidor.</b> Um único laço entre os grupos virou positivo. $f=1$ de novo, e $\lambda_1$ fica no meio do caminho entre os dois casos anteriores.</li>
+        <li><b>Duas facções com um traidor.</b> Um único link entre os grupos virou positivo. $f=1$ de novo, e $\lambda_1$ fica no meio do caminho entre os dois casos anteriores.</li>
         <li>Em todas as redes, confira na leitura que $\lambda_1\le4f/n$ e $\hat\lambda_1\le2f/m$.</li>
       </ol>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
-      <p>A célula parte de redes equilibradas sorteadas (16 vértices, dois grupos) e estraga cada uma trocando o sinal de cada laço com probabilidade $\varepsilon$. Para cada nível de ruído, calcula $f$ exatamente (força bruta), a cota espectral, o sinal de $q_1$ e o sinal de $q_1$ seguido de busca local, sempre como fração dos laços. Repare em três coisas: a frustração acompanha o ruído enquanto ele é pequeno e depois fica para trás (trocar muitos sinais ao acaso cria divisões novas, melhores que a plantada); a cota espectral fica sempre abaixo, a uma distância razoável; e $q_1$ com busca local fica colado no ótimo.</p>
+      <p>A célula parte de redes equilibradas sorteadas (16 vértices, dois grupos) e estraga cada uma trocando o sinal de cada link com probabilidade $\varepsilon$. Para cada nível de ruído, calcula $f$ exatamente (força bruta), a cota espectral, o sinal de $q_1$ e o sinal de $q_1$ seguido de busca local, sempre como fração dos links. Repare em três coisas: a frustração acompanha o ruído enquanto ele é pequeno e depois fica para trás (trocar muitos sinais ao acaso cria divisões novas, melhores que a plantada); a cota espectral fica sempre abaixo, a uma distância razoável; e $q_1$ com busca local fica colado no ótimo.</p>
 
       <div class="pycell" data-title="Frustração de uma rede equilibrada com ruído"
            data-starter="../py/frust_lacunas.py"
@@ -170,41 +170,41 @@
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>$(a-b)^2\le(a-b)^2+(a+b)^2=2a^2+2b^2$, com $a=v_i$ e $b=\sigma_{ij}v_j$ ($b^2=v_j^2$). Somando sobre os laços, cada $v_i^2$ aparece uma vez para cada laço de $i$: $x^\top Lx\le2\sum_i\bar d_ix_i^2=2x^\top\bar Dx$. O quociente $x^\top Lx/x^\top\bar Dx$ fica em $[0,2]$, e os autovalores de $\hat L$ são os valores desse quociente nos seus pontos críticos.</p>
+          <p>$(a-b)^2\le(a-b)^2+(a+b)^2=2a^2+2b^2$, com $a=v_i$ e $b=\sigma_{ij}v_j$ ($b^2=v_j^2$). Somando sobre os links, cada $v_i^2$ aparece uma vez para cada link de $i$: $x^\top Lx\le2\sum_i\bar d_ix_i^2=2x^\top\bar Dx$. O quociente $x^\top Lx/x^\top\bar Dx$ fica em $[0,2]$, e os autovalores de $\hat L$ são os valores desse quociente nos seus pontos críticos.</p>
         </div>
       </details>
 
       <aside class="box exercicio">
         <p class="tag">3. A busca local garante metade</p>
-        <p>Suponha que a busca local parou: mudar qualquer vértice de lado não diminui os laços contrariados. Mostre que, em cada vértice, pelo menos metade dos seus laços estão satisfeitos, e conclua que $f\le m/2$ para toda rede com sinais.</p>
+        <p>Suponha que a busca local parou: mudar qualquer vértice de lado não diminui os links contrariados. Mostre que, em cada vértice, pelo menos metade dos seus links estão satisfeitos, e conclua que $f\le m/2$ para toda rede com sinais.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>Mudar o vértice $i$ de lado transforma exatamente os seus laços satisfeitos em contrariados e vice-versa (os outros laços não mudam). Se isso não diminui o total, então $i$ tem pelo menos tantos laços satisfeitos quanto contrariados. Somando sobre todos os vértices, cada laço é contado duas vezes (uma em cada ponta), e a desigualdade continua valendo: no total, satisfeitos $\ge$ contrariados, ou seja, contrariados $\le m/2$. Como $f$ é o mínimo, $f\le m/2$. A célula de Python mostra que, com ruído forte, $f/m$ fica abaixo de $1/2$, e o exercício explica por quê.</p>
+          <p>Mudar o vértice $i$ de lado transforma exatamente os seus links satisfeitos em contrariados e vice-versa (os outros links não mudam). Se isso não diminui o total, então $i$ tem pelo menos tantos links satisfeitos quanto contrariados. Somando sobre todos os vértices, cada link é contado duas vezes (uma em cada ponta), e a desigualdade continua valendo: no total, satisfeitos $\ge$ contrariados, ou seja, contrariados $\le m/2$. Como $f$ é o mínimo, $f\le m/2$. A célula de Python mostra que, com ruído forte, $f/m$ fica abaixo de $1/2$, e o exercício explica por quê.</p>
         </div>
       </details>
 
       <aside class="box exercicio">
         <p class="tag">4. Empacotar ciclos desequilibrados</p>
-        <p>(a) Mostre que, se a rede tem $k$ ciclos desequilibrados que não compartilham laços, então $f\ge k$. (b) Nas Gahuku-Gama há $9$ triângulos desequilibrados. Mostre que não dá para escolher todos sem laços em comum, e ache $5$ que não compartilham laços.</p>
+        <p>(a) Mostre que, se a rede tem $k$ ciclos desequilibrados que não compartilham links, então $f\ge k$. (b) Nas Gahuku-Gama há $9$ triângulos desequilibrados. Mostre que não dá para escolher todos sem links em comum, e ache $5$ que não compartilham links.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) Qualquer divisão contraria pelo menos um laço de cada ciclo desequilibrado (senão, pela parte fácil do teorema de Harary, o ciclo seria equilibrado). Se os ciclos não compartilham laços, esses laços contrariados são todos diferentes: pelo menos $k$.</p>
-          <p>(b) Três dos triângulos passam pelo laço GEHAM–UHETO (MASIL–GEHAM–UHETO, GEHAM–UHETO–NAGAD e GEHAM–UHETO–GAMA), e no máximo um deles pode entrar. Uma escolha de $5$ sem laços em comum: KOTUN–GAHUK–NOTOH, GAHUK–MASIL–UHETO, NOTOH–GEHAM–NAGAD, GEHAM–UHETO–GAMA e ASARO–SEUVE–GAMA (a lista dos nove está na <a href="sinais.html#gama">página de redes com sinais</a>). Testando todas as escolhas, $5$ é o máximo. A cota de empacotamento coincide aqui com a espectral ($f\ge5$); nenhuma das duas chega a $7$.</p>
+          <p>(a) Qualquer divisão contraria pelo menos um link de cada ciclo desequilibrado (senão, pela parte fácil do teorema de Harary, o ciclo seria equilibrado). Se os ciclos não compartilham links, esses links contrariados são todos diferentes: pelo menos $k$.</p>
+          <p>(b) Três dos triângulos passam pelo link GEHAM–UHETO (MASIL–GEHAM–UHETO, GEHAM–UHETO–NAGAD e GEHAM–UHETO–GAMA), e no máximo um deles pode entrar. Uma escolha de $5$ sem links em comum: KOTUN–GAHUK–NOTOH, GAHUK–MASIL–UHETO, NOTOH–GEHAM–NAGAD, GEHAM–UHETO–GAMA e ASARO–SEUVE–GAMA (a lista dos nove está na <a href="sinais.html#gama">página de redes com sinais</a>). Testando todas as escolhas, $5$ é o máximo. A cota de empacotamento coincide aqui com a espectral ($f\ge5$); nenhuma das duas chega a $7$.</p>
         </div>
       </details>
 
       <aside class="box exercicio">
         <p class="tag">5. Corte máximo</p>
-        <p>(a) Numa rede só de laços negativos, mostre que $f=m-\mathrm{maxcut}$. (b) Conclua que um algoritmo rápido para $f$ daria um algoritmo rápido para o corte máximo. (c) Que $\lambda_1$ tem um ciclo de $n$ vértices todo negativo? Compare com $f$ para $n$ par e ímpar.</p>
+        <p>(a) Numa rede só de links negativos, mostre que $f=m-\mathrm{maxcut}$. (b) Conclua que um algoritmo rápido para $f$ daria um algoritmo rápido para o corte máximo. (c) Que $\lambda_1$ tem um ciclo de $n$ vértices todo negativo? Compare com $f$ para $n$ par e ímpar.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) Numa divisão, um laço negativo está satisfeito exatamente quando liga os dois grupos, isto é, quando está no corte. Contrariados $=m-\text{corte}$, e o mínimo de contrariados é $m$ menos o máximo do corte. (b) Dada uma rede comum, ponha sinal negativo em todos os laços e calcule $f$: o corte máximo é $m-f$. (c) Pela página anterior, $\lambda_1=0$ para $n$ par e $\lambda_1=2-2\cos(\pi/n)\approx\pi^2/n^2$ para $n$ ímpar. E $f=0$ para $n$ par (o ciclo par é bipartido) e $f=1$ para $n$ ímpar: o mesmo contraste do ciclo com um laço negativo, que é a mesma rede a menos de uma troca de sinais.</p>
+          <p>(a) Numa divisão, um link negativo está satisfeito exatamente quando liga os dois grupos, isto é, quando está no corte. Contrariados $=m-\text{corte}$, e o mínimo de contrariados é $m$ menos o máximo do corte. (b) Dada uma rede comum, ponha sinal negativo em todos os links e calcule $f$: o corte máximo é $m-f$. (c) Pela página anterior, $\lambda_1=0$ para $n$ par e $\lambda_1=2-2\cos(\pi/n)\approx\pi^2/n^2$ para $n$ ímpar. E $f=0$ para $n$ par (o ciclo par é bipartido) e $f=1$ para $n$ ímpar: o mesmo contraste do ciclo com um link negativo, que é a mesma rede a menos de uma troca de sinais.</p>
         </div>
       </details>
 
@@ -226,8 +226,8 @@
     </main>
   </div>
 
-  <script src="../assets/redes-core.js?v=6049da2b"></script>
-  <script src="../assets/frust-demo.js?v=97d4fa05"></script>
+  <script src="../assets/redes-core.js?v=f3b8056e"></script>
+  <script src="../assets/frust-demo.js?v=a16f6d8d"></script>
   <script src="../assets/pyrunner.js?v=54fb0c98"></script>
 </body>
 </html>

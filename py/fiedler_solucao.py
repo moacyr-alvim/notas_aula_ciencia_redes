@@ -2,15 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
 
-def laplaciano(n, lacos):
-    B = np.zeros((len(lacos), n))
-    for e, (i, j) in enumerate(lacos):
+def laplaciano(n, links):
+    B = np.zeros((len(links), n))
+    for e, (i, j) in enumerate(links):
         B[e, i], B[e, j] = -1, +1
     return B.T @ B
 
-def corte(lacos, lado):
-    # quantos laços ligam vértices de lados diferentes
-    return sum(lado[i] != lado[j] for i, j in lacos)
+def corte(links, lado):
+    # quantos links ligam vértices de lados diferentes
+    return sum(lado[i] != lado[j] for i, j in links)
 
 def fiedler(L):
     lam, Q = np.linalg.eigh(L)        # autovalores em ordem crescente
@@ -19,10 +19,10 @@ def fiedler(L):
 # --- 1. O clube de caratê
 G = nx.karate_club_graph()
 n = G.number_of_nodes()
-lacos = list(G.edges())
+links = list(G.edges())
 faccao = np.array([G.nodes[i]["club"] == "Officer" for i in G])   # o que de fato aconteceu
 
-lam2, q2 = fiedler(laplaciano(n, lacos))
+lam2, q2 = fiedler(laplaciano(n, links))
 if q2 @ (2 * faccao - 1) < 0:         # o sinal de um autovetor é arbitrário: orienta como as facções
     q2 = -q2
 
@@ -30,10 +30,10 @@ pelo_sinal = q2 > 0
 pela_mediana = q2 > np.median(q2)
 for nome, lado in (("sinal", pelo_sinal), ("mediana", pela_mediana), ("facções reais", faccao)):
     erros = [i for i in range(n) if lado[i] != faccao[i]]
-    print(f"{nome:>13}: lados {lado.sum():2d} e {n - lado.sum():2d}   corte = {corte(lacos, lado):2d}   erram: {erros}")
-print(f"λ₂ = {lam2:.4f};  toda bisseção corta pelo menos n λ₂ / 4 = {n * lam2 / 4:.2f} laços")
+    print(f"{nome:>13}: lados {lado.sum():2d} e {n - lado.sum():2d}   corte = {corte(links, lado):2d}   erram: {erros}")
+print(f"λ₂ = {lam2:.4f};  toda bisseção corta pelo menos n λ₂ / 4 = {n * lam2 / 4:.2f} links")
 
-# --- 2. Modelo estocástico de blocos: dois grupos de k, laço com prob. p_in dentro e p_out entre
+# --- 2. Modelo estocástico de blocos: dois grupos de k, link com prob. p_in dentro e p_out entre
 rng = np.random.default_rng(1)
 k, p_in = 50, 0.2
 
@@ -48,8 +48,8 @@ media_acertos = []
 for p_out in p_outs:
     ac = []
     for _ in range(20):
-        lacos_b, grupo = blocos(p_out)
-        lam2_b, q = fiedler(laplaciano(2 * k, lacos_b))
+        links_b, grupo = blocos(p_out)
+        lam2_b, q = fiedler(laplaciano(2 * k, links_b))
         lado = q > np.median(q)
         a = np.mean(lado == grupo)
         ac.append(max(a, 1 - a))      # os rótulos podem sair trocados

@@ -28,14 +28,14 @@
     <main>
       <header>
         <h1>Difusão em redes</h1>
-        <p class="lede">Alguma coisa se espalha por uma rede: calor entre salas, dinheiro entre contas, uma opinião entre amigos que conversam. A regra é "a cada passo, por cada laço, passa do lado que tem mais para o que tem menos uma fração da diferença". Escrita com a matriz de incidência $B$, ela vira $u_{k+1}=u_k-c\,Lu_k$, e o laplaciano da rede aparece sozinho: $L=B^\top B$.</p>
+        <p class="lede">Alguma coisa se espalha por uma rede: calor entre salas, dinheiro entre contas, uma opinião entre amigos que conversam. A regra é "a cada passo, por cada link, passa do lado que tem mais para o que tem menos uma fração da diferença". Escrita com a matriz de incidência $B$, ela vira $u_{k+1}=u_k-c\,Lu_k$, e o laplaciano da rede aparece sozinho: $L=B^\top B$.</p>
         <p class="meta">Primeira página. Precisa de álgebra linear: produto de matrizes e autovalores de matrizes simétricas. O mesmo assunto, com tempo contínuo e puxado para o lado das EDPs, está nas <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/difusao-grafos.html">notas de EDP</a>.</p>
       </header>
 
       <h2 id="regra" data-toc="A regra">A regra: o desnível empurra</h2>
-      <p>A rede tem $n$ vértices e $m$ laços, sem direção. Em cada vértice mora uma quantidade $u_i$, e o tempo anda em passos: $k=0,1,2,\dots$ Pense em tanques de água ligados por canos. Em cada passo, por cada cano, passa água do tanque mais cheio para o mais vazio, numa quantidade proporcional ao desnível:
-      $$\text{o que passa pelo laço em um passo}=c\times(\text{diferença de }u\text{ entre as pontas}).$$
-      A constante $c>0$ mede quão bem os canos conduzem. Em cada vértice, o novo valor é o valor atual mais o saldo do que chegou e do que saiu por todos os seus laços.</p>
+      <p>A rede tem $n$ vértices e $m$ links, sem direção. Em cada vértice mora uma quantidade $u_i$, e o tempo anda em passos: $k=0,1,2,\dots$ Pense em tanques de água ligados por canos. Em cada passo, por cada cano, passa água do tanque mais cheio para o mais vazio, numa quantidade proporcional ao desnível:
+      $$\text{o que passa pelo link em um passo}=c\times(\text{diferença de }u\text{ entre as pontas}).$$
+      A constante $c>0$ mede quão bem os canos conduzem. Em cada vértice, o novo valor é o valor atual mais o saldo do que chegou e do que saiu por todos os seus links.</p>
 
       <figure class="fig">
 <svg viewBox="0 0 520 220" role="img" aria-labelledby="fg1t" style="width:100%;height:auto;max-width:520px;display:block;margin:0 auto">
@@ -57,7 +57,7 @@
   <text x="90" y="150" font-family="sans-serif" font-size="12" style="fill:var(--ink-soft)" text-anchor="middle">vizinho</text>
   <text x="260" y="152" font-family="sans-serif" font-size="12" style="fill:var(--ink-soft)" text-anchor="middle">vértice i</text>
 </svg>
-<figcaption>O vértice $i$ tem $u_i=2$ e três vizinhos, com $5$, $3$ e $1$. As setas mostram para onde vai a quantidade em cada laço. Saldo: $c\,[(5-2)+(3-2)+(1-2)]=3c$, e no próximo passo $u_i$ vale $2+3c$. O vértice sobe porque está abaixo da maior parte da vizinhança.</figcaption>
+<figcaption>O vértice $i$ tem $u_i=2$ e três vizinhos, com $5$, $3$ e $1$. As setas mostram para onde vai a quantidade em cada link. Saldo: $c\,[(5-2)+(3-2)+(1-2)]=3c$, e no próximo passo $u_i$ vale $2+3c$. O vértice sobe porque está abaixo da maior parte da vizinhança.</figcaption>
 </figure>
 
       <p>A mesma regra aparece com outros nomes: lei de Fourier (calor), de Fick (partículas), de Ohm (carga). Em redes sociais é o modelo mais simples de influência entre opiniões que variam continuamente.</p>
@@ -68,13 +68,13 @@
       </aside>
 
       <h2 id="incidencia" data-toc="A matriz de incidência">A contabilidade: a matriz de incidência</h2>
-      <p>Para escrever a regra de uma vez para todos os vértices, <b>oriente cada laço</b>, de qualquer jeito: a seta é só um combinado de contabilidade, não quer dizer que a quantidade só anda naquele sentido. Monte a <b>matriz de incidência</b> $B$, com uma linha por laço e uma coluna por vértice ($m\times n$): a linha do laço $i\to j$ tem $-1$ na coluna $i$, $+1$ na coluna $j$ e zero no resto. Então
+      <p>Para escrever a regra de uma vez para todos os vértices, <b>oriente cada link</b>, de qualquer jeito: a seta é só um combinado de contabilidade, não quer dizer que a quantidade só anda naquele sentido. Monte a <b>matriz de incidência</b> $B$, com uma linha por link e uma coluna por vértice ($m\times n$): a linha do link $i\to j$ tem $-1$ na coluna $i$, $+1$ na coluna $j$ e zero no resto. Então
       $$(Bu)_e=u_j-u_i$$
-      é o desnível ao longo do laço $e$, medido no sentido da seta.</p>
+      é o desnível ao longo do link $e$, medido no sentido da seta.</p>
 
       <figure class="fig">
 <svg viewBox="0 0 520 110" role="img" aria-labelledby="fg2t" style="width:100%;height:auto;max-width:480px;display:block;margin:0 auto">
-  <title id="fg2t">Caminho de três vértices, com o laço e1 orientado de 1 para 2 e o laço e2 orientado de 2 para 3.</title>
+  <title id="fg2t">Caminho de três vértices, com o link e1 orientado de 1 para 2 e o link e2 orientado de 2 para 3.</title>
   <defs><marker id="sg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1 L9,5 L0,9 z" style="fill:var(--carac)"/></marker></defs>
   <line x1="92" y1="60" x2="234" y2="60" style="stroke:var(--carac)" stroke-width="2.4" marker-end="url(#sg)"/>
   <line x1="282" y1="60" x2="424" y2="60" style="stroke:var(--carac)" stroke-width="2.4" marker-end="url(#sg)"/>
@@ -89,17 +89,17 @@
       $$B=\begin{pmatrix}-1&1&0\\0&-1&1\end{pmatrix},\qquad Bu=\begin{pmatrix}u_2-u_1\\u_3-u_2\end{pmatrix}.$$
       Agora a regra, em dois passos de contabilidade:</p>
       <ol>
-        <li><b>O que passa em cada laço</b>, contado no sentido da seta: $f=-c\,Bu$. Na linha $e$, $f_e=c\,(u_i-u_j)$, positivo quando a quantidade desce de $i$ para $j$.</li>
-        <li><b>O saldo em cada vértice</b> é $B^\top f$. O vértice ganha $f_e$ nos laços que chegam nele (onde a coluna dele tem $+1$) e perde $f_e$ nos que saem dele (onde tem $-1$); somar $B_{ei}f_e$ sobre os laços é exatamente $(B^\top f)_i$.</li>
+        <li><b>O que passa em cada link</b>, contado no sentido da seta: $f=-c\,Bu$. Na linha $e$, $f_e=c\,(u_i-u_j)$, positivo quando a quantidade desce de $i$ para $j$.</li>
+        <li><b>O saldo em cada vértice</b> é $B^\top f$. O vértice ganha $f_e$ nos links que chegam nele (onde a coluna dele tem $+1$) e perde $f_e$ nos que saem dele (onde tem $-1$); somar $B_{ei}f_e$ sobre os links é exatamente $(B^\top f)_i$.</li>
       </ol>
       <p>Juntando, um passo é
       $$u_{k+1}=u_k+B^\top f=u_k-c\,B^\top B\,u_k,\qquad\text{isto é,}\qquad\boxed{\,u_{k+1}=u_k-c\,L\,u_k,\qquad L=B^\top B.\,}$$
-      $L$ é o <b>laplaciano da rede</b>. Trocar a orientação de um laço troca o sinal de uma linha de $B$; como essa linha aparece duas vezes em $B^\top B$, o sinal se cancela e $L$ não muda. A escolha arbitrária das setas não deixa marca.</p>
+      $L$ é o <b>laplaciano da rede</b>. Trocar a orientação de um link troca o sinal de uma linha de $B$; como essa linha aparece duas vezes em $B^\top B$, o sinal se cancela e $L$ não muda. A escolha arbitrária das setas não deixa marca.</p>
 
       <h2 id="euler" data-toc="Um passo depois do outro">Um passo depois do outro: o método de Euler</h2>
       <p>A regra tem a forma
       $$\text{valor novo}=\text{valor atual}+\Delta t\times(\text{taxa de variação}),\qquad\text{com }\Delta t=1\text{ e taxa}=-c\,Lu.$$
-      Esse é o <b>método de Euler</b>: saber quanto cada coisa está variando agora e dar um passo nessa direção. Aqui o passo de tempo é $\Delta t=1$ e a "velocidade" de cada vértice é o saldo $-c\,(Lu)_i$ do que entra e sai pelos laços. No computador, a evolução inteira é um laço de uma linha:</p>
+      Esse é o <b>método de Euler</b>: saber quanto cada coisa está variando agora e dar um passo nessa direção. Aqui o passo de tempo é $\Delta t=1$ e a "velocidade" de cada vértice é o saldo $-c\,(Lu)_i$ do que entra e sai pelos links. No computador, a evolução inteira é um <code>for</code> de uma linha:</p>
       <pre><code>for k in range(K):
     u = u - c * L @ u</code></pre>
       <p>Também dá para escrever tudo de uma vez: $u_k=(I-cL)^k\,u_0$. A matriz $W=I-cL$ é a que leva um passo ao seguinte.</p>
@@ -117,17 +117,17 @@
       <ul>
         <li><b>$L$ é simétrica</b>: $(B^\top B)^\top=B^\top B$. Então tem autovalores reais e uma base ortonormal de autovetores.</li>
         <li><b>$L$ é positiva (semidefinida).</b> Para qualquer $u$,
-        $$u^\top Lu=u^\top B^\top Bu=(Bu)^\top(Bu)=\|Bu\|^2=\sum_{\text{laços }ij}(u_i-u_j)^2\ \ge0.$$
-        Nenhuma conta com os elementos de $L$: é uma soma de quadrados. Em particular, todo autovalor é $\ge0$, porque se $Lq=\lambda q$ com $\|q\|=1$, então $\lambda=q^\top Lq\ge0$. O número $u^\top Lu$ mede o <em>desacordo total entre vizinhos</em>; ele só é zero quando $u$ é igual nas duas pontas de cada laço.</li>
+        $$u^\top Lu=u^\top B^\top Bu=(Bu)^\top(Bu)=\|Bu\|^2=\sum_{\text{links }ij}(u_i-u_j)^2\ \ge0.$$
+        Nenhuma conta com os elementos de $L$: é uma soma de quadrados. Em particular, todo autovalor é $\ge0$, porque se $Lq=\lambda q$ com $\|q\|=1$, então $\lambda=q^\top Lq\ge0$. O número $u^\top Lu$ mede o <em>desacordo total entre vizinhos</em>; ele só é zero quando $u$ é igual nas duas pontas de cada link.</li>
         <li><b>O vetor constante dá autovalor $0$.</b> Cada linha de $B$ tem um $+1$ e um $-1$, então $B\mathbf 1=0$ e $L\mathbf 1=B^\top B\mathbf 1=0$. Ordenando, $0=\lambda_1\le\lambda_2\le\dots\le\lambda_n$.</li>
       </ul>
-      <p>E, olhando por dentro, $L$ é a matriz que os livros de redes escrevem como $L=D-A$: grau na diagonal, $-1$ onde há laço, zero no resto. No caminho,
+      <p>E, olhando por dentro, $L$ é a matriz que os livros de redes escrevem como $L=D-A$: grau na diagonal, $-1$ onde há link, zero no resto. No caminho,
       $$L=B^\top B=\begin{pmatrix}-1&0\\1&-1\\0&1\end{pmatrix}\begin{pmatrix}-1&1&0\\0&-1&1\end{pmatrix}=\begin{pmatrix}1&-1&0\\-1&2&-1\\0&-1&1\end{pmatrix}.$$</p>
 
       <details>
         <summary>Por que $B^\top B=D-A$ em geral</summary>
         <div class="body">
-          <p>$(B^\top B)_{ij}=\sum_eB_{ei}B_{ej}$ percorre os laços. Na diagonal, $B_{ei}^2=1$ em cada laço que toca $i$, e a soma é o grau $d_i$. Fora da diagonal, só um laço que toca $i$ e $j$ ao mesmo tempo contribui, isto é, o laço entre eles, se existir; nele um dos dois tem $+1$ e o outro $-1$, e o produto é $-1$. Com pesos $w_e$ nos laços (intensidade da relação, capacidade do cano), $L=B^\top CB$ com $C=\mathrm{diag}(w_e)$, e o argumento da positividade continua igual: $u^\top Lu=\sum_ew_e(u_i-u_j)^2\ge0$.</p>
+          <p>$(B^\top B)_{ij}=\sum_eB_{ei}B_{ej}$ percorre os links. Na diagonal, $B_{ei}^2=1$ em cada link que toca $i$, e a soma é o grau $d_i$. Fora da diagonal, só um link que toca $i$ e $j$ ao mesmo tempo contribui, isto é, o link entre eles, se existir; nele um dos dois tem $+1$ e o outro $-1$, e o produto é $-1$. Com pesos $w_e$ nos links (intensidade da relação, capacidade do cano), $L=B^\top CB$ com $C=\mathrm{diag}(w_e)$, e o argumento da positividade continua igual: $u^\top Lu=\sum_ew_e(u_i-u_j)^2\ge0$.</p>
         </div>
       </details>
 
@@ -176,7 +176,7 @@
         <li><b>Clube de caratê.</b> Comece no vértice $0$ (o instrutor, grau $16$) e depois no $16$ (grau $2$, na borda). No primeiro passo, quanto sobra no vértice inicial em cada caso? E o número de passos até tudo se igualar, muda muito?</li>
         <li><b>Estrela.</b> Comece no centro: quase tudo se iguala logo no primeiro passo. Comece numa folha: leva perto de uma dezena de passos. O exercício 4 explica por quê.</li>
         <li><b>Caminho.</b> Comece numa ponta. A outra ponta demora a receber alguma coisa, e o equilíbrio é lento: num caminho de $n$ vértices, o número de passos cresce como $n^2$ (exercício 6).</li>
-        <li><b>Dois grupos.</b> Dentro do grupo de partida tudo se iguala depressa; entre os grupos fica um patamar, que só se desfaz devagar, pelo único laço. Esse é o assunto de <a href="componentes.html">Laplaciano, componentes e gargalos</a>.</li>
+        <li><b>Dois grupos.</b> Dentro do grupo de partida tudo se iguala depressa; entre os grupos fica um patamar, que só se desfaz devagar, pelo único link. Esse é o assunto de <a href="componentes.html">Laplaciano, componentes e gargalos</a>.</li>
         <li><b>Passo grande demais.</b> Na estrela, começando no centro, passe $c\times d_{\max}$ de $1$: o centro fica negativo já no primeiro passo. Continue aumentando: acima de um certo valor, as diferenças crescem em vez de diminuir. No caminho, esse valor é quase o próprio $1$.</li>
         <li>Com $c\le1/d_{\max}$, olhe o <b>maior valor</b> na leitura: ele nunca sobe. E a <b>soma</b> nunca muda, qualquer que seja $c$.</li>
       </ol>
@@ -199,8 +199,8 @@
       </aside>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
-      <p>Monte a matriz de incidência do clube de caratê a partir da lista de laços, faça $L=B^\top B$ e dê os passos de Euler. O código confere que $L=D-A$ e que $v^\top Lv=\|Bv\|^2$. O segundo gráfico mostra a distância ao equilíbrio em escala logarítmica: depois de um começo rápido, ela vira uma reta com a inclinação de $(1-c\lambda_2)^k$. Ao rodar, confira que a soma fica em $1$, que o maior valor nunca sobe e que $\lambda_2\approx0{,}4685$.</p>
-      <p>Um detalhe do networkx: <code>karate_club_graph()</code> guarda pesos nos laços (em quantos contextos o par se encontrava). A lista de laços não depende disso, mas, para comparar com $D-A$, use <code>weight=None</code>, que dá só "ligado ou não".</p>
+      <p>Monte a matriz de incidência do clube de caratê a partir da lista de links, faça $L=B^\top B$ e dê os passos de Euler. O código confere que $L=D-A$ e que $v^\top Lv=\|Bv\|^2$. O segundo gráfico mostra a distância ao equilíbrio em escala logarítmica: depois de um começo rápido, ela vira uma reta com a inclinação de $(1-c\lambda_2)^k$. Ao rodar, confira que a soma fica em $1$, que o maior valor nunca sobe e que $\lambda_2\approx0{,}4685$.</p>
+      <p>Um detalhe do networkx: <code>karate_club_graph()</code> guarda pesos nos links (em quantos contextos o par se encontrava). A lista de links não depende disso, mas, para comparar com $D-A$, use <code>weight=None</code>, que dá só "ligado ou não".</p>
 
       <div class="pycell" data-title="Difusão no clube de caratê"
            data-starter="../py/difusao_lacunas.py"
@@ -231,7 +231,7 @@
         <summary>Solução</summary>
         <div class="body">
           <p>(a) Cada linha de $B$ tem um $+1$ e um $-1$, e o resto é zero; somando a linha, dá $0$. Então $\mathbf 1^\top Lu=(B\mathbf 1)^\top(Bu)=0$ e $\mathbf 1^\top u_{k+1}=\mathbf 1^\top u_k-c\,\mathbf 1^\top Lu_k=\mathbf 1^\top u_k$.</p>
-          <p>(b) Se $Lu=0$, então $0=u^\top Lu=\|Bu\|^2=\sum_{\text{laços }ij}(u_i-u_j)^2$. Uma soma de quadrados só é zero se cada parcela é zero: $u_i=u_j$ em todo laço, e, andando de laço em laço, $u$ é constante em cada pedaço conexo. A volta: se $u$ é constante em cada pedaço, $Bu=0$ e então $Lu=B^\top Bu=0$.</p>
+          <p>(b) Se $Lu=0$, então $0=u^\top Lu=\|Bu\|^2=\sum_{\text{links }ij}(u_i-u_j)^2$. Uma soma de quadrados só é zero se cada parcela é zero: $u_i=u_j$ em todo link, e, andando de link em link, $u$ é constante em cada pedaço conexo. A volta: se $u$ é constante em cada pedaço, $Bu=0$ e então $Lu=B^\top Bu=0$.</p>
         </div>
       </details>
 
@@ -302,7 +302,7 @@
     </main>
   </div>
 
-  <script src="../assets/redes-core.js?v=6049da2b"></script>
+  <script src="../assets/redes-core.js?v=f3b8056e"></script>
   <script src="../assets/difusao-demo.js?v=9aabdbb6"></script>
   <script src="../assets/pyrunner.js?v=54fb0c98"></script>
 </body>

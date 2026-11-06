@@ -1,5 +1,5 @@
 /* Web Worker que roda Python (Pyodide) fora da thread da página.
- * Assim, um laço infinito não trava a página: o botão "Parar" simplesmente encerra o worker.
+ * Assim, um link infinito não trava a página: o botão "Parar" simplesmente encerra o worker.
  *
  * Para trocar a versão do Pyodide, altere só a constante abaixo
  * (versões disponíveis: https://pyodide.org/en/stable/project/changelog.html).

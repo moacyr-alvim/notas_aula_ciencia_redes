@@ -41,23 +41,23 @@ nomes = "GAVEV KOTUN OVE ALIKA NAGAM GAHUK MASIL UKUDZ NOTOH KOHIK GEHAM ASARO U
 M = np.loadtxt(StringIO(dados), dtype=int)
 S = M[:16] - M[16:]
 n = 16
-lacos = [(i, j, S[i, j]) for i in range(n) for j in range(i + 1, n) if S[i, j] != 0]
+links = [(i, j, S[i, j]) for i in range(n) for j in range(i + 1, n) if S[i, j] != 0]
 
 # --- 1. Incidência com sinais e laplaciano
-def laplaciano_sinais(lacos):
-    B = np.zeros((len(lacos), n))
-    for e, (i, j, s) in enumerate(lacos):
+def laplaciano_sinais(links):
+    B = np.zeros((len(links), n))
+    for e, (i, j, s) in enumerate(links):
         if s > 0:
             B[e, i], B[e, j] = -1, +1     # positivo: (Bu)_e = u_j - u_i
         else:
             B[e, i], B[e, j] = +1, +1     # negativo: (Bu)_e = u_i + u_j
     return B, B.T @ B
 
-B, L = laplaciano_sinais(lacos)
+B, L = laplaciano_sinais(links)
 A = np.zeros((n, n))
-for i, j, s in lacos:
+for i, j, s in links:
     A[i, j] = A[j, i] = s                 # adjacência com sinais
-Dbar = np.diag(np.abs(A).sum(axis=1))     # quantos laços cada tribo tem, sem olhar o sinal
+Dbar = np.diag(np.abs(A).sum(axis=1))     # quantos links cada tribo tem, sem olhar o sinal
 print("L = D̄ - A_σ ?", np.allclose(L, Dbar - A) and L.any())
 
 lam, Q = np.linalg.eigh(L)
@@ -65,7 +65,7 @@ lam1, q1 = lam[0], Q[:, 0]
 print(f"λ₁ = {lam1:.4f}   (zero só se a rede fosse equilibrada)")
 
 # --- 2. λ₁ e o índice de frustração
-I = np.array([i for i, _, _ in lacos]); J = np.array([j for _, j, _ in lacos]); sig = np.array([s for _, _, s in lacos])
+I = np.array([i for i, _, _ in links]); J = np.array([j for _, j, _ in links]); sig = np.array([s for _, _, s in links])
 def contrariados(cor):
     return int((cor[I] * cor[J] != sig).sum())
 todas = np.array([[1] + [1 - 2 * ((m >> k) & 1) for k in range(n - 1)] for m in range(2 ** (n - 1))])
@@ -74,7 +74,7 @@ f = int(por_pintura.min())
 melhor = todas[por_pintura.argmin()]
 cor_q1 = np.where(q1 >= 0, 1, -1)
 print(f"índice de frustração f = {f};  cota n λ₁ / 4 = {n * lam1 / 4:.2f}")
-print(f"a divisão pelo sinal de q₁ contraria {contrariados(cor_q1)} laços:",
+print(f"a divisão pelo sinal de q₁ contraria {contrariados(cor_q1)} links:",
       [nomes[i] for i in range(n) if cor_q1[i] == cor_q1[0]], "contra o resto")
 
 # --- 3. Opiniões com antagonismo: u <- u - c L u
@@ -89,9 +89,9 @@ rng = np.random.default_rng(3)
 u0 = rng.uniform(-1, 1, n)
 U = evolui(L, u0, 200)
 
-# a mesma rede, mas com os f laços contrariados pela melhor pintura trocados de sinal: fica equilibrada
-lacos_eq = [(i, j, s if melhor[i] * melhor[j] == s else -s) for i, j, s in lacos]
-_, L_eq = laplaciano_sinais(lacos_eq)
+# a mesma rede, mas com os f links contrariados pela melhor pintura trocados de sinal: fica equilibrada
+links_eq = [(i, j, s if melhor[i] * melhor[j] == s else -s) for i, j, s in links]
+_, L_eq = laplaciano_sinais(links_eq)
 print(f"versão equilibrada: λ₁ = {abs(np.linalg.eigvalsh(L_eq)[0]):.1e}  (zero, a menos do arredondamento)")
 U_eq = evolui(L_eq, u0, 200)
 previsto = (melhor @ u0) / n

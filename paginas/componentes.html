@@ -33,33 +33,33 @@
 
       <h2 id="zero" data-toc="Autovalor zero">Autovalor zero: quantos pedaços</h2>
       <p>Se $Lu=0$, então
-      $$0=u^\top Lu=\|Bu\|^2=\sum_{\text{laços }ij}(u_i-u_j)^2.$$
-      Uma soma de quadrados só é zero se cada parcela é zero: $u_i=u_j$ em todo laço. Andando de laço em laço, $u$ é constante em cada <b>componente conexa</b>, o pedaço da rede que se alcança a partir de um vértice. Reciprocamente, qualquer vetor constante em cada componente é anulado por $B$ e, portanto, por $L$. Os autovetores de autovalor $0$ são exatamente esses, e uma base deles é formada pelos vetores indicadores das componentes ($1$ nos vértices de uma componente, $0$ no resto). Conclusão:
+      $$0=u^\top Lu=\|Bu\|^2=\sum_{\text{links }ij}(u_i-u_j)^2.$$
+      Uma soma de quadrados só é zero se cada parcela é zero: $u_i=u_j$ em todo link. Andando de link em link, $u$ é constante em cada <b>componente conexa</b>, o pedaço da rede que se alcança a partir de um vértice. Reciprocamente, qualquer vetor constante em cada componente é anulado por $B$ e, portanto, por $L$. Os autovetores de autovalor $0$ são exatamente esses, e uma base deles é formada pelos vetores indicadores das componentes ($1$ nos vértices de uma componente, $0$ no resto). Conclusão:
       $$\boxed{\,\text{número de autovalores nulos de }L\;=\;\text{número de componentes conexas.}\,}$$</p>
-      <p>Dá para ver isso também na própria matriz. Numerando os vértices componente por componente, não há laço entre componentes, e $L$ fica em <b>blocos</b> na diagonal, um laplaciano para cada pedaço:
+      <p>Dá para ver isso também na própria matriz. Numerando os vértices componente por componente, não há link entre componentes, e $L$ fica em <b>blocos</b> na diagonal, um laplaciano para cada pedaço:
       $$L=\begin{pmatrix}L_1&0&0\\0&L_2&0\\0&0&L_3\end{pmatrix}.$$
       Cada bloco tem o seu próprio autovalor $0$, com o vetor constante daquele bloco.</p>
       <p><b>Na difusão</b>, cada componente é um mundo à parte. Nada passa de uma para outra, a soma se conserva em cada uma, e o estado final é a <em>média de cada componente</em>: pelos modos, todos os termos com $\lambda>0$ morrem e sobra a projeção de $u_0$ nos indicadores das componentes. Se a rede tem mais de um pedaço, $\lambda_2=0$ e ela nunca chega a uma média geral.</p>
       <aside class="box">
-        <p class="tag">Com sinais nos laços</p>
-        <p>Numa rede com laços positivos e negativos, a mesma construção $L=B^\top B$, com uma matriz de incidência que enxerga os sinais, faz o autovalor zero contar outra coisa: as componentes <em>equilibradas</em>, as que se dividem em dois lados sem traidores. É o <a href="lapsinal.html">Laplaciano com sinais</a>.</p>
+        <p class="tag">Com sinais nos links</p>
+        <p>Numa rede com links positivos e negativos, a mesma construção $L=B^\top B$, com uma matriz de incidência que enxerga os sinais, faz o autovalor zero contar outra coisa: as componentes <em>equilibradas</em>, as que se dividem em dois lados sem traidores. É o <a href="lapsinal.html">Laplaciano com sinais</a>.</p>
       </aside>
 
       <h2 id="rayleigh" data-toc="λ₂ como um mínimo">$\lambda_2$ como um mínimo</h2>
       <p>Para falar de "quase partida", precisamos de uma descrição de $\lambda_2$ que não dependa de calcular autovetores. Tome qualquer $v$ ortogonal ao vetor constante, $v\perp\mathbf 1$. Escrevendo $v$ na base ortonormal dos autovetores, o coeficiente de $q_1=\mathbf 1/\sqrt n$ é zero: $v=\sum_{j\ge2}a_jq_j$. Então
       $$v^\top Lv=\sum_{j\ge2}\lambda_ja_j^2\ \ge\ \lambda_2\sum_{j\ge2}a_j^2=\lambda_2\,v^\top v,$$
       com igualdade quando $v=q_2$. Isto é,
-      $$\boxed{\,\lambda_2=\min_{v\perp\mathbf 1,\ v\ne0}\ \frac{v^\top Lv}{v^\top v}=\min_{v\perp\mathbf 1,\ v\ne0}\ \frac{\sum_{\text{laços }ij}(v_i-v_j)^2}{\sum_iv_i^2}.\,}$$
+      $$\boxed{\,\lambda_2=\min_{v\perp\mathbf 1,\ v\ne0}\ \frac{v^\top Lv}{v^\top v}=\min_{v\perp\mathbf 1,\ v\ne0}\ \frac{\sum_{\text{links }ij}(v_i-v_j)^2}{\sum_iv_i^2}.\,}$$
       A fração é o <b>quociente de Rayleigh</b>. Em palavras: $\lambda_2$ é o menor desacordo entre vizinhos que um vetor pode ter, entre os vetores de média zero e tamanho fixo. A consequência prática é que <em>qualquer</em> $v\perp\mathbf 1$ que você escolher dá uma cota superior: $\lambda_2\le v^\top Lv/v^\top v$.</p>
 
       <h2 id="gargalo" data-toc="Gargalo ⇒ λ₂ pequeno">Gargalo obriga $\lambda_2$ a ser pequeno</h2>
-      <p>Divida os vértices em dois grupos, $S$ e o resto $\bar S$, e chame de <b>corte</b> o número de laços que ligam um grupo ao outro (com pesos, a soma dos pesos desses laços). Use como vetor de teste
+      <p>Divida os vértices em dois grupos, $S$ e o resto $\bar S$, e chame de <b>corte</b> o número de links que ligam um grupo ao outro (com pesos, a soma dos pesos desses links). Use como vetor de teste
       $$v_i=\begin{cases}\phantom{-}1/|S|,&i\in S,\\-1/|\bar S|,&i\in\bar S.\end{cases}$$
-      Ele soma zero, então $v\perp\mathbf 1$. Nos laços de dentro de um grupo, $v_i-v_j=0$; nos laços do corte, $|v_i-v_j|=\frac1{|S|}+\frac1{|\bar S|}=\frac{n}{|S|\,|\bar S|}$. Logo
+      Ele soma zero, então $v\perp\mathbf 1$. Nos links de dentro de um grupo, $v_i-v_j=0$; nos links do corte, $|v_i-v_j|=\frac1{|S|}+\frac1{|\bar S|}=\frac{n}{|S|\,|\bar S|}$. Logo
       $$v^\top Lv=\text{corte}\cdot\Big(\frac{n}{|S||\bar S|}\Big)^2,\qquad v^\top v=\frac1{|S|}+\frac1{|\bar S|}=\frac{n}{|S||\bar S|},$$
       e o quociente de Rayleigh dá
       $$\boxed{\,\lambda_2\ \le\ \text{corte}(S)\cdot\frac{n}{|S|\,|\bar S|}.\,}$$
-      Se existe um jeito de partir a rede em dois grupos grandes com poucos laços entre eles, $\lambda_2$ é pequeno. Para dois grupos de mesmo tamanho, $\lambda_2\le4\,\text{corte}/n$.</p>
+      Se existe um jeito de partir a rede em dois grupos grandes com poucos links entre eles, $\lambda_2$ é pequeno. Para dois grupos de mesmo tamanho, $\lambda_2\le4\,\text{corte}/n$.</p>
       <p>Exemplo: dois grupos de $k$ vértices, todos ligados a todos dentro de cada grupo, e uma única porta de peso $\varepsilon$ entre eles. Aqui $n=2k$, $|S|=|\bar S|=k$ e o corte é $\varepsilon$:
       $$\lambda_2\le\frac{2\varepsilon}{k}.$$
       Para $\varepsilon$ pequeno vale quase a igualdade (a célula de Python confere). Dividir $\varepsilon$ por $10$ divide $\lambda_2$ por $10$ e multiplica por $10$ o número de passos até o equilíbrio, $1/(c\lambda_2)$.</p>
@@ -72,16 +72,16 @@
         </div>
       </details>
 
-      <h2 id="demo" data-toc="Corte laços">Corte laços e veja o espectro</h2>
-      <p>À esquerda, a rede; à direita, os $n$ autovalores de $L$ em ordem crescente. <b>Clique num laço para cortá-lo</b> (ele fica tracejado) e clique de novo para religar. Autovalores nulos aparecem como pontos vermelhos na base; $\lambda_2$, quando é positivo, é a barra azul. Enquanto a rede é conexa, a cor de cada vértice é o valor do autovetor $q_2$ (o <b>vetor de Fiedler</b>): azul para positivo, vermelho para negativo, mais forte quanto maior o módulo. Quando a rede se parte, cada componente ganha uma cor.</p>
+      <h2 id="demo" data-toc="Corte links">Corte links e veja o espectro</h2>
+      <p>À esquerda, a rede; à direita, os $n$ autovalores de $L$ em ordem crescente. <b>Clique num link para cortá-lo</b> (ele fica tracejado) e clique de novo para religar. Autovalores nulos aparecem como pontos vermelhos na base; $\lambda_2$, quando é positivo, é a barra azul. Enquanto a rede é conexa, a cor de cada vértice é o valor do autovetor $q_2$ (o <b>vetor de Fiedler</b>): azul para positivo, vermelho para negativo, mais forte quanto maior o módulo. Quando a rede se parte, cada componente ganha uma cor.</p>
 
       <div class="demo" id="demo-corte">
         <div class="controls">
           <label>rede <select id="g-rede" aria-label="Escolha da rede"></select></label>
-          <button id="g-restaura" type="button">Religar todos os laços</button>
+          <button id="g-restaura" type="button">Religar todos os links</button>
         </div>
         <div class="panels two">
-          <canvas id="g-rede-canvas" role="img" aria-label="A rede; clique num laço para cortá-lo ou religá-lo"></canvas>
+          <canvas id="g-rede-canvas" role="img" aria-label="A rede; clique num link para cortá-lo ou religá-lo"></canvas>
           <canvas id="g-esp-canvas" role="img" aria-label="Os autovalores do laplaciano em ordem crescente"></canvas>
         </div>
         <div id="g-hover" aria-live="polite"></div>
@@ -95,23 +95,23 @@
 
       <p>Para explorar:</p>
       <ol>
-        <li><b>Contar pedaços.</b> Em qualquer rede, corte laços até ela se partir. O número de pontos vermelhos é sempre o número de componentes. No clube de caratê, o vértice $11$ tem um laço só, com o $0$: corte esse laço e ele vira uma componente sozinho.</li>
+        <li><b>Contar pedaços.</b> Em qualquer rede, corte links até ela se partir. O número de pontos vermelhos é sempre o número de componentes. No clube de caratê, o vértice $11$ tem um link só, com o $0$: corte esse link e ele vira uma componente sozinho.</li>
         <li><b>A ponte.</b> Em "dois grupos", corte a ponte $5$–$6$. Antes, $\lambda_2\approx0{,}26$ (bem menor que os outros autovalores: dez deles valem $6$ e o maior, cerca de $7{,}7$); depois, $\lambda_2=0$. O vetor de Fiedler já pintava cada grupo de uma cor antes do corte.</li>
-        <li><b>Quase partir.</b> No anel, corte um laço: a rede continua inteira (vira um caminho), mas $\lambda_2$ cai de $0{,}268$ para $0{,}068$, quase um quarto, e o equilíbrio fica quatro vezes mais lento (exercício 4). Corte um segundo laço e ela se parte.</li>
-        <li><b>As facções do caratê.</b> Olhe as cores antes de cortar qualquer coisa: o sinal de $q_2$ já divide o clube em dois lados. Os onze laços que ligam as duas facções em que o clube de fato se dividiu são $0$–$31$, $1$–$30$, $2$–$9$, $2$–$27$, $2$–$28$, $2$–$32$, $8$–$30$, $8$–$32$, $8$–$33$, $13$–$33$ e $19$–$33$. Corte os onze e veja as duas componentes. Como o sinal de $q_2$ prevê a divisão é o assunto de <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>.</li>
-        <li><b>A estrela.</b> Cortar qualquer laço isola uma folha. Na grade, quantos laços é preciso cortar para separar um canto? E para dividir a grade ao meio?</li>
+        <li><b>Quase partir.</b> No anel, corte um link: a rede continua inteira (vira um caminho), mas $\lambda_2$ cai de $0{,}268$ para $0{,}068$, quase um quarto, e o equilíbrio fica quatro vezes mais lento (exercício 4). Corte um segundo link e ela se parte.</li>
+        <li><b>As facções do caratê.</b> Olhe as cores antes de cortar qualquer coisa: o sinal de $q_2$ já divide o clube em dois lados. Os onze links que ligam as duas facções em que o clube de fato se dividiu são $0$–$31$, $1$–$30$, $2$–$9$, $2$–$27$, $2$–$28$, $2$–$32$, $8$–$30$, $8$–$32$, $8$–$33$, $13$–$33$ e $19$–$33$. Corte os onze e veja as duas componentes. Como o sinal de $q_2$ prevê a divisão é o assunto de <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>.</li>
+        <li><b>A estrela.</b> Cortar qualquer link isola uma folha. Na grade, quantos links é preciso cortar para separar um canto? E para dividir a grade ao meio?</li>
       </ol>
 
       <h2 id="redes" data-toc="Uso em redes">Para que serve em análise de redes</h2>
       <ul>
         <li><b>Contar pedaços:</b> a multiplicidade do autovalor $0$. Num programa, contar componentes por busca em largura é mais barato; o interesse do espectro está no que vem a seguir.</li>
-        <li><b>Medir gargalos e robustez:</b> $\lambda_2$, a <b>conectividade algébrica</b>, é uma medida contínua de quão longe a rede está de se partir. Retirar um laço nunca aumenta $\lambda_2$; o quanto ele cai mede quão crítico é aquele laço. Fiedler mostrou que, se a rede não é completa, $\lambda_2$ não passa do número mínimo de vértices que é preciso retirar para desconectá-la. No caratê, retirar o vértice $0$ isola o $11$, e de fato $\lambda_2\approx0{,}47\le1$.</li>
+        <li><b>Medir gargalos e robustez:</b> $\lambda_2$, a <b>conectividade algébrica</b>, é uma medida contínua de quão longe a rede está de se partir. Retirar um link nunca aumenta $\lambda_2$; o quanto ele cai mede quão crítico é aquele link. Fiedler mostrou que, se a rede não é completa, $\lambda_2$ não passa do número mínimo de vértices que é preciso retirar para desconectá-la. No caratê, retirar o vértice $0$ isola o $11$, e de fato $\lambda_2\approx0{,}47\le1$.</li>
         <li><b>Velocidade de espalhamento:</b> difusão, consenso e passeios aleatórios se misturam em $\sim1/(c\lambda_2)$ passos. Redes com $\lambda_2$ grande espalham depressa; com $\lambda_2$ pequeno, ficam presas em grupos.</li>
         <li><b>Achar comunidades:</b> o vetor $q_2$ aponta os dois lados do gargalo (<a href="fiedler.html">próxima página</a>).</li>
       </ul>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
-      <p>Dois grupos de $6$ vértices e uma porta de peso $\varepsilon$. Com pesos, $L=B^\top CB$, com $C$ a matriz diagonal dos pesos dos laços. A célula calcula $\lambda_2$ para vários $\varepsilon$ e compara com a cota $2\varepsilon/k$; mostra o sinal do vetor de Fiedler; e dá os passos de Euler com $\varepsilon=0{,}05$, para ver o patamar: as médias dos grupos ficam separadas por centenas de passos, enquanto dentro de cada grupo tudo se iguala em poucos.</p>
+      <p>Dois grupos de $6$ vértices e uma porta de peso $\varepsilon$. Com pesos, $L=B^\top CB$, com $C$ a matriz diagonal dos pesos dos links. A célula calcula $\lambda_2$ para vários $\varepsilon$ e compara com a cota $2\varepsilon/k$; mostra o sinal do vetor de Fiedler; e dá os passos de Euler com $\varepsilon=0{,}05$, para ver o patamar: as médias dos grupos ficam separadas por centenas de passos, enquanto dentro de cada grupo tudo se iguala em poucos.</p>
 
       <div class="pycell" data-title="Dois grupos e uma porta"
            data-starter="../py/gargalo_lacunas.py"
@@ -123,7 +123,7 @@
 
       <aside class="box exercicio">
         <p class="tag">1. Contando pedaços</p>
-        <p>Uma rede tem os vértices $1,\dots,6$ e os laços $\{1,2\}$, $\{2,3\}$, $\{4,5\}$; o vértice $6$ está isolado. Quantos autovalores nulos tem $L$? Para onde vão os passos de difusão (com $c$ dentro da regra de bolso) se $u_0=(3,0,0,2,0,5)$?</p>
+        <p>Uma rede tem os vértices $1,\dots,6$ e os links $\{1,2\}$, $\{2,3\}$, $\{4,5\}$; o vértice $6$ está isolado. Quantos autovalores nulos tem $L$? Para onde vão os passos de difusão (com $c$ dentro da regra de bolso) se $u_0=(3,0,0,2,0,5)$?</p>
       </aside>
       <details>
         <summary>Solução</summary>
@@ -134,12 +134,12 @@
 
       <aside class="box exercicio">
         <p class="tag">2. A cota do gargalo</p>
-        <p>(a) Refaça a conta de $v^\top Lv$ e $v^\top v$ para o vetor de teste $v=1/|S|$ em $S$ e $-1/|\bar S|$ fora. (b) Para dois grupos completos de $k$ vértices ligados por uma porta de peso $\varepsilon$, conclua que $\lambda_2\le2\varepsilon/k$. (c) No caratê, as duas facções têm $17$ membros cada e $11$ laços entre elas. Que cota isso dá para $\lambda_2$? Compare com $\lambda_2\approx0{,}4685$.</p>
+        <p>(a) Refaça a conta de $v^\top Lv$ e $v^\top v$ para o vetor de teste $v=1/|S|$ em $S$ e $-1/|\bar S|$ fora. (b) Para dois grupos completos de $k$ vértices ligados por uma porta de peso $\varepsilon$, conclua que $\lambda_2\le2\varepsilon/k$. (c) No caratê, as duas facções têm $17$ membros cada e $11$ links entre elas. Que cota isso dá para $\lambda_2$? Compare com $\lambda_2\approx0{,}4685$.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) Só os laços do corte contribuem para $v^\top Lv=\sum(v_i-v_j)^2$, cada um com $\big(\frac1{|S|}+\frac1{|\bar S|}\big)^2$. E $v^\top v=|S|\cdot\frac1{|S|^2}+|\bar S|\cdot\frac1{|\bar S|^2}=\frac1{|S|}+\frac1{|\bar S|}$. Dividindo, $\text{corte}\cdot\big(\frac1{|S|}+\frac1{|\bar S|}\big)=\text{corte}\cdot\frac{n}{|S||\bar S|}$.</p>
+          <p>(a) Só os links do corte contribuem para $v^\top Lv=\sum(v_i-v_j)^2$, cada um com $\big(\frac1{|S|}+\frac1{|\bar S|}\big)^2$. E $v^\top v=|S|\cdot\frac1{|S|^2}+|\bar S|\cdot\frac1{|\bar S|^2}=\frac1{|S|}+\frac1{|\bar S|}$. Dividindo, $\text{corte}\cdot\big(\frac1{|S|}+\frac1{|\bar S|}\big)=\text{corte}\cdot\frac{n}{|S||\bar S|}$.</p>
           <p>(b) $\text{corte}=\varepsilon$, $n=2k$, $|S|=|\bar S|=k$: $\lambda_2\le\varepsilon\cdot2k/k^2=2\varepsilon/k$.</p>
           <p>(c) $11\cdot34/(17\cdot17)\approx1{,}29$. A cota vale ($0{,}47\le1{,}29$), mas está longe de ser justa: as facções não são grupos quase isolados, são grupos com uma fronteira razoavelmente larga. A cota só é boa quando o corte é realmente estreito.</p>
         </div>
@@ -147,23 +147,23 @@
 
       <aside class="box exercicio">
         <p class="tag">3. Cortar não ajuda</p>
-        <p>Mostre que retirar um laço de uma rede nunca aumenta $\lambda_2$. (Dica: compare o quociente de Rayleigh antes e depois, para o mesmo $v$.)</p>
+        <p>Mostre que retirar um link de uma rede nunca aumenta $\lambda_2$. (Dica: compare o quociente de Rayleigh antes e depois, para o mesmo $v$.)</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>Retirar o laço $ij$ tira a parcela $(v_i-v_j)^2\ge0$ de $v^\top Lv$, e não mexe em $v^\top v$ nem na condição $v\perp\mathbf 1$. Então, para todo $v\perp\mathbf 1$, o quociente depois é menor ou igual ao quociente antes. O mínimo também: $\lambda_2^{\text{depois}}\le\lambda_2^{\text{antes}}$. Na demo, a barra azul só desce quando você corta.</p>
+          <p>Retirar o link $ij$ tira a parcela $(v_i-v_j)^2\ge0$ de $v^\top Lv$, e não mexe em $v^\top v$ nem na condição $v\perp\mathbf 1$. Então, para todo $v\perp\mathbf 1$, o quociente depois é menor ou igual ao quociente antes. O mínimo também: $\lambda_2^{\text{depois}}\le\lambda_2^{\text{antes}}$. Na demo, a barra azul só desce quando você corta.</p>
         </div>
       </details>
 
       <aside class="box exercicio">
         <p class="tag">4. Do anel ao caminho</p>
-        <p>Os autovalores do anel de $n$ vértices são $2-2\cos(2\pi m/n)$, $m=0,\dots,n-1$, e o $\lambda_2$ do caminho de $n$ vértices é $2-2\cos(\pi/n)$ (exercício 6 de <a href="difusao.html#exercicios">Difusão em redes</a>). Mostre que cortar um único laço do anel divide $\lambda_2$ por um fator que tende a $4$ quando $n$ cresce. Por que faz sentido, pensando no caminho mais longo que a quantidade precisa percorrer?</p>
+        <p>Os autovalores do anel de $n$ vértices são $2-2\cos(2\pi m/n)$, $m=0,\dots,n-1$, e o $\lambda_2$ do caminho de $n$ vértices é $2-2\cos(\pi/n)$ (exercício 6 de <a href="difusao.html#exercicios">Difusão em redes</a>). Mostre que cortar um único link do anel divide $\lambda_2$ por um fator que tende a $4$ quando $n$ cresce. Por que faz sentido, pensando no caminho mais longo que a quantidade precisa percorrer?</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>Para $x$ pequeno, $2-2\cos x\approx x^2$. Anel: $\lambda_2\approx(2\pi/n)^2$; caminho: $\lambda_2\approx(\pi/n)^2$. A razão tende a $4$. Com $n=12$: $0{,}268$ contra $0{,}068$. No anel, nenhum vértice está a mais de $n/2$ laços de outro; depois do corte, as duas pontas ficam a $n-1$ laços uma da outra. A distância dobra, e na difusão o tempo cresce como o quadrado da distância: $2^2=4$.</p>
+          <p>Para $x$ pequeno, $2-2\cos x\approx x^2$. Anel: $\lambda_2\approx(2\pi/n)^2$; caminho: $\lambda_2\approx(\pi/n)^2$. A razão tende a $4$. Com $n=12$: $0{,}268$ contra $0{,}068$. No anel, nenhum vértice está a mais de $n/2$ links de outro; depois do corte, as duas pontas ficam a $n-1$ links uma da outra. A distância dobra, e na difusão o tempo cresce como o quadrado da distância: $2^2=4$.</p>
         </div>
       </details>
 
@@ -174,7 +174,7 @@
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>Com $S=\{\text{uma folha}\}$, o corte é $1$ (o laço até o centro), $|S|=1$ e $|\bar S|=n-1$: $\lambda_2\le1\cdot n/(n-1)$, que tende a $1$. Cada folha está ligada ao resto por um só laço, e isso basta para segurar $\lambda_2$, por maior que seja o centro. No grafo completo, separar qualquer grupo $S$ corta $|S|\,|\bar S|$ laços, e a cota dá exatamente $n$. Moral: $\lambda_2$ mede o gargalo <em>mais estreito</em> da rede, não a conexão média.</p>
+          <p>Com $S=\{\text{uma folha}\}$, o corte é $1$ (o link até o centro), $|S|=1$ e $|\bar S|=n-1$: $\lambda_2\le1\cdot n/(n-1)$, que tende a $1$. Cada folha está ligada ao resto por um só link, e isso basta para segurar $\lambda_2$, por maior que seja o centro. No grafo completo, separar qualquer grupo $S$ corta $|S|\,|\bar S|$ links, e a cota dá exatamente $n$. Moral: $\lambda_2$ mede o gargalo <em>mais estreito</em> da rede, não a conexão média.</p>
         </div>
       </details>
 
@@ -197,8 +197,8 @@
     </main>
   </div>
 
-  <script src="../assets/redes-core.js?v=6049da2b"></script>
-  <script src="../assets/corte-demo.js?v=0c4e5d05"></script>
+  <script src="../assets/redes-core.js?v=f3b8056e"></script>
+  <script src="../assets/corte-demo.js?v=4f5b0609"></script>
   <script src="../assets/pyrunner.js?v=54fb0c98"></script>
 </body>
 </html>

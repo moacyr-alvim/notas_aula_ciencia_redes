@@ -58,7 +58,7 @@ check("gargalo (lacunas): roda sem completar", "inf" in s)
 s, _ = rodar("fiedler_solucao.py")
 check("fiedler: sinal dá lados 19/15, corte 10, erra 2 e 8", "lados 19 e 15   corte = 10   erram: [2, 8]" in s)
 check("fiedler: mediana reproduz as facções (corte 11, sem erros)", "mediana: lados 17 e 17   corte = 11   erram: []" in s)
-check("fiedler: cota nλ₂/4 = 3,98", "= 3.98 laços" in s)
+check("fiedler: cota nλ₂/4 = 3,98", "= 3.98 links" in s)
 ac = [float(x) for x in re.findall(r"^\s*[0-9.]+\s+([01]\.[0-9]+)$", s, re.M)]
 check("fiedler: acertos caem de ~1 para ~0,5 com p_out", ac[0] > 0.97 and ac[-1] < 0.65, str(ac))
 s, _ = rodar("fiedler_lacunas.py")
@@ -66,10 +66,10 @@ check("fiedler (lacunas): roda sem completar", "corte =  0" in s)
 
 # redes com sinais: Gahuku-Gama
 s, _ = rodar("sinais_solucao.py")
-check("sinais: 29 positivos e 29 negativos", "16 tribos, 29 laços positivos e 29 negativos" in s)
+check("sinais: 29 positivos e 29 negativos", "16 tribos, 29 links positivos e 29 negativos" in s)
 check("sinais: 11 conflitos com a pintura da árvore, não equilibrada", "contrariam a pintura: 11" in s and "equilibrada? False" in s)
 check("sinais: 68 triângulos, 9 desequilibrados (7 com ---)", "68 triângulos, 9 desequilibrados" in s and s.count("(---)") == 7)
-check("sinais: a melhor divisão em dois contraria 7 laços e separa GAVEV, KOTUN, NAGAD, GAMA", "duas cores: 7" in s and "grupo 1: ['GAVEV', 'KOTUN', 'NAGAD', 'GAMA']" in s)
+check("sinais: a melhor divisão em dois contraria 7 links e separa GAVEV, KOTUN, NAGAD, GAMA", "duas cores: 7" in s and "grupo 1: ['GAVEV', 'KOTUN', 'NAGAD', 'GAMA']" in s)
 # os dados embutidos na célula são os de dados/gama.txt
 import numpy as _np
 emb = _np.loadtxt(io.StringIO(re.search(r'dados = """(.*?)"""', (root / "py" / "sinais_solucao.py").read_text(encoding="utf-8"), re.S).group(1)), dtype=int)
@@ -80,7 +80,7 @@ check("sinais (lacunas): roda sem completar", "contrariam a pintura: 1" in s)
 # laplaciano com sinais
 s, _ = rodar("lapsinal_solucao.py")
 check("lapsinal: L = D̄ − A_σ, λ₁ = 1,0403", "L = D̄ - A_σ ? True" in s and "λ₁ = 1.0403" in s)
-check("lapsinal: f = 7 ≥ nλ₁/4 = 4,16; sinal de q₁ contraria 8", "f = 7;  cota n λ₁ / 4 = 4.16" in s and "contraria 8 laços" in s)
+check("lapsinal: f = 7 ≥ nλ₁/4 = 4,16; sinal de q₁ contraria 8", "f = 7;  cota n λ₁ / 4 = 4.16" in s and "contraria 8 links" in s)
 pol = re.search(r"prevista: ±([0-9.]+);  depois de 200 passos: \[([^\]]*)\]", s)
 vals = [abs(float(x)) for x in pol.group(2).split()]
 check("lapsinal: versão equilibrada polariza em ± (sᵀu₀)/n", all(abs(v - float(pol.group(1))) < 1e-4 for v in vals), pol.group(1))

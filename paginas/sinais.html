@@ -30,16 +30,16 @@
     <main>
       <header>
         <h1>Redes com sinais e equilíbrio</h1>
-        <p class="lede">Nem todo laço é de amizade. Numa rede com sinais, cada laço é positivo (aliança, concordância) ou negativo (hostilidade, discordância). Uma rede é equilibrada quando todo ciclo tem um número par de laços negativos. O teorema de Harary diz que isso acontece exatamente quando a rede se divide em dois grupos: amigos dentro de cada grupo, inimigos entre eles.</p>
+        <p class="lede">Nem todo link é de amizade. Numa rede com sinais, cada link é positivo (aliança, concordância) ou negativo (hostilidade, discordância). Uma rede é equilibrada quando todo ciclo tem um número par de links negativos. O teorema de Harary diz que isso acontece exatamente quando a rede se divide em dois grupos: amigos dentro de cada grupo, inimigos entre eles.</p>
         <p class="meta">Primeira página da trilha <em>Redes com sinais</em>. Não usa nada das páginas anteriores: só a ideia de ciclo e de árvore geradora. O laplaciano volta na <a href="lapsinal.html">próxima página da trilha</a>.</p>
       </header>
 
       <h2 id="definicao" data-toc="Rede com sinais">Rede com sinais</h2>
-      <p>Uma <b>rede com sinais</b> é uma rede sem direção em que cada laço $ij$ leva um sinal $\sigma_{ij}\in\{+1,-1\}$. O positivo é amizade, aliança, voto a favor, avaliação boa; o negativo é inimizade, hostilidade, voto contra, avaliação ruim. Ausência de laço não é um terceiro sinal: quer dizer só que não há relação registrada. Nas figuras e na demo, laços positivos são linhas cheias azuis e negativos são tracejados vermelhos.</p>
+      <p>Uma <b>rede com sinais</b> é uma rede sem direção em que cada link $ij$ leva um sinal $\sigma_{ij}\in\{+1,-1\}$. O positivo é amizade, aliança, voto a favor, avaliação boa; o negativo é inimizade, hostilidade, voto contra, avaliação ruim. Ausência de link não é um terceiro sinal: quer dizer só que não há relação registrada. Nas figuras e na demo, links positivos são linhas cheias azuis e negativos são tracejados vermelhos.</p>
       <p>Exemplos que aparecem na literatura: alianças e guerras entre países, votos de parlamentares que concordam ou discordam, usuários que marcam outros como confiáveis ou não confiáveis em sites de avaliação, e relações entre tribos, como no exemplo desta página.</p>
 
       <h2 id="heider" data-toc="As tríades de Heider">As tríades de Heider</h2>
-      <p>O psicólogo Fritz Heider (1946) observou que, entre três pessoas, algumas configurações são estáveis e outras geram tensão. Há quatro tipos de triângulo, conforme o número de laços negativos:</p>
+      <p>O psicólogo Fritz Heider (1946) observou que, entre três pessoas, algumas configurações são estáveis e outras geram tensão. Há quatro tipos de triângulo, conforme o número de links negativos:</p>
 
       <figure class="fig">
 <svg viewBox="0 0 560 170" role="img" aria-labelledby="fgt" style="width:100%;height:auto;max-width:560px;display:block;margin:0 auto">
@@ -61,7 +61,7 @@
     <g font-size="12" style="fill:var(--ink-soft)"><text x="70" y="156">equilibrado</text><text x="210" y="156">equilibrado</text><text x="350" y="156">desequilibrado</text><text x="490" y="156">desequilibrado</text></g>
   </g>
 </svg>
-<figcaption>Os quatro tipos de tríade. Linha cheia azul: laço positivo; tracejado vermelho: negativo.</figcaption>
+<figcaption>Os quatro tipos de tríade. Linha cheia azul: link positivo; tracejado vermelho: negativo.</figcaption>
 </figure>
 
       <table class="tabela">
@@ -73,13 +73,13 @@
           <tr><td>$-\,-\,-$</td><td>três inimigos: dois deles tendem a se aliar contra o terceiro</td><td>desequilibrada</td></tr>
         </tbody>
       </table>
-      <p>A regra que separa as duas colunas é aritmética: <b>a tríade é equilibrada quando o produto dos três sinais é $+1$</b>, isto é, quando o número de laços negativos é par ($0$ ou $2$).</p>
+      <p>A regra que separa as duas colunas é aritmética: <b>a tríade é equilibrada quando o produto dos três sinais é $+1$</b>, isto é, quando o número de links negativos é par ($0$ ou $2$).</p>
 
       <h2 id="equilibrio" data-toc="Rede equilibrada">De triângulos para ciclos: rede equilibrada</h2>
-      <p>Cartwright e Harary (1956) estenderam a ideia de Heider a qualquer rede. Um <b>ciclo</b> é um caminho fechado que não repete vértices (a não ser o primeiro, que é também o último). O <b>sinal de um ciclo</b> é o produto dos sinais dos seus laços.</p>
+      <p>Cartwright e Harary (1956) estenderam a ideia de Heider a qualquer rede. Um <b>ciclo</b> é um caminho fechado que não repete vértices (a não ser o primeiro, que é também o último). O <b>sinal de um ciclo</b> é o produto dos sinais dos seus links.</p>
       <aside class="box">
         <p class="tag">Definição</p>
-        <p>Uma rede com sinais é <b>equilibrada</b> quando todo ciclo tem sinal $+1$; ou seja, quando todo ciclo tem um número par de laços negativos.</p>
+        <p>Uma rede com sinais é <b>equilibrada</b> quando todo ciclo tem sinal $+1$; ou seja, quando todo ciclo tem um número par de links negativos.</p>
       </aside>
       <p>Para triângulos, é a regra de Heider. Num quadrado com sinais $+,-,+,-$ há dois negativos, e o quadrado é equilibrado; com $+,+,+,-$ não é. Uma rede sem ciclos (uma árvore, ou uma floresta) é sempre equilibrada, quaisquer que sejam os sinais.</p>
       <p>A definição tem um problema prático: uma rede pode ter uma quantidade enorme de ciclos, e conferir todos é inviável. O teorema a seguir troca essa condição por outra, fácil de testar e fácil de interpretar.</p>
@@ -87,38 +87,38 @@
       <h2 id="teorema" data-toc="O teorema de Harary">O teorema de estrutura de Harary</h2>
       <p>Diga que uma rede com sinais é <b>agrupável</b> (em dois grupos) quando seus vértices podem ser pintados com duas cores de modo que</p>
       <ul>
-        <li>todo laço positivo liga vértices da <b>mesma</b> cor, e</li>
-        <li>todo laço negativo liga vértices de cores <b>diferentes</b>.</li>
+        <li>todo link positivo liga vértices da <b>mesma</b> cor, e</li>
+        <li>todo link negativo liga vértices de cores <b>diferentes</b>.</li>
       </ul>
-      <p>Uma das cores pode nem ser usada: uma rede só de laços positivos é agrupável, com todo mundo num grupo só. Em palavras, agrupável é "a rede é uma briga entre dois lados, sem traidores": amigos dentro de cada lado, inimigos entre os lados.</p>
+      <p>Uma das cores pode nem ser usada: uma rede só de links positivos é agrupável, com todo mundo num grupo só. Em palavras, agrupável é "a rede é uma briga entre dois lados, sem traidores": amigos dentro de cada lado, inimigos entre os lados.</p>
       <aside class="box">
         <p class="tag">Teorema (Harary, 1953)</p>
         <p>Uma rede com sinais é equilibrada se, e somente se, é agrupável.</p>
       </aside>
-      <p><b>Agrupável ⇒ equilibrada</b> é a parte fácil. Percorra um ciclo qualquer. Cada laço negativo troca de cor, e cada positivo mantém. Como o ciclo termina no vértice onde começou, termina na mesma cor; então trocou de cor um número par de vezes, isto é, tem um número par de laços negativos.</p>
+      <p><b>Agrupável ⇒ equilibrada</b> é a parte fácil. Percorra um ciclo qualquer. Cada link negativo troca de cor, e cada positivo mantém. Como o ciclo termina no vértice onde começou, termina na mesma cor; então trocou de cor um número par de vezes, isto é, tem um número par de links negativos.</p>
 
       <details>
         <summary>Demonstração de "equilibrada ⇒ agrupável"</summary>
         <div class="body">
           <p>Pintamos cada componente conexa separadamente; então basta tratar uma rede conexa. Vamos escrever as cores como $+1$ e $-1$. A condição "positivo liga cores iguais, negativo liga cores diferentes" é a mesma que
-          $$\sigma_{uv}=\mathrm{cor}(u)\cdot\mathrm{cor}(v)\qquad\text{para todo laço }uv.\tag{$*$}$$</p>
+          $$\sigma_{uv}=\mathrm{cor}(u)\cdot\mathrm{cor}(v)\qquad\text{para todo link }uv.\tag{$*$}$$</p>
           <p><b>A pintura.</b> Escolha um vértice $r$, a <em>raiz</em>, e uma árvore geradora $T$ da rede (por exemplo, a da busca em largura a partir de $r$). Para cada vértice $v$ existe um único caminho em $T$ de $r$ até $v$. Defina
-          $$\mathrm{cor}(v)=\text{produto dos sinais dos laços nesse caminho}.$$
-          Em particular, $\mathrm{cor}(r)=+1$ (caminho vazio). Na prática: a raiz recebe $+1$ e, descendo pela árvore, cada laço positivo mantém a cor e cada negativo troca.</p>
-          <p><b>Os laços da árvore satisfazem $(*)$.</b> Se $u$ é o pai de $v$ em $T$, o caminho até $v$ é o caminho até $u$ mais o laço $uv$, então $\mathrm{cor}(v)=\mathrm{cor}(u)\,\sigma_{uv}$. Multiplicando por $\mathrm{cor}(u)$ e usando $\mathrm{cor}(u)^2=1$, sai $\sigma_{uv}=\mathrm{cor}(u)\,\mathrm{cor}(v)$.</p>
-          <p><b>Os laços fora da árvore também.</b> Seja $uv$ um laço que não está em $T$, e seja $w$ o último vértice comum aos caminhos de $r$ até $u$ e de $r$ até $v$ na árvore. Os trechos de $w$ até $u$ e de $w$ até $v$ só se encontram em $w$, então, junto com o laço $uv$, eles formam um ciclo $C$ (o <em>ciclo fundamental</em> do laço $uv$). Chame de $P(x,y)$ o produto dos sinais no caminho da árvore de $x$ até $y$. Então
+          $$\mathrm{cor}(v)=\text{produto dos sinais dos links nesse caminho}.$$
+          Em particular, $\mathrm{cor}(r)=+1$ (caminho vazio). Na prática: a raiz recebe $+1$ e, descendo pela árvore, cada link positivo mantém a cor e cada negativo troca.</p>
+          <p><b>Os links da árvore satisfazem $(*)$.</b> Se $u$ é o pai de $v$ em $T$, o caminho até $v$ é o caminho até $u$ mais o link $uv$, então $\mathrm{cor}(v)=\mathrm{cor}(u)\,\sigma_{uv}$. Multiplicando por $\mathrm{cor}(u)$ e usando $\mathrm{cor}(u)^2=1$, sai $\sigma_{uv}=\mathrm{cor}(u)\,\mathrm{cor}(v)$.</p>
+          <p><b>Os links fora da árvore também.</b> Seja $uv$ um link que não está em $T$, e seja $w$ o último vértice comum aos caminhos de $r$ até $u$ e de $r$ até $v$ na árvore. Os trechos de $w$ até $u$ e de $w$ até $v$ só se encontram em $w$, então, junto com o link $uv$, eles formam um ciclo $C$ (o <em>ciclo fundamental</em> do link $uv$). Chame de $P(x,y)$ o produto dos sinais no caminho da árvore de $x$ até $y$. Então
           $$\mathrm{cor}(u)=P(r,w)\,P(w,u),\qquad\mathrm{cor}(v)=P(r,w)\,P(w,v),$$
           e, como $P(r,w)^2=1$,
           $$\mathrm{cor}(u)\,\mathrm{cor}(v)=P(w,u)\,P(w,v).$$
           O sinal de $C$ é $P(w,u)\,P(w,v)\,\sigma_{uv}$. A rede é equilibrada, então esse sinal é $+1$, e daí $\sigma_{uv}=P(w,u)\,P(w,v)=\mathrm{cor}(u)\,\mathrm{cor}(v)$.</p>
-          <p>Todo laço satisfaz $(*)$, e a pintura agrupa a rede. $\blacksquare$</p>
+          <p>Todo link satisfaz $(*)$, e a pintura agrupa a rede. $\blacksquare$</p>
         </div>
       </details>
 
       <p>Três observações que saem da demonstração:</p>
       <ul>
-        <li><b>Ela é um algoritmo.</b> Uma busca em largura pinta a rede e confere cada laço, num tempo proporcional ao número de vértices mais o de laços. Ou todos os laços conferem, e a pintura é a divisão em dois grupos, ou algum laço $uv$ não confere, e o seu ciclo fundamental é um ciclo com número ímpar de negativos: uma prova de que a rede <em>não</em> é equilibrada. Nos dois casos há um certificado.</li>
-        <li><b>Não é preciso olhar todos os ciclos.</b> Basta conferir os ciclos fundamentais de uma árvore geradora, um para cada laço fora dela: numa rede conexa com $n$ vértices e $m$ laços, são $m-n+1$.</li>
+        <li><b>Ela é um algoritmo.</b> Uma busca em largura pinta a rede e confere cada link, num tempo proporcional ao número de vértices mais o de links. Ou todos os links conferem, e a pintura é a divisão em dois grupos, ou algum link $uv$ não confere, e o seu ciclo fundamental é um ciclo com número ímpar de negativos: uma prova de que a rede <em>não</em> é equilibrada. Nos dois casos há um certificado.</li>
+        <li><b>Não é preciso olhar todos os ciclos.</b> Basta conferir os ciclos fundamentais de uma árvore geradora, um para cada link fora dela: numa rede conexa com $n$ vértices e $m$ links, são $m-n+1$.</li>
         <li><b>A divisão é única</b>, numa rede conexa equilibrada, a menos de trocar as duas cores: a pintura da raiz decide a de todos os outros (exercício 2).</li>
       </ul>
       <aside class="box">
@@ -127,7 +127,7 @@
       </aside>
 
       <h2 id="demo" data-toc="Troque sinais">Troque sinais e veja a prova</h2>
-      <p>A demo faz a demonstração acima. A raiz (contorno grosso) recebe uma cor; descendo pela árvore de busca em largura (laços grossos, com a caixa marcada), cada laço positivo mantém a cor e cada negativo troca. Laços que contrariam a pintura ficam com uma sombra cinza. Se não sobra nenhum, a rede é equilibrada e as duas cores são os dois grupos. Se sobra algum, a faixa amarela mostra um ciclo com número ímpar de negativos, o mais curto entre os ciclos fundamentais. <b>Clique num laço para trocar o sinal</b>; clique num vértice para escolher outra raiz.</p>
+      <p>A demo faz a demonstração acima. A raiz (contorno grosso) recebe uma cor; descendo pela árvore de busca em largura (links grossos, com a caixa marcada), cada link positivo mantém a cor e cada negativo troca. Links que contrariam a pintura ficam com uma sombra cinza. Se não sobra nenhum, a rede é equilibrada e as duas cores são os dois grupos. Se sobra algum, a faixa amarela mostra um ciclo com número ímpar de negativos, o mais curto entre os ciclos fundamentais. <b>Clique num link para trocar o sinal</b>; clique num vértice para escolher outra raiz.</p>
 
       <div class="demo" id="demo-sinais">
         <div class="controls">
@@ -136,36 +136,36 @@
           <button id="s-restaura" type="button">Voltar aos sinais originais</button>
         </div>
         <div class="panels">
-          <canvas id="s-rede-canvas" role="img" aria-label="A rede com sinais; clique num laço para trocar o sinal ou num vértice para escolher a raiz"></canvas>
+          <canvas id="s-rede-canvas" role="img" aria-label="A rede com sinais; clique num link para trocar o sinal ou num vértice para escolher a raiz"></canvas>
         </div>
         <div id="s-hover" aria-live="polite"></div>
         <div class="readout" id="s-readout" aria-live="polite"></div>
         <div class="legend">
-          <span><i style="border-color:var(--carac)"></i>laço positivo</span>
-          <span><i style="border-color:var(--choque);border-top-style:dashed"></i>laço negativo</span>
+          <span><i style="border-color:var(--carac)"></i>link positivo</span>
+          <span><i style="border-color:var(--choque);border-top-style:dashed"></i>link negativo</span>
           <span><span class="dot" style="background:#2a9d8f"></span><span class="dot" style="background:#c9a227"></span>as duas cores da pintura</span>
-          <span>sombra cinza: laço em conflito · faixa amarela: ciclo ímpar</span>
+          <span>sombra cinza: link em conflito · faixa amarela: ciclo ímpar</span>
         </div>
       </div>
 
       <p>Para explorar:</p>
       <ol>
         <li><b>Triângulo.</b> Troque sinais e passe pelos quatro tipos de Heider. Com um ou três negativos, a faixa amarela aparece.</li>
-        <li><b>Duas facções.</b> A rede é equilibrada e as cores mostram os lados. Troque o sinal de um laço qualquer: aparece um ciclo ímpar. Troque o de outro laço desse ciclo: às vezes o equilíbrio volta, às vezes não. Por quê?</li>
-        <li><b>Raiz.</b> Numa rede equilibrada, clique em outros vértices para mudar a raiz: as cores, no máximo, trocam entre si, porque a divisão é única. Numa rede desequilibrada, o número de laços em conflito depende da raiz, mas nunca chega a zero.</li>
-        <li><b>Ciclo de 5.</b> Ponha os cinco laços negativos. Cinco inimigos em roda não se dividem em dois lados (exercício 5).</li>
+        <li><b>Duas facções.</b> A rede é equilibrada e as cores mostram os lados. Troque o sinal de um link qualquer: aparece um ciclo ímpar. Troque o de outro link desse ciclo: às vezes o equilíbrio volta, às vezes não. Por quê?</li>
+        <li><b>Raiz.</b> Numa rede equilibrada, clique em outros vértices para mudar a raiz: as cores, no máximo, trocam entre si, porque a divisão é única. Numa rede desequilibrada, o número de links em conflito depende da raiz, mas nunca chega a zero.</li>
+        <li><b>Ciclo de 5.</b> Ponha os cinco links negativos. Cinco inimigos em roda não se dividem em dois lados (exercício 5).</li>
         <li><b>Gahuku-Gama.</b> A rede real não é equilibrada; veja a próxima seção.</li>
       </ol>
 
       <h2 id="gama" data-toc="As tribos Gahuku-Gama">Um exemplo real: as tribos Gahuku-Gama</h2>
-      <p>O antropólogo Kenneth Read (1954) descreveu as relações entre dezesseis tribos do planalto central da Nova Guiné, conhecidas em conjunto como Gahuku-Gama. Entre cada par de tribos podia haver aliança política, hostilidade declarada, ou nenhuma das duas. Hage e Harary (1983) tornaram esses dados um exemplo clássico de rede com sinais. São $29$ laços positivos e $29$ negativos.</p>
+      <p>O antropólogo Kenneth Read (1954) descreveu as relações entre dezesseis tribos do planalto central da Nova Guiné, conhecidas em conjunto como Gahuku-Gama. Entre cada par de tribos podia haver aliança política, hostilidade declarada, ou nenhuma das duas. Hage e Harary (1983) tornaram esses dados um exemplo clássico de rede com sinais. São $29$ links positivos e $29$ negativos.</p>
       <p><b>A rede não é equilibrada.</b> Dos $68$ triângulos, $9$ têm sinal $-1$:</p>
       <ul>
         <li>sete são do tipo $-\,-\,-$, três tribos hostis entre si (por exemplo, KOTUN, GAHUK e NOTOH);</li>
         <li>dois são do tipo $+\,+\,-$, e os dois passam por MASIL: ela é aliada de GAHUK e de UHETO, que são hostis entre si, e também aliada de GEHAM e de UHETO, que também são hostis.</li>
       </ul>
-      <p>Pelo teorema, nenhuma pintura em duas cores respeita todos os laços. A melhor deixa $7$ laços contrariados: separa GAVEV, KOTUN, NAGAD e GAMA do resto (a célula de Python confere, testando todas as $2^{15}$ pinturas). Esse número mínimo de laços contrariados é o <b>índice de frustração</b>, e mede quão longe a rede está do equilíbrio (veja <a href="frustracao.html">Frustração espectral</a>).</p>
-      <p>Com <b>três</b> grupos a história muda. Testando todas as divisões em até três grupos, a melhor deixa só $2$ laços contrariados:</p>
+      <p>Pelo teorema, nenhuma pintura em duas cores respeita todos os links. A melhor deixa $7$ links contrariados: separa GAVEV, KOTUN, NAGAD e GAMA do resto (a célula de Python confere, testando todas as $2^{15}$ pinturas). Esse número mínimo de links contrariados é o <b>índice de frustração</b>, e mede quão longe a rede está do equilíbrio (veja <a href="frustracao.html">Frustração espectral</a>).</p>
+      <p>Com <b>três</b> grupos a história muda. Testando todas as divisões em até três grupos, a melhor deixa só $2$ links contrariados:</p>
       <table class="tabela">
         <tbody>
           <tr><td>grupo 1</td><td>GAVEV, KOTUN, NAGAD, GAMA</td></tr>
@@ -173,27 +173,27 @@
           <tr><td>grupo 3</td><td>OVE, ALIKA, GAHUK, MASIL, UKUDZ, GEHAM, ASARO</td></tr>
         </tbody>
       </table>
-      <p>Os dois laços contrariados são justamente as alianças de MASIL (grupo 3) com NAGAM e com UHETO (grupo 2). Os sete triângulos $-\,-\,-$ deixam de ser problema: são três tribos em três grupos diferentes, todos hostis entre si. Essa é a ideia de <b>equilíbrio fraco</b> de Davis (1967), que aceita a tríade $-\,-\,-$ e permite mais de dois grupos. Ela também tem o seu teorema de estrutura, tema de uma página futura.</p>
+      <p>Os dois links contrariados são justamente as alianças de MASIL (grupo 3) com NAGAM e com UHETO (grupo 2). Os sete triângulos $-\,-\,-$ deixam de ser problema: são três tribos em três grupos diferentes, todos hostis entre si. Essa é a ideia de <b>equilíbrio fraco</b> de Davis (1967), que aceita a tríade $-\,-\,-$ e permite mais de dois grupos. Ela também tem o seu teorema de estrutura, tema de uma página futura.</p>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
-      <p>A célula lê as duas matrizes do conjunto de dados, faz a pintura da demonstração por busca em largura a partir de GAVEV, conta os laços em conflito, lista os triângulos desequilibrados e testa todas as $2^{15}$ pinturas em duas cores para achar a que contraria menos laços.</p>
+      <p>A célula lê as duas matrizes do conjunto de dados, faz a pintura da demonstração por busca em largura a partir de GAVEV, conta os links em conflito, lista os triângulos desequilibrados e testa todas as $2^{15}$ pinturas em duas cores para achar a que contraria menos links.</p>
 
       <div class="pycell" data-title="Equilíbrio nas tribos Gahuku-Gama"
            data-starter="../py/sinais_lacunas.py"
            data-solution="../py/sinais_solucao.py"></div>
 
-      <p>Para pensar: quais são os $7$ laços que a melhor pintura contraria? Se fossem trocados de sinal, a rede ficaria equilibrada. Faz sentido, olhando os nomes, que sejam esses?</p>
+      <p>Para pensar: quais são os $7$ links que a melhor pintura contraria? Se fossem trocados de sinal, a rede ficaria equilibrada. Faz sentido, olhando os nomes, que sejam esses?</p>
 
       <h2 id="exercicios">Exercícios</h2>
 
       <aside class="box exercicio">
         <p class="tag">1. As tríades</p>
-        <p>Há $2^3=8$ maneiras de pôr sinais nos três laços de um triângulo. Quantas são equilibradas? Confira, para cada uma das equilibradas, uma pintura em duas cores que a agrupe.</p>
+        <p>Há $2^3=8$ maneiras de pôr sinais nos três links de um triângulo. Quantas são equilibradas? Confira, para cada uma das equilibradas, uma pintura em duas cores que a agrupe.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>São $4$: a $+\,+\,+$ (uma maneira) e as $+\,-\,-$ (três maneiras, conforme qual laço é o positivo). Para $+\,+\,+$, os três na mesma cor. Para $+\,-\,-$, as duas pontas do laço positivo de uma cor e o terceiro vértice da outra. As outras $4$ ($+\,+\,-$ de três maneiras e $-\,-\,-$) têm um número ímpar de negativos.</p>
+          <p>São $4$: a $+\,+\,+$ (uma maneira) e as $+\,-\,-$ (três maneiras, conforme qual link é o positivo). Para $+\,+\,+$, os três na mesma cor. Para $+\,-\,-$, as duas pontas do link positivo de uma cor e o terceiro vértice da outra. As outras $4$ ($+\,+\,-$ de três maneiras e $-\,-\,-$) têm um número ímpar de negativos.</p>
         </div>
       </details>
 
@@ -216,31 +216,31 @@
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) A demonstração só usou o equilíbrio nos ciclos fundamentais: foi o que garantiu $(*)$ nos laços fora da árvore. Então a pintura agrupa a rede, e pela parte fácil do teorema todo ciclo tem sinal $+1$.</p>
-          <p>(b) A rede é conexa, com $16$ vértices e $58$ laços: $58-16+1=43$ ciclos fundamentais. Com a raiz em GAVEV, $11$ laços ficam em conflito, ou seja, $11$ dos $43$ ciclos fundamentais têm sinal $-1$. Com outra raiz, a árvore muda e esse número também.</p>
+          <p>(a) A demonstração só usou o equilíbrio nos ciclos fundamentais: foi o que garantiu $(*)$ nos links fora da árvore. Então a pintura agrupa a rede, e pela parte fácil do teorema todo ciclo tem sinal $+1$.</p>
+          <p>(b) A rede é conexa, com $16$ vértices e $58$ links: $58-16+1=43$ ciclos fundamentais. Com a raiz em GAVEV, $11$ links ficam em conflito, ou seja, $11$ dos $43$ ciclos fundamentais têm sinal $-1$. Com outra raiz, a árvore muda e esse número também.</p>
         </div>
       </details>
 
       <aside class="box exercicio">
         <p class="tag">4. Trocar os sinais em volta de um grupo</p>
-        <p>Escolha um conjunto $X$ de vértices e troque o sinal de todos os laços com exatamente uma ponta em $X$. (a) Mostre que o sinal de cada ciclo não muda. (b) Conclua que uma rede é equilibrada se, e somente se, alguma escolha de $X$ deixa todos os laços positivos.</p>
+        <p>Escolha um conjunto $X$ de vértices e troque o sinal de todos os links com exatamente uma ponta em $X$. (a) Mostre que o sinal de cada ciclo não muda. (b) Conclua que uma rede é equilibrada se, e somente se, alguma escolha de $X$ deixa todos os links positivos.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) Percorrendo um ciclo, cada vez que se atravessa um laço com uma ponta só em $X$, entra-se em $X$ ou sai-se de $X$. Como o ciclo volta ao começo, entra e sai o mesmo número de vezes: atravessa um número par desses laços. O sinal do ciclo é multiplicado por $(-1)^{\text{par}}=1$.</p>
-          <p>(b) Se a rede é equilibrada, tome $X$ como um dos dois grupos: os laços com uma ponta só em $X$ são exatamente os que ligam os grupos, os negativos, e todos viram positivos. Reciprocamente, se alguma troca deixa tudo positivo, todo ciclo passa a ter sinal $+1$; pelo item (a), já tinha antes. Essa operação se chama <em>troca de sinais</em> (<em>switching</em>), e vai reaparecer no <a href="lapsinal.html#troca">laplaciano com sinais</a>.</p>
+          <p>(a) Percorrendo um ciclo, cada vez que se atravessa um link com uma ponta só em $X$, entra-se em $X$ ou sai-se de $X$. Como o ciclo volta ao começo, entra e sai o mesmo número de vezes: atravessa um número par desses links. O sinal do ciclo é multiplicado por $(-1)^{\text{par}}=1$.</p>
+          <p>(b) Se a rede é equilibrada, tome $X$ como um dos dois grupos: os links com uma ponta só em $X$ são exatamente os que ligam os grupos, os negativos, e todos viram positivos. Reciprocamente, se alguma troca deixa tudo positivo, todo ciclo passa a ter sinal $+1$; pelo item (a), já tinha antes. Essa operação se chama <em>troca de sinais</em> (<em>switching</em>), e vai reaparecer no <a href="lapsinal.html#troca">laplaciano com sinais</a>.</p>
         </div>
       </details>
 
       <aside class="box exercicio">
         <p class="tag">5. Todos inimigos</p>
-        <p>Numa rede em que todos os laços são negativos, mostre que equilibrada é o mesmo que <em>bipartida</em> (os vértices se dividem em dois grupos sem laços dentro de cada grupo), e o mesmo que não ter ciclos de comprimento ímpar.</p>
+        <p>Numa rede em que todos os links são negativos, mostre que equilibrada é o mesmo que <em>bipartida</em> (os vértices se dividem em dois grupos sem links dentro de cada grupo), e o mesmo que não ter ciclos de comprimento ímpar.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>Com todos os laços negativos, o número de negativos de um ciclo é o seu comprimento: equilibrada é o mesmo que "todo ciclo tem comprimento par". E agrupável é o mesmo que "pintar em duas cores com todo laço ligando cores diferentes", que é a definição de bipartida. O teorema de Harary, neste caso, é o teorema clássico de König: uma rede é bipartida se, e somente se, não tem ciclos ímpares. No ciclo de $5$ todo negativo, isso falha.</p>
+          <p>Com todos os links negativos, o número de negativos de um ciclo é o seu comprimento: equilibrada é o mesmo que "todo ciclo tem comprimento par". E agrupável é o mesmo que "pintar em duas cores com todo link ligando cores diferentes", que é a definição de bipartida. O teorema de Harary, neste caso, é o teorema clássico de König: uma rede é bipartida se, e somente se, não tem ciclos ímpares. No ciclo de $5$ todo negativo, isso falha.</p>
         </div>
       </details>
 
@@ -263,8 +263,8 @@
     </main>
   </div>
 
-  <script src="../assets/redes-core.js?v=6049da2b"></script>
-  <script src="../assets/sinais-demo.js?v=80263bb5"></script>
+  <script src="../assets/redes-core.js?v=f3b8056e"></script>
+  <script src="../assets/sinais-demo.js?v=66d27f93"></script>
   <script src="../assets/pyrunner.js?v=54fb0c98"></script>
 </body>
 </html>

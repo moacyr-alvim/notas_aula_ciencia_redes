@@ -104,7 +104,7 @@
     oIn.textContent = fmt(parseFloat(rIn.value), 2); oOut.textContent = fmt(parseFloat(rOut.value), 2);
     read.innerHTML = (R.conexa ? "" : '<span style="color:var(--choque);font-weight:600">rede partida: λ₂ = 0 e q₂ só separa componentes; sorteie de novo</span>') +
       "<span>lados: <b>" + nS + "</b> e <b>" + (n - nS) + "</b> vértices</span>" +
-      "<span>laços cortados: <b>" + c + "</b> (entre os grupos verdadeiros: " + cv + ")</span>" +
+      "<span>links cortados: <b>" + c + "</b> (entre os grupos verdadeiros: " + cv + ")</span>" +
       "<span>acertos: <b>" + ac + "</b> de " + n + "</span>" +
       "<span>λ₂ = <b>" + fmt(R.eig.values[1]) + "</b> · toda bisseção corta ≥ nλ₂/4 = <b>" + fmt(n * R.eig.values[1] / 4, 2) + "</b></span>";
     hov.textContent = hover >= 0

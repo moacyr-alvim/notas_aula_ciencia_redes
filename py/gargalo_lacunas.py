@@ -2,27 +2,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Dois grupos de k vértices, todos ligados a todos dentro de cada grupo (peso 1),
-# e uma única "porta" entre eles: o laço (k-1, k), com peso eps.
+# e uma única "porta" entre eles: o link (k-1, k), com peso eps.
 k = 6
 n = 2 * k
 
 def dois_grupos(eps):
-    lacos, pesos = [], []
+    links, pesos = [], []
     for g in range(2):
         for i in range(k):
             for j in range(i + 1, k):
-                lacos.append((g * k + i, g * k + j))
+                links.append((g * k + i, g * k + j))
                 pesos.append(1.0)
-    lacos.append((k - 1, k))      # a porta
+    links.append((k - 1, k))      # a porta
     pesos.append(eps)
-    return lacos, np.array(pesos)
+    return links, np.array(pesos)
 
-def laplaciano(lacos, pesos):
-    B = np.zeros((len(lacos), n))
-    for e, (i, j) in enumerate(lacos):
+def laplaciano(links, pesos):
+    B = np.zeros((len(links), n))
+    for e, (i, j) in enumerate(links):
         ########### complete: -1 na coluna i e +1 na coluna j ##########
         pass
-    C = np.diag(pesos)            # o peso de cada laço
+    C = np.diag(pesos)            # o peso de cada link
     return np.zeros((n, n))       ########### complete: com pesos, L = B' C B ##########
 
 # --- 1. λ₂ contra o peso da porta

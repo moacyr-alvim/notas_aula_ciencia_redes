@@ -1,4 +1,4 @@
-/* Demo da página "Laplaciano, componentes e gargalos": clique num laço para cortá-lo (ou religá-lo) e veja o espectro de L.
+/* Demo da página "Laplaciano, componentes e gargalos": clique num link para cortá-lo (ou religá-lo) e veja o espectro de L.
  * Esquerda: a rede. Se é conexa, os vértices são coloridos pelo vetor de Fiedler q₂ (azul > 0, vermelho < 0);
  * se está partida, cada componente ganha uma cor.  Direita: os n autovalores de L em ordem.  Depende de redes-core.js. */
 (function () {
@@ -102,13 +102,13 @@
   function draw() {
     var col = colors(), A = atual, nc = cortado.filter(Boolean).length, l2 = A.eig.values[1], c = 0.9 / Math.max(1, A.dmax);
     drawRede(col); drawEspectro(col);
-    read.innerHTML = "<span>laços cortados: <b>" + nc + "</b> de " + base.edges.length + "</span>" +
+    read.innerHTML = "<span>links cortados: <b>" + nc + "</b> de " + base.edges.length + "</span>" +
       "<span>componentes: <b>" + A.ncomp + "</b> · autovalores nulos: <b>" + A.nulos + "</b></span>" +
       "<span>λ₂ = <b>" + fmt(l2) + "</b> (rede inteira: " + fmt(base.lambda2) + ")</span>" +
       "<span>" + (l2 === 0 ? "rede partida: <b>nunca</b> chega à média geral" : "passos até o equilíbrio ≈ 1/(cλ₂) = <b>" + fmt(1 / (c * l2), 1) + "</b> (c = 0,9/d_max)") + "</span>";
-    if (hoverE >= 0) { var e = base.edges[hoverE]; hov.textContent = "laço " + e[0] + "–" + e[1] + ": clique para " + (cortado[hoverE] ? "religar" : "cortar") + "."; }
+    if (hoverE >= 0) { var e = base.edges[hoverE]; hov.textContent = "link " + e[0] + "–" + e[1] + ": clique para " + (cortado[hoverE] ? "religar" : "cortar") + "."; }
     else if (hoverV >= 0) hov.textContent = "vértice " + hoverV + " (grau " + A.graus[hoverV] + ")" + (A.ncomp > 1 ? ", componente " + (A.comp[hoverV] + 1) : ", q₂ = " + fmt(A.q[hoverV]));
-    else hov.textContent = "Clique num laço para cortá-lo; clique de novo para religar.";
+    else hov.textContent = "Clique num link para cortá-lo; clique de novo para religar.";
   }
   function schedule() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; draw(); }); }
 

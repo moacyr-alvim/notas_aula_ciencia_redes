@@ -1,5 +1,5 @@
 /* Demo da página "Frustração espectral".
- * Esquerda: um jogo. Clique nos vértices para trocá-los de cor e tente contrariar o menor número de laços;
+ * Esquerda: um jogo. Clique nos vértices para trocá-los de cor e tente contrariar o menor número de links;
  * botões mostram o que fazem o sinal de q₁, a busca local e a força bruta.
  * Direita: as opiniões de Altafini (u ← u − cLu) se apagando, em escala log, com a inclinação prevista por λ₁.
  * Depende de redes-core.js. */
@@ -96,11 +96,11 @@
   function draw() {
     var col = colors(), c = K.contrariados(R.edges, cor), m = R.edges.length;
     drawRede(col); drawOp(col);
-    read.innerHTML = "<span>sua divisão contraria <b>" + c + "</b>" + (c === 1 ? " laço" : " laços") + " · a melhor que você achou clicando: <b>" + melhorSeu + "</b> · ótimo: <b>f = " + R.f + "</b></span>" +
+    read.innerHTML = "<span>sua divisão contraria <b>" + c + "</b>" + (c === 1 ? " link" : " links") + " · a melhor que você achou clicando: <b>" + melhorSeu + "</b> · ótimo: <b>f = " + R.f + "</b></span>" +
       "<span>λ₁ = <b>" + fmt(R.l1) + "</b> ≤ 4f/n = <b>" + fmt(4 * R.f / R.n) + "</b> · cota f ≥ nλ₁/4 = <b>" + fmt(R.n * R.l1 / 4, 2) + "</b></span>" +
       "<span>normalizado: λ̂₁ = <b>" + fmt(R.l1n) + "</b> ≤ 2f/m = <b>" + fmt(2 * R.f / m) + "</b></span>" +
       "<span>opiniões (c = 0,9/d̄_max): somem como (1 − cλ₁)ᵏ = " + fmt(1 - R.c * R.l1, 4) + "ᵏ; tempo de despolarização ≈ 1/(cλ₁) = <b>" + fmt(1 / (R.c * R.l1), 0) + "</b> passos</span>";
-    hov.textContent = hoverV >= 0 ? nome(hoverV) + ": clique para trocar de cor" : "Clique nos vértices para trocá-los de cor. Os laços com sombra estão contrariados.";
+    hov.textContent = hoverV >= 0 ? nome(hoverV) + ": clique para trocar de cor" : "Clique nos vértices para trocá-los de cor. Os links com sombra estão contrariados.";
   }
   function schedule() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; draw(); }); }
 

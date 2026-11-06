@@ -1,5 +1,5 @@
 /* Demo da página "Laplaciano com sinais": opiniões com antagonismo, u ← u − c L u, com L o laplaciano com sinais.
- * Esquerda: a rede (laços + azuis, − vermelhos tracejados; clique para trocar o sinal); vértices coloridos pela opinião
+ * Esquerda: a rede (links + azuis, − vermelhos tracejados; clique para trocar o sinal); vértices coloridos pela opinião
  * no passo k (verde-azulado > 0, dourado < 0, intensidade |u|). Direita: as opiniões u_i ao longo dos passos.
  * Depende de redes-core.js. */
 (function () {
@@ -107,13 +107,13 @@
     oK.textContent = String(k);
     drawRede(u, col); drawOp(col);
     var txt = "<span>λ₁ = <b>" + fmt(R.l1) + "</b> · equilibrada? <b>" + (R.eq ? "sim" : "não") + "</b></span>";
-    if (R.frus != null) txt += "<span>índice de frustração: <b>" + R.frus + "</b> · cota nλ₁/4 = <b>" + fmt(R.n * R.l1 / 4, 2) + "</b> · a divisão pelo sinal de q₁ contraria <b>" + R.contrariaQ + "</b>" + (R.contrariaQ === 1 ? " laço" : " laços") + "</span>";
+    if (R.frus != null) txt += "<span>índice de frustração: <b>" + R.frus + "</b> · cota nλ₁/4 = <b>" + fmt(R.n * R.l1 / 4, 2) + "</b> · a divisão pelo sinal de q₁ contraria <b>" + R.contrariaQ + "</b>" + (R.contrariaQ === 1 ? " link" : " links") + "</span>";
     txt += "<span>passo k = <b>" + k + "</b> · maior |uᵢ| = <b>" + fmt(mu) + "</b>" +
       (R.eq ? " · sᵀu = <b>" + fmt(R.s.reduce(function (a, x, i) { return a + x * u[i]; }, 0)) + "</b> (conservado)" : " · cai como (1 − cλ₁)ᵏ = " + fmt(Math.pow(1 - R.c * R.l1, k)) ) + "</span>";
     read.innerHTML = txt;
-    if (hoverE >= 0) { var e = R.edges[hoverE]; hov.textContent = "laço " + nome(e[0]) + " – " + nome(e[1]) + " (" + (e[2] > 0 ? "+" : "−") + "): clique para trocar o sinal."; }
+    if (hoverE >= 0) { var e = R.edges[hoverE]; hov.textContent = "link " + nome(e[0]) + " – " + nome(e[1]) + " (" + (e[2] > 0 ? "+" : "−") + "): clique para trocar o sinal."; }
     else if (hoverV >= 0) hov.textContent = nome(hoverV) + ": opinião " + fmt(u[hoverV]) + "; q₁ põe no lado " + (R.s[hoverV] > 0 ? "verde-azulado" : "dourado") + ".";
-    else hov.textContent = "Clique num laço para trocar o sinal. Passe o mouse num vértice para ver a opinião.";
+    else hov.textContent = "Clique num link para trocar o sinal. Passe o mouse num vértice para ver a opinião.";
   }
   function schedule() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; draw(); }); }
 

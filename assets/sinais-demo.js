@@ -1,7 +1,7 @@
 /* Demo da página "Redes com sinais e equilíbrio".
- * Laços positivos: linha cheia azul; negativos: tracejado vermelho. Clique num laço para trocar o sinal.
+ * Links positivos: linha cheia azul; negativos: tracejado vermelho. Clique num link para trocar o sinal.
  * Os vértices são pintados como na prova do teorema: a raiz recebe uma cor e, descendo pela árvore de busca,
- * cada laço positivo mantém a cor e cada negativo troca. Laços que contrariam essa pintura ficam destacados.
+ * cada link positivo mantém a cor e cada negativo troca. Links que contrariam essa pintura ficam destacados.
  * Depende de redes-core.js. */
 (function () {
   "use strict";
@@ -79,19 +79,19 @@
 
     var npos = R.edges.filter(function (e) { return e[2] > 0; }).length, nneg = R.edges.length - npos, eq = !R.ciclo, txt;
     var grupo = function (c) { return R.pos.map(function (_, i) { return i; }).filter(function (i) { return T.cor[i] === c; }).map(nome).join(", "); };
-    txt = "<span>laços: <b>" + npos + "</b> positivos, <b>" + nneg + "</b> negativos</span>" +
+    txt = "<span>links: <b>" + npos + "</b> positivos, <b>" + nneg + "</b> negativos</span>" +
       "<span>equilibrada? <b>" + (eq ? "sim" : "não") + "</b></span>";
     if (eq) txt += "<span>grupos: {" + grupo(1) + "} e {" + (grupo(-1) || "vazio") + "}</span>";
     else {
       var neg = 0; R.ciclo.forEach(function (v, i) { if (K.sinalEntre(R.edges, v, R.ciclo[(i + 1) % R.ciclo.length]) < 0) neg++; });
-      txt += "<span>laços em conflito com a pintura da árvore: <b>" + T.conflitos.length + "</b></span>" +
-        "<span>um ciclo com número ímpar de negativos: <b>" + R.ciclo.map(nome).join(" – ") + " – " + nome(R.ciclo[0]) + "</b> (" + R.ciclo.length + " laços, " + neg + (neg === 1 ? " negativo" : " negativos") + ")</span>";
+      txt += "<span>links em conflito com a pintura da árvore: <b>" + T.conflitos.length + "</b></span>" +
+        "<span>um ciclo com número ímpar de negativos: <b>" + R.ciclo.map(nome).join(" – ") + " – " + nome(R.ciclo[0]) + "</b> (" + R.ciclo.length + " links, " + neg + (neg === 1 ? " negativo" : " negativos") + ")</span>";
     }
-    if (R.frus) txt += "<span>índice de frustração (menos laços contrariados possível com duas cores): <b>" + R.frus.indice + "</b></span>";
+    if (R.frus) txt += "<span>índice de frustração (menos links contrariados possível com duas cores): <b>" + R.frus.indice + "</b></span>";
     read.innerHTML = txt;
-    if (hoverE >= 0) { var e = R.edges[hoverE]; hov.textContent = "laço " + nome(e[0]) + " – " + nome(e[1]) + " (" + (e[2] > 0 ? "+" : "−") + "): clique para trocar o sinal" + (conf[hoverE] ? "; está em conflito com a pintura" : "") + "."; }
+    if (hoverE >= 0) { var e = R.edges[hoverE]; hov.textContent = "link " + nome(e[0]) + " – " + nome(e[1]) + " (" + (e[2] > 0 ? "+" : "−") + "): clique para trocar o sinal" + (conf[hoverE] ? "; está em conflito com a pintura" : "") + "."; }
     else if (hoverV >= 0) hov.textContent = nome(hoverV) + (hoverV === raiz ? " é a raiz da árvore" : ": clique para usar como raiz da árvore");
-    else hov.textContent = "Clique num laço para trocar o sinal; clique num vértice para escolher a raiz.";
+    else hov.textContent = "Clique num link para trocar o sinal; clique num vértice para escolher a raiz.";
   }
   function schedule() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; draw(); }); }
 

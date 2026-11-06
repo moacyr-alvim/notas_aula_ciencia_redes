@@ -30,16 +30,16 @@
     <main>
       <header>
         <h1>Comunidades pelo vetor de Fiedler</h1>
-        <p class="lede">Dividir uma rede em dois grupos com poucos laços entre eles é um problema de escolher entre bilhões de possibilidades. Escrito com $\pm1$, ele vira um problema sobre $s^\top Ls$; trocando "$\pm1$" por "qualquer número", a resposta é o autovetor $q_2$. Basta então olhar o sinal de cada coordenada.</p>
+        <p class="lede">Dividir uma rede em dois grupos com poucos links entre eles é um problema de escolher entre bilhões de possibilidades. Escrito com $\pm1$, ele vira um problema sobre $s^\top Ls$; trocando "$\pm1$" por "qualquer número", a resposta é o autovetor $q_2$. Basta então olhar o sinal de cada coordenada.</p>
         <p class="meta">Continuação de <a href="componentes.html">Laplaciano, componentes e gargalos</a>, de onde vêm o quociente de Rayleigh e a cota do gargalo.</p>
       </header>
 
-      <h2 id="problema" data-toc="O problema">O problema: cortar ao meio com poucos laços</h2>
-      <p>Uma <b>bisseção</b> divide os $n$ vértices em dois grupos de mesmo tamanho, $S$ e $\bar S$. O <b>corte</b> é o número de laços entre os grupos. Procuramos a bisseção de menor corte: dois grupos grandes, cada um mais ligado por dentro do que ao outro.</p>
+      <h2 id="problema" data-toc="O problema">O problema: cortar ao meio com poucos links</h2>
+      <p>Uma <b>bisseção</b> divide os $n$ vértices em dois grupos de mesmo tamanho, $S$ e $\bar S$. O <b>corte</b> é o número de links entre os grupos. Procuramos a bisseção de menor corte: dois grupos grandes, cada um mais ligado por dentro do que ao outro.</p>
       <p>Sem a exigência de tamanhos iguais o problema perde a graça: o menor corte possível é isolar um vértice de grau $1$, ou não cortar nada ($S$ vazio). Com ela, o problema fica difícil de verdade. No clube de caratê há $\binom{34}{17}\approx2{,}3$ bilhões de bisseções, e em redes maiores testar todas está fora de questão. O problema da bisseção mínima é NP-difícil: não se conhece algoritmo rápido que sempre ache a melhor.</p>
 
       <h2 id="codigo" data-toc="Com ±1">O mesmo problema, escrito com $\pm1$</h2>
-      <p>Marque cada vértice com $s_i=+1$ se está em $S$ e $s_i=-1$ se está em $\bar S$. Num laço dentro de um grupo, $s_i-s_j=0$; num laço do corte, $(s_i-s_j)^2=4$. Usando $s^\top Ls=\|Bs\|^2=\sum_{\text{laços}}(s_i-s_j)^2$, da página de difusão,
+      <p>Marque cada vértice com $s_i=+1$ se está em $S$ e $s_i=-1$ se está em $\bar S$. Num link dentro de um grupo, $s_i-s_j=0$; num link do corte, $(s_i-s_j)^2=4$. Usando $s^\top Ls=\|Bs\|^2=\sum_{\text{links}}(s_i-s_j)^2$, da página de difusão,
       $$\text{corte}=\frac14\,s^\top L\,s.$$
       Grupos de mesmo tamanho é o mesmo que $\sum_is_i=0$, isto é, $s\perp\mathbf 1$. E sempre $\|s\|^2=n$. Então
       $$\text{bisseção mínima}=\min\Big\{\tfrac14\,s^\top Ls\ :\ s_i=\pm1,\ s\perp\mathbf 1\Big\}.$$
@@ -52,7 +52,7 @@
       <ul>
         <li><b>Uma cota que vale para toda bisseção:</b>
         $$\boxed{\,\text{corte de qualquer bisseção}\ \ge\ \frac{n\,\lambda_2}{4}.\,}$$
-        Ela é a mesma desigualdade da página anterior ($\lambda_2\le4\,\text{corte}/n$ para grupos de mesmo tamanho), lida no outro sentido. No caratê, $n\lambda_2/4\approx3{,}98$: nenhuma bisseção corta menos de $4$ laços.</li>
+        Ela é a mesma desigualdade da página anterior ($\lambda_2\le4\,\text{corte}/n$ para grupos de mesmo tamanho), lida no outro sentido. No caratê, $n\lambda_2/4\approx3{,}98$: nenhuma bisseção corta menos de $4$ links.</li>
         <li><b>Uma receita:</b> a solução relaxada é $q_2$, que tem coordenadas reais quaisquer. Para voltar a um $s$ de $\pm1$, é preciso <b>arredondar</b>.</li>
       </ul>
       <p>Há três jeitos usuais de arredondar:</p>
@@ -68,7 +68,7 @@
       Se a rede tem um gargalo, esse último desequilíbrio é exatamente "um lado do gargalo acima da média, o outro abaixo": é o patamar dos dois salões. O sinal de $q_{2,i}$ diz de que lado do gargalo o vértice $i$ está, e o tamanho $|q_{2,i}|$ diz quão para dentro do seu lado ele está. Vértices com $q_{2,i}$ perto de zero estão em cima do muro: ligados aos dois lados mais ou menos por igual.</p>
 
       <h2 id="demo" data-toc="Veja dividir">Veja dividir</h2>
-      <p>À esquerda, a rede. A <b>forma</b> de cada vértice é o grupo verdadeiro (círculo ou quadrado), e a <b>cor</b> é o lado escolhido pela regra (azul ou vermelho, mais forte quanto maior $|q_{2,i}|$). Vértices que caíram do lado errado ganham contorno grosso, e os laços cortados ficam tracejados. À direita, os valores de $q_2$ em ordem crescente, com a linha que separa os lados.</p>
+      <p>À esquerda, a rede. A <b>forma</b> de cada vértice é o grupo verdadeiro (círculo ou quadrado), e a <b>cor</b> é o lado escolhido pela regra (azul ou vermelho, mais forte quanto maior $|q_{2,i}|$). Vértices que caíram do lado errado ganham contorno grosso, e os links cortados ficam tracejados. À direita, os valores de $q_2$ em ordem crescente, com a linha que separa os lados.</p>
       <p>No <b>clube de caratê</b>, o grupo verdadeiro é a facção que cada membro seguiu depois da briga entre o instrutor (vértice $0$) e o presidente (vértice $33$). No <b>modelo de blocos</b>, a rede é sorteada: dois grupos de $16$, cada par de vértices do mesmo grupo ligado com probabilidade $p_{\text{in}}$ e cada par de grupos diferentes com probabilidade $p_{\text{out}}$. O desenho é feito por molas, sem olhar os grupos.</p>
 
       <div class="demo" id="demo-fiedler">
@@ -84,8 +84,8 @@
           </select></label>
         </div>
         <div class="controls" id="f-blocos" hidden>
-          <label>p_in <input type="range" id="f-pin" min="0.1" max="0.8" step="0.02" value="0.4" aria-label="Probabilidade de laço dentro dos grupos"> <output id="f-pinv">0,40</output></label>
-          <label>p_out <input type="range" id="f-pout" min="0" max="0.4" step="0.01" value="0.05" aria-label="Probabilidade de laço entre os grupos"> <output id="f-poutv">0,05</output></label>
+          <label>p_in <input type="range" id="f-pin" min="0.1" max="0.8" step="0.02" value="0.4" aria-label="Probabilidade de link dentro dos grupos"> <output id="f-pinv">0,40</output></label>
+          <label>p_out <input type="range" id="f-pout" min="0" max="0.4" step="0.01" value="0.05" aria-label="Probabilidade de link entre os grupos"> <output id="f-poutv">0,05</output></label>
           <button id="f-sorteia" type="button">Sortear outra rede</button>
         </div>
         <div class="panels two">
@@ -103,16 +103,16 @@
 
       <p>Para explorar:</p>
       <ol>
-        <li><b>Caratê, pelo sinal.</b> Erram só os vértices $2$ e $8$, e os dois estão quase em cima do muro: os valores de $q_2$ deles são os mais próximos de zero no lado em que caíram. A divisão pelo sinal corta $10$ laços, um a menos que a divisão real.</li>
+        <li><b>Caratê, pelo sinal.</b> Erram só os vértices $2$ e $8$, e os dois estão quase em cima do muro: os valores de $q_2$ deles são os mais próximos de zero no lado em que caíram. A divisão pelo sinal corta $10$ links, um a menos que a divisão real.</li>
         <li><b>Caratê, pela mediana.</b> Acerta todos os $34$.</li>
-        <li><b>Caratê, por varredura.</b> Separa só cinco vértices, $\{4,5,6,10,16\}$, ligados ao resto por $4$ laços. Não é erro: é um grupinho de verdade, pendurado no instrutor, e pelo critério da varredura é o gargalo mais estreito da rede. Regras diferentes fazem perguntas diferentes.</li>
+        <li><b>Caratê, por varredura.</b> Separa só cinco vértices, $\{4,5,6,10,16\}$, ligados ao resto por $4$ links. Não é erro: é um grupinho de verdade, pendurado no instrutor, e pelo critério da varredura é o gargalo mais estreito da rede. Regras diferentes fazem perguntas diferentes.</li>
         <li><b>Blocos.</b> Comece com $p_{\text{out}}$ pequeno: tudo certo. Aumente $p_{\text{out}}$ aos poucos, sorteando algumas redes para cada valor. A partir de certo ponto os acertos despencam para perto de $16$ de $32$, o que se acertaria sorteando os lados. Os grupos ainda existem no modelo, mas a rede sorteada já não guarda sinal suficiente deles.</li>
         <li>Nos blocos, compare o corte da divisão com o corte entre os grupos verdadeiros. Às vezes o vetor de Fiedler acha uma divisão com corte <em>menor</em> que a verdadeira: o sorteio criou, por acaso, uma divisão melhor que a plantada.</li>
       </ol>
 
       <h2 id="carate" data-toc="O caratê">O que o caratê ensina</h2>
       <table class="tabela">
-        <thead><tr><th>divisão</th><th>tamanhos</th><th>laços cortados</th><th>erros contra as facções</th></tr></thead>
+        <thead><tr><th>divisão</th><th>tamanhos</th><th>links cortados</th><th>erros contra as facções</th></tr></thead>
         <tbody>
           <tr><td>facções reais</td><td>17 e 17</td><td>11</td><td>—</td></tr>
           <tr><td>sinal de $q_2$</td><td>19 e 15</td><td>10</td><td>2 (vértices 2 e 8)</td></tr>
@@ -120,14 +120,14 @@
           <tr><td>melhor varredura</td><td>5 e 29</td><td>4</td><td>(outra pergunta)</td></tr>
         </tbody>
       </table>
-      <p>Duas lições. A primeira: $q_2$ foi calculado só com a lista de laços, sem saber nada da briga, e ainda assim previu a divisão do clube quase sem erro. É o exemplo clássico de que a estrutura da rede carrega informação sobre o que as pessoas vão fazer. A segunda: as facções reais <em>não</em> são a bisseção de menor corte. Trocando os vértices $8$ e $9$ de lado, sai uma bisseção com corte $10$. Comunidades sociais e cortes mínimos são parentes próximos, não a mesma coisa; o corte é um modelo do que é uma comunidade, e como todo modelo pode discordar da realidade nas bordas.</p>
+      <p>Duas lições. A primeira: $q_2$ foi calculado só com a lista de links, sem saber nada da briga, e ainda assim previu a divisão do clube quase sem erro. É o exemplo clássico de que a estrutura da rede carrega informação sobre o que as pessoas vão fazer. A segunda: as facções reais <em>não</em> são a bisseção de menor corte. Trocando os vértices $8$ e $9$ de lado, sai uma bisseção com corte $10$. Comunidades sociais e cortes mínimos são parentes próximos, não a mesma coisa; o corte é um modelo do que é uma comunidade, e como todo modelo pode discordar da realidade nas bordas.</p>
 
       <h2 id="mais" data-toc="Mais de dois grupos">Mais de dois grupos, e outros critérios</h2>
       <ul>
         <li><b>Bisseção recursiva:</b> divida em dois, depois divida cada metade, e assim por diante, parando quando um pedaço não tem mais gargalo (o $\lambda_2$ dele não é pequeno).</li>
         <li><b>Vários autovetores ao mesmo tempo:</b> use $q_2,\dots,q_k$ como coordenadas de cada vértice e agrupe os pontos com $k$-médias. É o <em>agrupamento espectral</em>. Usar autovetores como coordenadas é o assunto de <em>Desenhar a rede com autovetores</em>.</li>
         <li><b>Graus muito diferentes:</b> em redes com hubs, o laplaciano $L=D-A$ tende a separar vértices de grau baixo, porque cortá-los é barato. A versão <em>normalizada</em> do laplaciano, que pesa cada vértice pelo grau, corrige isso (é a do critério <em>normalized cut</em>), e aparece naturalmente no <em>Passeio aleatório</em>.</li>
-        <li><b>Modularidade:</b> o critério mais usado em ciência de redes compara o número de laços dentro dos grupos com o esperado num modelo aleatório com os mesmos graus. Também ele leva a um problema de $\pm1$ cuja relaxação é um autovetor, só que de outra matriz. A ideia de "relaxar e arredondar" é a mesma.</li>
+        <li><b>Modularidade:</b> o critério mais usado em ciência de redes compara o número de links dentro dos grupos com o esperado num modelo aleatório com os mesmos graus. Também ele leva a um problema de $\pm1$ cuja relaxação é um autovetor, só que de outra matriz. A ideia de "relaxar e arredondar" é a mesma.</li>
       </ul>
 
       <aside class="box atencao">
@@ -148,24 +148,24 @@
 
       <aside class="box exercicio">
         <p class="tag">1. O corte como forma quadrática</p>
-        <p>Mostre que, para $s_i=\pm1$, $\tfrac14s^\top Ls$ é o número de laços entre $\{s_i=+1\}$ e $\{s_i=-1\}$. Com pesos nos laços, o que $\tfrac14s^\top B^\top CBs$ conta?</p>
+        <p>Mostre que, para $s_i=\pm1$, $\tfrac14s^\top Ls$ é o número de links entre $\{s_i=+1\}$ e $\{s_i=-1\}$. Com pesos nos links, o que $\tfrac14s^\top B^\top CBs$ conta?</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>$s^\top Ls=\|Bs\|^2=\sum_{\text{laços }ij}(s_i-s_j)^2$. Cada parcela vale $0$ se $s_i=s_j$ e $(\pm2)^2=4$ se não. Então $s^\top Ls=4\times(\text{número de laços com pontas em lados diferentes})$. Com pesos, $s^\top B^\top CBs=\sum w_{ij}(s_i-s_j)^2$, e $\tfrac14$ disso é a soma dos pesos dos laços cortados.</p>
+          <p>$s^\top Ls=\|Bs\|^2=\sum_{\text{links }ij}(s_i-s_j)^2$. Cada parcela vale $0$ se $s_i=s_j$ e $(\pm2)^2=4$ se não. Então $s^\top Ls=4\times(\text{número de links com pontas em lados diferentes})$. Com pesos, $s^\top B^\top CBs=\sum w_{ij}(s_i-s_j)^2$, e $\tfrac14$ disso é a soma dos pesos dos links cortados.</p>
         </div>
       </details>
 
       <aside class="box exercicio">
         <p class="tag">2. A mesma cota, dos dois lados</p>
-        <p>Na página anterior vimos $\lambda_2\le\text{corte}(S)\cdot n/(|S|\,|\bar S|)$ para qualquer $S$. (a) Mostre que, para $|S|=n/2$, isso é exatamente $\text{corte}\ge n\lambda_2/4$. (b) No caratê, $n\lambda_2/4\approx3{,}98$ e as facções cortam $11$ laços. O que a cota diz sobre a bisseção mínima, e o que ela não diz?</p>
+        <p>Na página anterior vimos $\lambda_2\le\text{corte}(S)\cdot n/(|S|\,|\bar S|)$ para qualquer $S$. (a) Mostre que, para $|S|=n/2$, isso é exatamente $\text{corte}\ge n\lambda_2/4$. (b) No caratê, $n\lambda_2/4\approx3{,}98$ e as facções cortam $11$ links. O que a cota diz sobre a bisseção mínima, e o que ela não diz?</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
           <p>(a) Com $|S|=|\bar S|=n/2$: $n/(|S||\bar S|)=n/(n^2/4)=4/n$, e $\lambda_2\le4\,\text{corte}/n$ é o mesmo que $\text{corte}\ge n\lambda_2/4$.</p>
-          <p>(b) Toda bisseção do caratê corta pelo menos $4$ laços. Conhecemos bisseções com $10$ (trocando $8$ e $9$). A bisseção mínima está, portanto, entre $4$ e $10$. A cota não diz onde: ela só é justa quando há um gargalo bem estreito, como em dois grupos ligados por uma porta.</p>
+          <p>(b) Toda bisseção do caratê corta pelo menos $4$ links. Conhecemos bisseções com $10$ (trocando $8$ e $9$). A bisseção mínima está, portanto, entre $4$ e $10$. A cota não diz onde: ela só é justa quando há um gargalo bem estreito, como em dois grupos ligados por uma porta.</p>
         </div>
       </details>
 
@@ -176,18 +176,18 @@
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>O cosseno é decrescente nesse intervalo e troca de sinal no meio: $q_{2,i}>0$ para $i&lt;(n-1)/2$ e $&lt;0$ para $i>(n-1)/2$. O sinal corta o caminho ao meio, num laço só. Para $n$ par, é uma bisseção com corte $1$, a menor possível (com corte $0$ a rede não estaria ligada). Para $n$ ímpar, o vértice do meio tem $q_2=0$ e fica de um dos lados.</p>
+          <p>O cosseno é decrescente nesse intervalo e troca de sinal no meio: $q_{2,i}>0$ para $i&lt;(n-1)/2$ e $&lt;0$ para $i>(n-1)/2$. O sinal corta o caminho ao meio, num link só. Para $n$ par, é uma bisseção com corte $1$, a menor possível (com corte $0$ a rede não estaria ligada). Para $n$ ímpar, o vértice do meio tem $q_2=0$ e fica de um dos lados.</p>
         </div>
       </details>
 
       <aside class="box exercicio">
         <p class="tag">4. Dois grupos e uma porta</p>
-        <p>Dois grupos completos de $k$ vértices, ligados por um único laço entre $a$ (no primeiro grupo) e $b$ (no segundo). (a) Use a simetria que troca os dois grupos (levando $a$ em $b$) para argumentar que $q_2$ tem sinais opostos nos dois grupos. (b) Qual é o corte da divisão pelo sinal? Compare com a cota $n\lambda_2/4$, sabendo que $\lambda_2\le2/k$.</p>
+        <p>Dois grupos completos de $k$ vértices, ligados por um único link entre $a$ (no primeiro grupo) e $b$ (no segundo). (a) Use a simetria que troca os dois grupos (levando $a$ em $b$) para argumentar que $q_2$ tem sinais opostos nos dois grupos. (b) Qual é o corte da divisão pelo sinal? Compare com a cota $n\lambda_2/4$, sabendo que $\lambda_2\le2/k$.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) Seja $\sigma$ a troca dos grupos. Se $q$ é autovetor de $\lambda_2$, então $q\circ\sigma$ também é, e daí $q+q\circ\sigma$ (simétrico) e $q-q\circ\sigma$ (antissimétrico: vale $x$ num vértice e $-x$ no seu par) também são, quando não nulos. Um $v$ simétrico e ortogonal a $\mathbf 1$ soma zero dentro de cada grupo. Num grupo completo de $k$ vértices, $\sum_{i&lt;j}(v_i-v_j)^2=k\sum_iv_i^2-\big(\sum_iv_i\big)^2$, então só os laços de dentro dos grupos já dão $v^\top Lv\ge k\,\|v\|^2$. Como $\lambda_2\le2/k&lt;k$, o autovetor de $\lambda_2$ não pode ser simétrico: é antissimétrico, com sinais opostos nos dois grupos. (Com $k=6$, $q_2$ vale cerca de $\mp0{,}30$ em cada grupo e $\mp0{,}22$ nas pontas da porta.)</p>
+          <p>(a) Seja $\sigma$ a troca dos grupos. Se $q$ é autovetor de $\lambda_2$, então $q\circ\sigma$ também é, e daí $q+q\circ\sigma$ (simétrico) e $q-q\circ\sigma$ (antissimétrico: vale $x$ num vértice e $-x$ no seu par) também são, quando não nulos. Um $v$ simétrico e ortogonal a $\mathbf 1$ soma zero dentro de cada grupo. Num grupo completo de $k$ vértices, $\sum_{i&lt;j}(v_i-v_j)^2=k\sum_iv_i^2-\big(\sum_iv_i\big)^2$, então só os links de dentro dos grupos já dão $v^\top Lv\ge k\,\|v\|^2$. Como $\lambda_2\le2/k&lt;k$, o autovetor de $\lambda_2$ não pode ser simétrico: é antissimétrico, com sinais opostos nos dois grupos. (Com $k=6$, $q_2$ vale cerca de $\mp0{,}30$ em cada grupo e $\mp0{,}22$ nas pontas da porta.)</p>
           <p>(b) O sinal separa os dois grupos, cortando só a porta: corte $1$. A cota dá $n\lambda_2/4=2k\lambda_2/4\le2k\cdot(2/k)/4=1$. A bisseção mínima é $1$, a cota fica próxima de $1$ para $k$ grande (porque $\lambda_2\approx2/k$), e a divisão pelo sinal é ótima.</p>
         </div>
       </details>
@@ -199,7 +199,7 @@
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>A combinação é $r\cos(2\pi i/n-\varphi)$ para algum $r>0$ e algum ângulo $\varphi$: uma onda que dá uma volta, deslocada. O sinal divide o anel em dois arcos de metade do tamanho, cortando $2$ laços, e o ângulo $\varphi$ decide onde ficam os cortes. Todas essas divisões são bisseções mínimas, porque toda bisseção do anel corta pelo menos $2$ laços. O método não escolhe porque o anel não tem um lugar preferido para ser cortado: a ambiguidade de $q_2$ é a simetria da rede.</p>
+          <p>A combinação é $r\cos(2\pi i/n-\varphi)$ para algum $r>0$ e algum ângulo $\varphi$: uma onda que dá uma volta, deslocada. O sinal divide o anel em dois arcos de metade do tamanho, cortando $2$ links, e o ângulo $\varphi$ decide onde ficam os cortes. Todas essas divisões são bisseções mínimas, porque toda bisseção do anel corta pelo menos $2$ links. O método não escolhe porque o anel não tem um lugar preferido para ser cortado: a ambiguidade de $q_2$ é a simetria da rede.</p>
         </div>
       </details>
 
@@ -221,8 +221,8 @@
     </main>
   </div>
 
-  <script src="../assets/redes-core.js?v=6049da2b"></script>
-  <script src="../assets/fiedler-demo.js?v=13d80269"></script>
+  <script src="../assets/redes-core.js?v=f3b8056e"></script>
+  <script src="../assets/fiedler-demo.js?v=e1b766d0"></script>
   <script src="../assets/pyrunner.js?v=54fb0c98"></script>
 </body>
 </html>

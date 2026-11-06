@@ -2,15 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
 
-# O clube de caratê de Zachary: 34 membros, um laço para cada par que se encontrava fora das aulas.
+# O clube de caratê de Zachary: 34 membros, um link para cada par que se encontrava fora das aulas.
 G = nx.karate_club_graph()
 n = G.number_of_nodes()
-lacos = list(G.edges())        # cada laço (i, j), orientado de i para j (a orientação é arbitrária)
-m = len(lacos)
+links = list(G.edges())        # cada link (i, j), orientado de i para j (a orientação é arbitrária)
+m = len(links)
 
-# --- Matriz de incidência B (m x n): a linha do laço i -> j tem -1 na coluna i e +1 na coluna j
+# --- Matriz de incidência B (m x n): a linha do link i -> j tem -1 na coluna i e +1 na coluna j
 B = np.zeros((m, n))
-for e, (i, j) in enumerate(lacos):
+for e, (i, j) in enumerate(links):
     ########### complete: -1 na coluna i e +1 na coluna j da linha e ##########
     pass
 

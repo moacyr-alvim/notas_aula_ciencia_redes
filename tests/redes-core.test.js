@@ -63,7 +63,7 @@ for (const id of Object.keys(K.REDES)) {
 
 // valores citados no texto
 const kar = K.prepara("carate");
-check("caratê: 34 vértices, 78 laços, d_max = 17, λ₂ ≈ 0,4685", kar.n === 34 && kar.edges.length === 78 && kar.dmax === 17 && near(kar.lambda2, 0.4685, 5e-5));
+check("caratê: 34 vértices, 78 links, d_max = 17, λ₂ ≈ 0,4685", kar.n === 34 && kar.edges.length === 78 && kar.dmax === 17 && near(kar.lambda2, 0.4685, 5e-5));
 check("caratê: grau do 0 é 16, do 16 é 2; 1/(cλ₂) ≈ 40 com c = 0,9/17", kar.graus[0] === 16 && kar.graus[16] === 2 && near(1 / (0.9 / 17 * kar.lambda2), 40.3, 0.05));
 // dois vértices
 const L2 = K.laplacian(2, [[0, 1]]);
@@ -103,9 +103,9 @@ const Lx = K.laplacian(6, ex1); let ux = [3, 0, 0, 2, 0, 5]; for (let k = 0; k <
 check("exercício 1: converge para (1,1,1,1,1,5)", ux.every((x, i) => near(x, [1, 1, 1, 1, 1, 5][i], 1e-9)));
 const corteK = [[0, 31], [1, 30], [2, 9], [2, 27], [2, 28], [2, 32], [8, 30], [8, 32], [8, 33], [13, 33], [19, 33]];
 const restoK = K.carate().edges.filter(e => !corteK.some(c => c[0] === e[0] && c[1] === e[1]));
-check("caratê: cortar os 11 laços entre facções deixa 2 componentes e 2 autovalores nulos", restoK.length === 67 && ncomp(34, restoK) === 2 && nulos(34, restoK) === 2);
+check("caratê: cortar os 11 links entre facções deixa 2 componentes e 2 autovalores nulos", restoK.length === 67 && ncomp(34, restoK) === 2 && nulos(34, restoK) === 2);
 const sem11 = K.carate().edges.filter(e => e[0] !== 11 && e[1] !== 11);
-check("caratê: o vértice 11 tem um laço só, e cortá-lo o isola", K.carate().edges.length - sem11.length === 1 && ncomp(34, sem11) === 2);
+check("caratê: o vértice 11 tem um link só, e cortá-lo o isola", K.carate().edges.length - sem11.length === 1 && ncomp(34, sem11) === 2);
 const gr = K.prepara("grupos"), semPonte = gr.edges.filter(e => !(e[0] === 5 && e[1] === 6));
 check("dois grupos: cortar a ponte 5–6 dá 2 componentes", semPonte.length === gr.edges.length - 1 && ncomp(12, semPonte) === 2 && nulos(12, semPonte) === 2);
 check("dois grupos (k = 6, porta 1): λ₂ = 0,2583 ≤ 2/k", near(gr.lambda2, 0.25834, 1e-5) && gr.lambda2 <= 2 / 6);
@@ -128,7 +128,7 @@ check("estrela: λ₂ = 1; completo de 6: λ₂ = 6", near(est.lambda2, 1, 1e-10
 
 // ---------- página Comunidades pelo vetor de Fiedler ----------
 const fac = K.faccoes();
-check("facções: 17 e 17, e 11 laços entre elas", fac.filter(Boolean).length === 17 && K.corte(kar.edges, fac) === 11);
+check("facções: 17 e 17, e 11 links entre elas", fac.filter(Boolean).length === 17 && K.corte(kar.edges, fac) === 11);
 let q2c = kar.eig.vectors[1].slice(); if (q2c.reduce((a, x, i) => a + x * (fac[i] ? 1 : -1), 0) < 0) q2c = q2c.map(x => -x);
 const dS = K.divide(q2c, kar.edges, "sinal"), dM = K.divide(q2c, kar.edges, "mediana"), dV = K.divide(q2c, kar.edges, "varredura");
 const errosDe = d => d.map((x, i) => x !== fac[i] ? i : -1).filter(i => i >= 0).join(",");
@@ -161,7 +161,7 @@ check("Gahuku-Gama: as arestas embutidas são as de dados/gama.txt", JSON.string
 check("Gahuku-Gama: matrizes simétricas e sem par com os dois sinais", Mg.every((r, i) => r.every((x, j) => x === Mg[i < 16 ? j : 16 + j][i < 16 ? i : i - 16])) && Mg.slice(0, 16).every((r, i) => r.every((x, j) => !(x && Mg[16 + i][j]))));
 check("Gahuku-Gama: 29 positivos, 29 negativos, conexa", GG.edges.filter(e => e[2] > 0).length === 29 && GG.edges.filter(e => e[2] < 0).length === 29 && ncomp(16, GG.edges) === 1);
 const TG = K.pinturaArvore(16, GG.edges, 0);
-check("Gahuku-Gama: 11 conflitos com a árvore a partir de GAVEV; a árvore tem n − 1 = 15 laços", TG.conflitos.length === 11 && TG.naArvore.filter(Boolean).length === 15);
+check("Gahuku-Gama: 11 conflitos com a árvore a partir de GAVEV; a árvore tem n − 1 = 15 links", TG.conflitos.length === 11 && TG.naArvore.filter(Boolean).length === 15);
 const cg = K.cicloImpar(16, GG.edges);
 check("Gahuku-Gama: o ciclo ímpar mais curto é um triângulo de três negativos", cg.length === 3 && cg.every((v, i) => K.sinalEntre(GG.edges, v, cg[(i + 1) % 3]) < 0), cg.map(i => GG.nomes[i]).join("-"));
 const tg = K.triangulos(16, GG.edges), td = tg.filter(t => t.produto < 0);
@@ -171,7 +171,7 @@ check("Gahuku-Gama: índice de frustração 7, separando GAVEV, KOTUN, NAGAD, GA
 // três grupos: só MASIL–NAGAM e MASIL–UHETO (positivos) ficam contrariados
 const g3 = { GAVEV: 0, KOTUN: 0, NAGAD: 0, GAMA: 0, NAGAM: 1, NOTOH: 1, KOHIK: 1, UHETO: 1, SEUVE: 1, OVE: 2, ALIKA: 2, GAHUK: 2, MASIL: 2, UKUDZ: 2, GEHAM: 2, ASARO: 2 };
 const viol3 = GG.edges.filter(e => (e[2] > 0) !== (g3[GG.nomes[e[0]]] === g3[GG.nomes[e[1]]])).map(e => GG.nomes[e[0]] + "-" + GG.nomes[e[1]]);
-check("Gahuku-Gama: com três grupos, só 2 laços contrariados (MASIL–NAGAM e MASIL–UHETO)", viol3.length === 2 && viol3.includes("NAGAM-MASIL") && viol3.includes("MASIL-UHETO"), viol3.join(" "));
+check("Gahuku-Gama: com três grupos, só 2 links contrariados (MASIL–NAGAM e MASIL–UHETO)", viol3.length === 2 && viol3.includes("NAGAM-MASIL") && viol3.includes("MASIL-UHETO"), viol3.join(" "));
 // exemplos pequenos e a prova
 const fa = K.SINAIS.faccoes.make(), Tf = K.pinturaArvore(fa.n, fa.edges, 0);
 check("duas facções: equilibrada, grupos {0,1,2,3} e {4,5,6,7}", K.cicloImpar(fa.n, fa.edges) === null && Tf.cor.slice(0, 4).every(c => c === 1) && Tf.cor.slice(4).every(c => c === -1));
@@ -224,7 +224,7 @@ check("ciclo par de 6 todo negativo: λ₁ = 0", near(K.eigSym(K.laplacianoSinai
 const LG = K.laplacianoSinais(16, GG.edges), eG = K.eigSym(LG), l1G = eG.values[0];
 check("Gahuku-Gama: λ₁ ≈ 1,0403, f = 7 ≥ nλ₁/4 ≈ 4,16", near(l1G, 1.0403, 1e-4) && 7 >= 16 * l1G / 4 && near(16 * l1G / 4, 4.161, 1e-3));
 const sq = eG.vectors[0].map(x => x >= 0 ? 1 : -1);
-check("Gahuku-Gama: o sinal de q₁ contraria 8 laços e põe SEUVE junto de GAVEV, KOTUN, NAGAD, GAMA", GG.edges.filter(e => sq[e[0]] * sq[e[1]] !== e[2]).length === 8 && GG.nomes.filter((_, i) => sq[i] === sq[0]).join(",") === "GAVEV,KOTUN,SEUVE,NAGAD,GAMA");
+check("Gahuku-Gama: o sinal de q₁ contraria 8 links e põe SEUVE junto de GAVEV, KOTUN, NAGAD, GAMA", GG.edges.filter(e => sq[e[0]] * sq[e[1]] !== e[2]).length === 8 && GG.nomes.filter((_, i) => sq[i] === sq[0]).join(",") === "GAVEV,KOTUN,SEUVE,NAGAD,GAMA");
 // Altafini: c ≤ 1/d_max não aumenta max|u|; equilibrada polariza, desequilibrada apaga
 const cG = 0.9 / 10, Sg = K.itera(LG, Array.from({ length: 16 }, (_, i) => Math.sin(7 * i + 1)), cG, 400);
 let mono = true; for (let k = 1; k < Sg.length; k++) if (Math.max(...Sg[k].map(Math.abs)) > Math.max(...Sg[k - 1].map(Math.abs)) + 1e-12) mono = false;
@@ -253,7 +253,7 @@ for (let sd = 1; sd <= 120; sd++) {
 check("λ₁ ≤ 4f/n (120 redes sorteadas)", okCot);
 check("normalizado: λ̂₁ ≤ 2f/m", okNorm);
 check("busca local: nunca abaixo de f, e em cada vértice satisfeitos ≥ contrariados", okLoc);
-check("busca local contraria no máximo m/2 laços", okMeio);
+check("busca local contraria no máximo m/2 links", okMeio);
 const fc = K.FRUST.ciclo.make(), fk = K.FRUST.completo.make();
 const l1c = K.eigSym(K.laplacianoSinais(15, fc.edges)).values[0], l1k = K.eigSym(K.laplacianoSinais(8, fk.edges)).values[0];
 check("mesmo f = 1: ciclo de 15 λ₁ ≈ 0,044, completo de 8 λ₁ ≈ 0,417", K.frustracao(15, fc.edges).indice === 1 && K.frustracao(8, fk.edges).indice === 1 && near(l1c, 2 - 2 * Math.cos(Math.PI / 15), 1e-10) && near(l1k, 0.4174, 1e-4));
@@ -272,7 +272,7 @@ check("rede toda negativa: f = m − corte máximo", okMC);
 const nomeIdx = Object.fromEntries(GG.nomes.map((x, i) => [x, i]));
 const cinco = ["KOTUN GAHUK NOTOH", "GAHUK MASIL UHETO", "NOTOH GEHAM NAGAD", "GEHAM UHETO GAMA", "ASARO SEUVE GAMA"].map(t => t.split(" ").map(x => nomeIdx[x]));
 const lacosC = cinco.flatMap(t => [[t[0], t[1]], [t[0], t[2]], [t[1], t[2]]].map(p => Math.min(...p) + "-" + Math.max(...p)));
-check("Gahuku-Gama: os 5 triângulos do exercício 4 são desequilibrados e não compartilham laços", cinco.every(t => K.sinalEntre(GG.edges, t[0], t[1]) * K.sinalEntre(GG.edges, t[0], t[2]) * K.sinalEntre(GG.edges, t[1], t[2]) === -1) && new Set(lacosC).size === 15);
+check("Gahuku-Gama: os 5 triângulos do exercício 4 são desequilibrados e não compartilham links", cinco.every(t => K.sinalEntre(GG.edges, t[0], t[1]) * K.sinalEntre(GG.edges, t[0], t[2]) * K.sinalEntre(GG.edges, t[1], t[2]) === -1) && new Set(lacosC).size === 15);
 
 console.log("\nfalhas:", fails);
 process.exit(fails ? 1 : 0);

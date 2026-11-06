@@ -1,9 +1,9 @@
 /* Núcleo das páginas: difusão em passos numa rede,  u_{k+1} = u_k − c L u_k,  com  L = Bᵀ B = D − A.
  * Sem DOM: roda no navegador e no Node (testes).
  *
- *   B (m × n), matriz de incidência: a linha do laço i→j tem −1 na coluna i e +1 na coluna j (orientação arbitrária)
+ *   B (m × n), matriz de incidência: a linha do link i→j tem −1 na coluna i e +1 na coluna j (orientação arbitrária)
  *
- *   arestas: [i, j] ou [i, j, w] (w = peso do laço, 1 por padrão); índices a partir de 0; rede não dirigida
+ *   arestas: [i, j] ou [i, j, w] (w = peso do link, 1 por padrão); índices a partir de 0; rede não dirigida
  *   pos:     posições em [0,1]² para desenhar
  */
 (function (root, factory) {
@@ -112,7 +112,7 @@
   }
 
   /* ---------- comunidades: cortes e divisões a partir de um vetor ---------- */
-  /* corte: quantos laços ligam vértices de lados diferentes (lado[i] booleano) */
+  /* corte: quantos links ligam vértices de lados diferentes (lado[i] booleano) */
   function corte(edges, lado) { var c = 0; edges.forEach(function (e) { if (lado[e[0]] !== lado[e[1]]) c += e.length > 2 ? e[2] : 1; }); return c; }
   /* divisões a partir de q: pelo sinal; pela mediana (metade para cada lado); pela melhor varredura,
    * que testa os n − 1 cortes "os j maiores valores de q de um lado" e fica com o de menor razão corte·n/(|S||S̄|) */
@@ -141,7 +141,7 @@
     var t = seed >>> 0;
     return function () { t = (t + 0x6D2B79F5) >>> 0; var x = t; x = Math.imul(x ^ (x >>> 15), x | 1); x ^= x + Math.imul(x ^ (x >>> 7), x | 61); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
   }
-  /* modelo estocástico de blocos: dois grupos de k vértices; laço com probabilidade pin dentro e pout entre */
+  /* modelo estocástico de blocos: dois grupos de k vértices; link com probabilidade pin dentro e pout entre */
   function blocos(k, pin, pout, seed) {
     var R = rng(seed), n = 2 * k, e = [], grupo = [], i, j;
     for (i = 0; i < n; i++) grupo.push(i >= k);
@@ -175,10 +175,10 @@
   var KARATE_OFFICER = [9, 14, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33];
   function faccoes() { var f = new Array(34).fill(false); KARATE_OFFICER.forEach(function (i) { f[i] = true; }); return f; }
 
-  /* ---------- redes com sinais: laços [i, j, s] com s = +1 ou −1 ---------- */
+  /* ---------- redes com sinais: links [i, j, s] com s = +1 ou −1 ---------- */
   /* Pintura pela árvore de busca em largura, componente por componente: a cor da raiz é +1 e, ao descer pelo
-   * laço u–v da árvore, cor(v) = cor(u)·s. Devolve as cores, a árvore (pai, profundidade, laço de cada vértice)
-   * e os laços em conflito (os que a pintura contraria: cor(i)·cor(j) ≠ s). */
+   * link u–v da árvore, cor(v) = cor(u)·s. Devolve as cores, a árvore (pai, profundidade, link de cada vértice)
+   * e os links em conflito (os que a pintura contraria: cor(i)·cor(j) ≠ s). */
   function pinturaArvore(n, edges, raiz) {
     var viz = [], i; for (i = 0; i < n; i++) viz.push([]);
     edges.forEach(function (e, k) { viz[e[0]].push([e[1], k]); viz[e[1]].push([e[0], k]); });
@@ -199,13 +199,13 @@
     var conflitos = []; edges.forEach(function (e, k) { if (cor[e[0]] * cor[e[1]] !== e[2]) conflitos.push(k); });
     return { cor: cor, pai: pai, lacoPai: lacoPai, prof: prof, naArvore: naArvore, conflitos: conflitos };
   }
-  /* o ciclo fundamental de um laço fora da árvore: caminho na árvore entre as pontas, mais o próprio laço */
+  /* o ciclo fundamental de um link fora da árvore: caminho na árvore entre as pontas, mais o próprio link */
   function cicloFundamental(T, e) {
     var a = e[0], b = e[1], ca = [a], cb = [b];
     while (a !== b) { if (T.prof[a] >= T.prof[b]) { a = T.pai[a]; ca.push(a); } else { b = T.pai[b]; cb.push(b); } }
-    cb.pop(); return ca.concat(cb.reverse());     // vértices do ciclo, em ordem; o laço e fecha do último ao primeiro
+    cb.pop(); return ca.concat(cb.reverse());     // vértices do ciclo, em ordem; o link e fecha do último ao primeiro
   }
-  /* um ciclo com número ímpar de laços negativos, o mais curto entre os ciclos fundamentais de todas as raízes;
+  /* um ciclo com número ímpar de links negativos, o mais curto entre os ciclos fundamentais de todas as raízes;
    * null se a rede é equilibrada */
   function cicloImpar(n, edges) {
     var melhor = null;
@@ -217,7 +217,7 @@
     return melhor;
   }
   function sinalEntre(edges, i, j) { for (var k = 0; k < edges.length; k++) { var e = edges[k]; if ((e[0] === i && e[1] === j) || (e[0] === j && e[1] === i)) return e[2]; } return 0; }
-  /* índice de frustração: o menor número de laços que uma pintura em duas cores contraria (força bruta, n ≤ 20) */
+  /* índice de frustração: o menor número de links que uma pintura em duas cores contraria (força bruta, n ≤ 20) */
   function frustracao(n, edges) {
     var melhor = Infinity, mcor = null, m, i;
     for (m = 0; m < (1 << (n - 1)); m++) {
@@ -239,23 +239,23 @@
     return out;
   }
 
-  /* incidência com sinais (m × n): laço positivo i–j: −1 em i, +1 em j  (Bu = u_j − u_i);
-   *                                 laço negativo i–j: +1 em i, +1 em j  (Bu = u_i + u_j) */
+  /* incidência com sinais (m × n): link positivo i–j: −1 em i, +1 em j  (Bu = u_j − u_i);
+   *                                 link negativo i–j: +1 em i, +1 em j  (Bu = u_i + u_j) */
   function incidenciaSinais(n, edges) {
     var B = zeros(edges.length, n);
     edges.forEach(function (e, k) { B[k][e[0]] = e[2] > 0 ? -1 : 1; B[k][e[1]] = 1; });
     return B;
   }
-  /* laplaciano com sinais: L = D̄ − A_σ, com D̄ = número de laços de cada vértice (sem olhar o sinal) */
+  /* laplaciano com sinais: L = D̄ − A_σ, com D̄ = número de links de cada vértice (sem olhar o sinal) */
   function laplacianoSinais(n, edges) {
     var L = zeros(n);
     edges.forEach(function (e) { var i = e[0], j = e[1], s = e[2]; L[i][i] += 1; L[j][j] += 1; L[i][j] -= s; L[j][i] -= s; });
     return L;
   }
 
-  /* quantos laços uma pintura (cor[i] = ±1) contraria */
+  /* quantos links uma pintura (cor[i] = ±1) contraria */
   function contrariados(edges, cor) { var c = 0; edges.forEach(function (e) { if (cor[e[0]] * cor[e[1]] !== e[2]) c++; }); return c; }
-  /* busca local: enquanto mudar um vértice de lado diminuir os laços contrariados, muda (o que mais diminuir) */
+  /* busca local: enquanto mudar um vértice de lado diminuir os links contrariados, muda (o que mais diminuir) */
   function buscaLocal(n, edges, cor0) {
     var cor = cor0.slice(), viz = [], i;
     for (i = 0; i < n; i++) viz.push([]);
@@ -278,7 +278,7 @@
   }
 
   /* Tribos Gahuku-Gama (Read, 1954): 16 tribos do planalto central da Nova Guiné; +1 aliança, −1 hostilidade.
-   * Posições: Kamada–Kawai com distância 1 nos laços positivos e 2,2 nos negativos. */
+   * Posições: Kamada–Kawai com distância 1 nos links positivos e 2,2 nos negativos. */
   var GAMA_NOMES = ["GAVEV", "KOTUN", "OVE", "ALIKA", "NAGAM", "GAHUK", "MASIL", "UKUDZ", "NOTOH", "KOHIK", "GEHAM", "ASARO", "UHETO", "SEUVE", "NAGAD", "GAMA"];
   var GAMA_E = [[0,1,1],[0,2,-1],[0,3,-1],[0,4,-1],[0,5,-1],[0,11,-1],[0,14,1],[0,15,1],[1,2,-1],[1,4,-1],[1,5,-1],[1,8,-1],[1,9,-1],[1,14,1],[1,15,1],[2,3,1],[2,5,1],[2,6,1],[2,7,1],[3,7,1],[4,6,1],[4,8,1],[4,13,1],[4,14,-1],[4,15,-1],[5,6,1],[5,7,1],[5,8,-1],[5,10,1],[5,11,1],[5,12,-1],[5,15,-1],[6,7,1],[6,10,1],[6,11,1],[6,12,1],[7,10,1],[7,11,1],[7,13,-1],[8,9,1],[8,10,-1],[8,12,1],[8,14,-1],[9,10,-1],[9,12,1],[9,14,-1],[10,11,1],[10,12,-1],[10,14,-1],[10,15,-1],[11,13,-1],[11,14,-1],[11,15,-1],[12,13,1],[12,14,-1],[12,15,-1],[13,15,-1],[14,15,1]];
   var GAMA_P = [[0.806,0.528],[0.704,0.43],[0.501,0.724],[0.466,0.9],[0.401,0.338],[0.416,0.622],[0.335,0.518],[0.32,0.749],[0.183,0.23],[0.269,0.1],[0.189,0.578],[0.269,0.647],[0.299,0.304],[0.454,0.168],[0.697,0.285],[0.817,0.362]];
@@ -287,10 +287,10 @@
   /* redes da página de frustração: o mesmo f = 1 em lugares diferentes */
   var FRUST = {
     gama: { label: "Tribos Gahuku-Gama (16)", make: gama },
-    ciclo: { label: "Ciclo de 15, um laço negativo", make: function () {
+    ciclo: { label: "Ciclo de 15, um link negativo", make: function () {
       var e = [], p = []; for (var i = 0; i < 15; i++) { var a = Math.PI / 2 - 2 * Math.PI * i / 15; p.push([0.5 + 0.4 * Math.cos(a), 0.5 - 0.4 * Math.sin(a)]); e.push([i, (i + 1) % 15, i === 14 ? -1 : 1]); }
       return { n: 15, edges: e, pos: p }; } },
-    completo: { label: "Completo de 8, um laço negativo", make: function () {
+    completo: { label: "Completo de 8, um link negativo", make: function () {
       var e = [], p = []; for (var i = 0; i < 8; i++) { var a = Math.PI / 2 + Math.PI / 8 - 2 * Math.PI * i / 8; p.push([0.5 + 0.4 * Math.cos(a), 0.5 - 0.4 * Math.sin(a)]); for (var j = i + 1; j < 8; j++) e.push([i, j, i === 0 && j === 1 ? -1 : 1]); }
       return { n: 8, edges: e, pos: p }; } },
     traidor: { label: "Duas facções com um traidor (8)", make: function () {
@@ -333,7 +333,7 @@
     }
     return { n: k * k, edges: e, pos: p };
   }
-  function doisGrupos(k) { // dois grupos completos de k vértices e um único laço entre eles (k − 1 — k)
+  function doisGrupos(k) { // dois grupos completos de k vértices e um único link entre eles (k − 1 — k)
     var e = [], p = [], g, i, j;
     for (g = 0; g < 2; g++) for (i = 0; i < k; i++) {
       for (j = i + 1; j < k; j++) e.push([g * k + i, g * k + j]);
@@ -344,7 +344,7 @@
     e.push([k - 1, k]);
     return { n: 2 * k, edges: e, pos: p };
   }
-  /* Clube de caratê de Zachary (1977), sem pesos: 34 membros, 78 laços. Posições de Kamada–Kawai. */
+  /* Clube de caratê de Zachary (1977), sem pesos: 34 membros, 78 links. Posições de Kamada–Kawai. */
   var KARATE_E = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,10],[0,11],[0,12],[0,13],[0,17],[0,19],[0,21],[0,31],[1,2],[1,3],[1,7],[1,13],[1,17],[1,19],[1,21],[1,30],[2,3],[2,7],[2,8],[2,9],[2,13],[2,27],[2,28],[2,32],[3,7],[3,12],[3,13],[4,6],[4,10],[5,6],[5,10],[5,16],[6,16],[8,30],[8,32],[8,33],[9,33],[13,33],[14,32],[14,33],[15,32],[15,33],[18,32],[18,33],[19,33],[20,32],[20,33],[22,32],[22,33],[23,25],[23,27],[23,29],[23,32],[23,33],[24,25],[24,27],[24,31],[25,31],[26,29],[26,33],[27,33],[28,31],[28,33],[29,32],[29,33],[30,32],[30,33],[31,32],[31,33],[32,33]];
   var KARATE_P = [[0.482,0.555],[0.293,0.545],[0.529,0.257],[0.671,0.476],[0.708,0.697],[0.665,0.747],[0.572,0.778],[0.644,0.568],[0.363,0.516],[0.464,0.262],[0.51,0.685],[0.289,0.761],[0.529,0.587],[0.597,0.384],[0.156,0.385],[0.06,0.192],[0.702,0.94],[0.323,0.597],[0.261,0.271],[0.377,0.431],[0.289,0.366],[0.367,0.664],[0.249,0.159],[0.512,0.06],[0.798,0.373],[0.94,0.3],[0.154,0.324],[0.655,0.187],[0.51,0.35],[0.372,0.202],[0.156,0.486],[0.615,0.45],[0.329,0.265],[0.354,0.363]];
   function carate() { return { n: 34, edges: KARATE_E.map(function (e) { return e.slice(); }), pos: KARATE_P.map(function (p) { return p.slice(); }) }; }
