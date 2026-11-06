@@ -24,9 +24,9 @@
   // href: null  =>  "em breve"
   var NODES = [
     { id: "difusao", lane: "din", col: 0, label: "Difusão\nem redes", href: "paginas/difusao.html", trails: ["basico", "dinamica", "espectro", "passeios"],
-      desc: "Do desnível entre vizinhos à equação u′ = −cLu, com L = D − A. Conservação, princípio do máximo e a solução modo a modo. Demo com o clube de caratê e Python." },
+      desc: "Do desnível em cada laço ao passo u ← u − cLu, com L = BᵀB pela matriz de incidência: positividade de graça, escolha do passo, princípio do máximo e os modos. Demo com o clube de caratê e Python." },
     { id: "consenso", lane: "din", col: 1, label: "Consenso\n(DeGroot)", href: null, trails: ["dinamica"],
-      desc: "A mesma ideia em tempo discreto: cada um passa a ser a média ponderada dos vizinhos. Quando há consenso e quão depressa." },
+      desc: "A iteração u ← Wu com pesos quaisquer: cada um passa a ser uma média ponderada de quem escuta, inclusive em redes dirigidas. Quando há consenso, quão depressa e qual opinião vence." },
     { id: "sincr", lane: "din", col: 2, label: "Sincronização\n(Kuramoto)", href: null, trails: ["dinamica"],
       desc: "Osciladores acoplados pela rede. Perto da sincronia, a dinâmica linearizada é a difusão com o laplaciano." },
     { id: "comp", lane: "esp", col: 1, label: "Componentes\ne gargalos", href: null, trails: ["basico", "espectro"],

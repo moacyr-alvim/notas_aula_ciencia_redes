@@ -5,53 +5,58 @@ import networkx as nx
 # O clube de caratê de Zachary: 34 membros, um laço para cada par que se encontrava fora das aulas.
 G = nx.karate_club_graph()
 n = G.number_of_nodes()
-c = 1.0
+lacos = list(G.edges())        # cada laço (i, j), orientado de i para j (a orientação é arbitrária)
+m = len(lacos)
 
-# Cuidado: no networkx o grafo vem com pesos (o número de contextos em que o par se encontrava).
-# Aqui queremos só "ligado ou não": weight=None.
-A = nx.to_numpy_array(G, weight=None)
+# --- Matriz de incidência B (m x n): a linha do laço i -> j tem -1 na coluna i e +1 na coluna j
+B = np.zeros((m, n))
+for e, (i, j) in enumerate(lacos):
+    B[e, i] = -1
+    B[e, j] = +1
 
-# --- Laplaciano: L = D - A, com D a matriz diagonal dos graus
+# --- Laplaciano
+L = B.T @ B
+
+# confira: L = D - A, e u'Lu = |Bu|^2 >= 0
+A = nx.to_numpy_array(G, weight=None)      # weight=None: só "ligado ou não" (o networkx guarda pesos)
 graus = A.sum(axis=1)
-D = np.diag(graus)
-L = D - A
+print("L = D - A ?", np.allclose(L, np.diag(graus) - A) and L.any())
+rng = np.random.default_rng(0)
+v = rng.normal(size=n)
+print(f"para um v ao acaso: v'Lv = {v @ L @ v:.4f}   |Bv|^2 = {np.sum((B @ v)**2):.4f}")
 
-# confira: os graus batem com os do networkx, e cada linha de L soma zero
-print("graus conferem com o networkx?", np.allclose(graus, [d for _, d in G.degree()]))
-print("linhas de L somam zero?", np.allclose(L.sum(axis=1), 0) and L.any())
+# --- O passo de tempo: método de Euler com Δt = 1
+dmax = graus.max()
+c = 0.9 / dmax                # c <= 1/d_max: ninguém fica negativo
+K = 150                       # número de passos
 
-# --- Dado inicial: toda a quantidade no vértice 0 (o instrutor)
-u0 = np.zeros(n)
-u0[0] = 1.0
+u = np.zeros(n)
+u[0] = 1.0                    # toda a quantidade no vértice 0 (o instrutor)
+historia = [u.copy()]
+for k in range(K):
+    u = u - c * L @ u         # novo = atual + Δt * (taxa de variação), com Δt = 1
+    historia.append(u.copy())
+U = np.array(historia)        # U[k, i] = u_i no passo k
 
-# --- Solução modo a modo:  L = Q diag(lam) Q'
-lam, Q = np.linalg.eigh(L)
-a = Q.T @ u0                      # coeficientes de u0 na base dos autovetores
+for k in (0, 1, 10, 50, 150):
+    print(f"passo {k:>3}: soma = {U[k].sum():.4f}   maior = {U[k].max():.4f}   menor = {np.round(U[k].min(), 4) + 0.0:.4f}")
 
-def u_em(t):
-    # u(t) = soma_k exp(-c lam_k t) a_k q_k
-    return Q @ (np.exp(-c * lam * t) * a)
-
-print("os 4 menores autovalores:", np.round(lam[:4], 4) + 0.0)
+lam = np.linalg.eigvalsh(L)
 lam2 = lam[1]
-for t in (0, 0.5, 2, 10):
-    u = u_em(t)
-    print(f"t = {t:>4}: soma = {u.sum():.4f}   maior = {u.max():.4f}   menor = {np.round(u.min(), 4) + 0.0:.4f}")
+print(f"λ₂ = {lam2:.4f};  passos até o equilíbrio ~ 1/(c λ₂) = {(1 / (c * lam2) if lam2 > 1e-12 else float('inf')):.1f}")
 
-ts = np.linspace(0, 10, 300)
-U = np.array([u_em(t) for t in ts])
-media = u0.sum() / n
-
+ks = np.arange(K + 1)
+media = 1 / n
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 3.6))
-ax1.plot(ts, U[:, 1:], color="0.6", lw=0.8)
-ax1.plot(ts, U[:, 0], color="C3", lw=2.5, label="vértice 0")
+ax1.plot(ks, U[:, 1:], color="0.6", lw=0.8)
+ax1.plot(ks, U[:, 0], color="C3", lw=2.5, label="vértice 0")
 ax1.axhline(media, color="k", ls=":", lw=1, label="média 1/n")
-ax1.set_xlabel("t"); ax1.set_ylabel("u_i(t)"); ax1.set_ylim(0, 0.35); ax1.legend()
-ax1.set_title("u_i(t) (eixo cortado em 0,35)")
+ax1.set_xlabel("passo k"); ax1.set_ylabel("u_i"); ax1.set_ylim(0, 0.35); ax1.legend()
+ax1.set_title("u_i a cada passo (eixo cortado em 0,35)")
 
 dist = np.abs(U - media).max(axis=1)
-ax2.semilogy(ts, dist, lw=2, label="max_i |u_i - média|")
-ax2.semilogy(ts, dist[-1] * np.exp(-c * lam2 * (ts - ts[-1])), "k--", lw=1, label="inclinação de exp(-λ₂ t)")
-ax2.set_xlabel("t"); ax2.legend(); ax2.set_title("Distância ao equilíbrio")
+ax2.semilogy(ks, dist, lw=2, label="max_i |u_i - média|")
+ax2.semilogy(ks, dist[-1] * (1 - c * lam2) ** (ks - K), "k--", lw=1, label="inclinação de (1 - cλ₂)^k")
+ax2.set_xlabel("passo k"); ax2.legend(); ax2.set_title("Distância ao equilíbrio")
 plt.tight_layout()
 plt.show()

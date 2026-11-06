@@ -30,17 +30,19 @@ for nome in sorted(p.name for p in (root / "py").glob("*.py")):
     png_ok = bool(figs) and all(base64.b64decode(f)[:8] == b"\x89PNG\r\n\x1a\n" for f in figs)
     check(f"{nome}: executa e gera figura PNG", png_ok, f"({len(figs)} fig)")
 
-# difusão no caratê
+# difusão no caratê, em passos
 s, _ = rodar("difusao_solucao.py")
-check("difusão: graus e linhas de L conferem", "graus conferem com o networkx? True" in s and "linhas de L somam zero? True" in s)
-lam = [float(x) for x in re.search(r"menores autovalores: \[([^\]]*)\]", s).group(1).split()]
-check("difusão: λ₂ ≈ 0,4685", abs(lam[1] - 0.4685) < 1e-4, str(lam))
+check("difusão: L = BᵀB = D − A", "L = D - A ? True" in s)
+vl, bv = re.search(r"v'Lv = ([-0-9.]+)\s+\|Bv\|\^2 = ([-0-9.]+)", s).groups()
+check("difusão: v'Lv = |Bv|² e é positivo", vl == bv and float(vl) > 0, f"{vl} {bv}")
+check("difusão: λ₂ ≈ 0,4685 e 1/(cλ₂) ≈ 40,3", "λ₂ = 0.4685" in s and "= 40.3" in s)
 somas = [float(x) for x in re.findall(r"soma = ([0-9.]+)", s)]
 maiores = [float(x) for x in re.findall(r"maior = ([0-9.]+)", s)]
+menores = [float(x) for x in re.findall(r"menor = ([-0-9.]+)", s)]
 check("difusão: soma sempre 1", all(abs(x - 1) < 1e-4 for x in somas), str(somas))
-check("difusão: o maior valor só desce", all(a >= b for a, b in zip(maiores, maiores[1:])), str(maiores))
+check("difusão: o maior valor só desce, ninguém fica negativo", all(a >= b for a, b in zip(maiores, maiores[1:])) and min(menores) >= 0, str(maiores))
 s, _ = rodar("difusao_lacunas.py")
-check("difusão (lacunas): roda e avisa que ainda falta completar", "graus conferem com o networkx? False" in s and "linhas de L somam zero? False" in s)
+check("difusão (lacunas): roda e avisa que ainda falta completar", "L = D - A ? False" in s)
 
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

@@ -67,7 +67,7 @@ for p in pages:
 
 # ids exigidos pelos scripts
 need = {
-    "paginas/difusao.html": ["demo-difusao", "d-lin", "d-rede", "d-fonte", "d-t", "d-tv", "d-play", "d-readout", "d-hover", "d-rede-canvas", "d-curvas-canvas", "tema", "toc"],
+    "paginas/difusao.html": ["demo-difusao", "d-lin", "d-rede", "d-fonte", "d-c", "d-cv", "d-k", "d-kv", "d-play", "d-readout", "d-hover", "d-rede-canvas", "d-curvas-canvas", "tema", "toc"],
     "index.html": ["mapa", "chips", "info", "trail-list", "tema"],
 }
 for f in sorted(root.rglob("*.html")):

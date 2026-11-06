@@ -1,5 +1,7 @@
-/* Núcleo das páginas: difusão  u' = −c L u  numa rede, com  L = D − A.
+/* Núcleo das páginas: difusão em passos numa rede,  u_{k+1} = u_k − c L u_k,  com  L = Bᵀ B = D − A.
  * Sem DOM: roda no navegador e no Node (testes).
+ *
+ *   B (m × n), matriz de incidência: a linha do laço i→j tem −1 na coluna i e +1 na coluna j (orientação arbitrária)
  *
  *   arestas: [i, j] ou [i, j, w] (w = peso do laço, 1 por padrão); índices a partir de 0; rede não dirigida
  *   pos:     posições em [0,1]² para desenhar
@@ -20,7 +22,20 @@
   }
   function degrees(A) { return A.map(function (r) { return r.reduce(function (s, x) { return s + x; }, 0); }); }
 
-  /* L = D − A */
+  /* matriz de incidência B (m × n) */
+  function incidence(n, edges) {
+    var B = zeros(edges.length, n);
+    edges.forEach(function (e, k) { B[k][e[0]] = -1; B[k][e[1]] = 1; });
+    return B;
+  }
+  /* Bᵀ B (para conferir com D − A) */
+  function btb(B, n) {
+    var L = zeros(n);
+    B.forEach(function (r) { for (var i = 0; i < n; i++) if (r[i]) for (var j = 0; j < n; j++) if (r[j]) L[i][j] += r[i] * r[j]; });
+    return L;
+  }
+
+  /* L = D − A  (= Bᵀ C B, com C = diag dos pesos) */
   function laplacian(n, edges) {
     var A = adjacency(n, edges), d = degrees(A);
     return A.map(function (r, i) { return r.map(function (x, j) { return (i === j ? d[i] : 0) - x; }); });
@@ -48,6 +63,28 @@
     var values = idx.map(function (i) { return Math.abs(A[i][i]) < 1e-10 ? 0 : A[i][i]; });
     var vectors = idx.map(function (c) { var v = []; for (var r = 0; r < n; r++) v.push(V[r][c]); return v; });
     return { values: values, vectors: vectors };
+  }
+
+  /* um passo de Euler com Δt = 1:  u ← u − c L u */
+  function passo(L, u, c) {
+    var n = u.length, v = new Array(n), i, j, s;
+    for (i = 0; i < n; i++) { s = 0; for (j = 0; j < n; j++) s += L[i][j] * u[j]; v[i] = u[i] - c * s; }
+    return v;
+  }
+  /* os estados u_0, u_1, …, u_K */
+  function itera(L, u0, c, K) {
+    var out = [u0.slice()], u = u0.slice();
+    for (var k = 0; k < K; k++) { u = passo(L, u, c); out.push(u); }
+    return out;
+  }
+  /* u_k pelos modos:  Σ_j (1 − c λ_j)^k a_j q_j */
+  function modos(eig, a, c, k) {
+    var n = eig.vectors.length, u = new Array(n).fill(0);
+    eig.values.forEach(function (lam, j) {
+      var q = eig.vectors[j], f = a[j] * Math.pow(1 - c * lam, k);
+      for (var i = 0; i < n; i++) u[i] += f * q[i];
+    });
+    return u;
   }
 
   /* coeficientes a_k = q_kᵀ u0 (calcular uma vez por dado inicial) */
@@ -114,15 +151,16 @@
     grupos:  { label: "Dois grupos (2 × 6)",  make: function () { return doisGrupos(6); }, fonte: 0 }
   };
 
-  /* Prepara uma rede para a demo: espectro, graus e um tempo final "natural" ≈ 4/λ₂ arredondado. */
+  /* Prepara uma rede para a demo: espectro, graus, grau máximo e maior autovalor. */
   function prepara(id) {
-    var R = REDES[id], g = R.make(), L = laplacian(g.n, g.edges), eig = eigSym(L), l2 = eig.values[1];
-    var d = degrees(adjacency(g.n, g.edges)), raw = 4 / l2, mag = Math.pow(10, Math.floor(Math.log10(raw)));
-    var tmax = Math.ceil(raw / (mag / 2)) * (mag / 2);
-    return { id: id, n: g.n, edges: g.edges, pos: g.pos, L: L, eig: eig, lambda2: l2, graus: d, tmax: tmax, fonte: R.fonte };
+    var R = REDES[id], g = R.make(), L = laplacian(g.n, g.edges), eig = eigSym(L);
+    var d = degrees(adjacency(g.n, g.edges));
+    return { id: id, n: g.n, edges: g.edges, pos: g.pos, L: L, eig: eig, lambda2: eig.values[1], lambdaMax: eig.values[g.n - 1],
+             graus: d, dmax: Math.max.apply(null, d), fonte: R.fonte };
   }
 
-  return { adjacency: adjacency, degrees: degrees, laplacian: laplacian, eigSym: eigSym, coefs: coefs, evolve: evolve,
+  return { adjacency: adjacency, degrees: degrees, incidence: incidence, btb: btb, laplacian: laplacian, eigSym: eigSym,
+           passo: passo, itera: itera, modos: modos, coefs: coefs, evolve: evolve,
            caminho: caminho, anel: anel, estrela: estrela, grade: grade, doisGrupos: doisGrupos, carate: carate,
            REDES: REDES, prepara: prepara };
 });
