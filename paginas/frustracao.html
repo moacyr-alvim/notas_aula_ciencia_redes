@@ -61,7 +61,7 @@
       <p>A diferença é <b>onde</b> está o conflito. No ciclo, o conflito pode ser <em>diluído</em>: um vetor $v$ que gira devagar ao longo do ciclo contraria cada link só um pouquinho, e a soma dos quadrados fica pequena. No grafo completo, os dois vértices do link negativo estão ligados a todos os outros, que os puxam para o mesmo valor, e não há para onde diluir. O índice $f$ conta links errados; $\lambda_1$ mede <b>quão difícil é acomodar o conflito</b>, levando em conta a estrutura em volta dele.</p>
 
       <h2 id="dinamica" data-toc="O que λ₁ mede na dinâmica">O que $\lambda_1$ mede na dinâmica</h2>
-      <p>Na página anterior, as opiniões de Altafini, $u_{k+1}=u_k-c\,Lu_k$ (um aliado puxa para a sua opinião, um rival para o oposto dela), se apagavam numa rede desequilibrada, e o modo mais lento morria como $(1-c\lambda_1)^k$. Isso dá a $\lambda_1$ um significado que $f$ não tem:
+      <p>Em <a href="lapsinal.html">Laplaciano com sinais</a>, as opiniões de Altafini, $u_{k+1}=u_k-c\,Lu_k$ (um aliado puxa para a sua opinião, um rival para o oposto dela), se apagavam numa rede desequilibrada, e o modo mais lento morria como $(1-c\lambda_1)^k$. Isso dá a $\lambda_1$ um significado que $f$ não tem:
       $$\text{tempo de despolarização}\ \approx\ \frac{1}{c\,\lambda_1}\ \text{passos}.$$
       Com $\lambda_1$ pequeno, a rede passa muito tempo quase polarizada, com dois lados de opiniões opostas, antes de tudo ir a zero. Com $\lambda_1$ grande, a polarização se desfaz depressa. No ciclo de $15$ com um link negativo, o conflito é real ($f=1$), mas tão diluído que as opiniões levam cerca de $50$ passos para cair a um terço; no completo de $8$, menos de $20$, mesmo com um passo $c$ quatro vezes menor (lá $\bar d_{\max}=7$, aqui $2$). Com o mesmo $c$ nas duas redes, a diferença seria de quase dez vezes.</p>
       <p>Então a frustração espectral responde a uma pergunta um pouco diferente da do índice clássico. $f$ pergunta: <em>quantos links estão errados?</em> $\lambda_1$ pergunta: <em>quanto tempo a rede consegue sustentar dois lados?</em></p>
@@ -205,7 +205,7 @@
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) Numa divisão, um link negativo está satisfeito exatamente quando liga os dois grupos, isto é, quando está no corte. Contrariados $=m-\text{corte}$, e o mínimo de contrariados é $m$ menos o máximo do corte. (b) Dada uma rede comum, ponha sinal negativo em todos os links e calcule $f$: o corte máximo é $m-f$. (c) Pela página anterior, $\lambda_1=0$ para $n$ par e $\lambda_1=2-2\cos(\pi/n)\approx\pi^2/n^2$ para $n$ ímpar. E $f=0$ para $n$ par (o ciclo par é bipartido) e $f=1$ para $n$ ímpar: o mesmo contraste do ciclo com um link negativo, que é a mesma rede a menos de uma troca de sinais.</p>
+          <p>(a) Numa divisão, um link negativo está satisfeito exatamente quando liga os dois grupos, isto é, quando está no corte. Contrariados $=m-\text{corte}$, e o mínimo de contrariados é $m$ menos o máximo do corte. (b) Dada uma rede comum, ponha sinal negativo em todos os links e calcule $f$: o corte máximo é $m-f$. (c) Pelo exercício 5 de <a href="lapsinal.html#exercicios">Laplaciano com sinais</a>, $\lambda_1=0$ para $n$ par e $\lambda_1=2-2\cos(\pi/n)\approx\pi^2/n^2$ para $n$ ímpar. E $f=0$ para $n$ par (o ciclo par é bipartido) e $f=1$ para $n$ ímpar: o mesmo contraste do ciclo com um link negativo, que é a mesma rede a menos de uma troca de sinais.</p>
         </div>
       </details>
 

@@ -37,7 +37,7 @@
         <li>link positivo $ij$: $-1$ na coluna $i$ e $+1$ na coluna $j$, e $(Bu)_e=u_j-u_i$;</li>
         <li>link negativo $ij$: $+1$ na coluna $i$ e $+1$ na coluna $j$, e $(Bu)_e=u_i+u_j$.</li>
       </ul>
-      <p>Nos dois casos, $(Bu)_e$ é zero quando o link está satisfeito: $u_i=\sigma_{ij}u_j$, onde $\sigma_{ij}=\pm1$ é o sinal do link $ij$ (como na <a href="sinais.html#definicao">página anterior</a>). No link negativo não há orientação para escolher, porque a linha é simétrica. E a definição é a mesma de antes:
+      <p>Nos dois casos, $(Bu)_e$ é zero quando o link está satisfeito: $u_i=\sigma_{ij}u_j$, onde $\sigma_{ij}=\pm1$ é o sinal do link $ij$ (como em <a href="sinais.html#definicao">Redes com sinais e equilíbrio</a>). No link negativo não há orientação para escolher, porque a linha é simétrica. E a definição é a mesma de antes:
       $$\boxed{\,L=B^\top B.\,}$$</p>
 
       <figure class="fig">
@@ -85,7 +85,7 @@
       </details>
 
       <h2 id="troca" data-toc="Troca de sinais">A troca de sinais é uma mudança de base</h2>
-      <p>Na página anterior, trocar os sinais de todos os links com uma ponta só num conjunto $X$ não mudava o equilíbrio. Em termos de matrizes, escolha $s_i=-1$ em $X$ e $s_i=+1$ fora, e ponha $S=\mathrm{diag}(s)$. O link $ij$ ganha o sinal $s_i\sigma_{ij}s_j$ (troca se e só se exatamente uma ponta está em $X$), e o novo laplaciano é
+      <p>Em <a href="sinais.html#exercicios">Redes com sinais e equilíbrio</a> (exercício 4), trocar os sinais de todos os links com uma ponta só num conjunto $X$ não mudava o equilíbrio. Em termos de matrizes, escolha $s_i=-1$ em $X$ e $s_i=+1$ fora, e ponha $S=\mathrm{diag}(s)$. O link $ij$ ganha o sinal $s_i\sigma_{ij}s_j$ (troca se e só se exatamente uma ponta está em $X$), e o novo laplaciano é
       $$L'=S\,L\,S.$$
       Como $S^\top=S$ e $S^2=I$, $S$ é uma matriz ortogonal, e $L'$ tem <b>os mesmos autovalores</b> que $L$, com autovetores $Sq$. Dois usos:</p>
       <ul>
@@ -96,7 +96,7 @@
       <h2 id="medida" data-toc="λ₁ mede o conflito">$\lambda_1$ mede quão longe do equilíbrio</h2>
       <p>Sem a exigência $v\perp\mathbf 1$ (que antes vinha do autovalor $0$ conhecido), o quociente de Rayleigh dá
       $$\lambda_1=\min_{v\ne0}\frac{v^\top Lv}{v^\top v}=\min_{v\ne0}\frac{\sum_{\text{links}}(v_i-\sigma_{ij}v_j)^2}{\sum_iv_i^2}.$$
-      Compare com o <b>índice de frustração</b> $f$ da página anterior, o menor número de links que uma pintura em duas cores contraria. Para um vetor de cores $s$ ($s_i=\pm1$), cada link satisfeito contribui $0$ para $s^\top Ls$ e cada link contrariado contribui $(\pm2)^2=4$. Então
+      Compare com o <b>índice de frustração</b> $f$, definido em <a href="sinais.html#gama">Redes com sinais e equilíbrio</a>: o menor número de links que uma pintura em duas cores contraria. Para um vetor de cores $s$ ($s_i=\pm1$), cada link satisfeito contribui $0$ para $s^\top Ls$ e cada link contrariado contribui $(\pm2)^2=4$. Então
       $$f=\min_{s_i=\pm1}\ \tfrac14\,s^\top Ls,$$
       exatamente como a bisseção em <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>, só que sem exigir grupos do mesmo tamanho. Relaxando $s_i=\pm1$ para "qualquer real com $\|v\|^2=n$", o mínimo cai para $n\lambda_1$:
       $$\boxed{\,f\ \ge\ \frac{n\,\lambda_1}{4}.\,}$$
@@ -151,7 +151,7 @@
       <ol>
         <li><b>Duas facções.</b> A rede é equilibrada: $\lambda_1=0$, as opiniões se separam em dois valores opostos e a leitura mostra $s^\top u$ parado. Sorteie outras opiniões iniciais: o valor final muda, a forma não.</li>
         <li>Agora <b>troque o sinal de um link</b>. $\lambda_1$ fica positivo, mas pequeno, e as opiniões primeiro parecem polarizar e depois descem devagar até zero. Destroque e veja a polarização voltar.</li>
-        <li><b>Gahuku-Gama.</b> $\lambda_1\approx1{,}04$: as opiniões se apagam em poucas dezenas de passos. Compare a divisão pelo sinal de $q_1$ (as sombras cinzas são os $8$ links contrariados) com a melhor divisão da página anterior.</li>
+        <li><b>Gahuku-Gama.</b> $\lambda_1\approx1{,}04$: as opiniões se apagam em poucas dezenas de passos. Compare a divisão pelo sinal de $q_1$ (as sombras cinzas são os $8$ links contrariados) com a melhor divisão, vista em <a href="sinais.html#gama">Redes com sinais e equilíbrio</a>.</li>
         <li><b>Ciclo de 5.</b> Ponha todos os links negativos: $\lambda_1=2-2\cos(\pi/5)\approx0{,}38$ (exercício 5). Ponha só um negativo: é o mesmo $\lambda_1$. Por quê? (Dica: troca de sinais.)</li>
         <li><b>Triângulo.</b> Passe pelos quatro tipos de Heider: $\lambda_1=0$ nos dois equilibrados e $\lambda_1=1$ nos dois desequilibrados (exercício 1).</li>
       </ol>

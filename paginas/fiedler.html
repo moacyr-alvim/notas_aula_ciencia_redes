@@ -46,13 +46,13 @@
       Nada foi aproximado ainda: é só o problema original em outra notação.</p>
 
       <h2 id="relaxar" data-toc="Relaxar e arredondar">Relaxar: deixar $s$ ser qualquer número</h2>
-      <p>O que torna o problema difícil é a exigência $s_i=\pm1$. Troque-a pela exigência mais fraca de que $v$ seja um vetor real qualquer com o mesmo tamanho, $\|v\|^2=n$. Isso se chama <b>relaxar</b> o problema. Agora há mais vetores permitidos, então o mínimo só pode ficar menor ou igual. E esse mínimo nós já conhecemos: pelo quociente de Rayleigh da página anterior,
+      <p>O que torna o problema difícil é a exigência $s_i=\pm1$. Troque-a pela exigência mais fraca de que $v$ seja um vetor real qualquer com o mesmo tamanho, $\|v\|^2=n$. Isso se chama <b>relaxar</b> o problema. Agora há mais vetores permitidos, então o mínimo só pode ficar menor ou igual. E esse mínimo nós já conhecemos: pelo quociente de Rayleigh de <a href="componentes.html">Laplaciano, componentes e gargalos</a>,
       $$\min\Big\{v^\top Lv\ :\ \|v\|^2=n,\ v\perp\mathbf 1\Big\}=n\,\lambda_2,\qquad\text{atingido em }v=\sqrt n\,q_2.$$
       Duas conclusões:</p>
       <ul>
         <li><b>Uma cota que vale para toda bisseção:</b>
         $$\boxed{\,\text{corte de qualquer bisseção}\ \ge\ \frac{n\,\lambda_2}{4}.\,}$$
-        Ela é a mesma desigualdade da página anterior ($\lambda_2\le4\,\text{corte}/n$ para grupos de mesmo tamanho), lida no outro sentido. No caratê, $n\lambda_2/4\approx3{,}98$: nenhuma bisseção corta menos de $4$ links.</li>
+        Ela é a mesma desigualdade da cota do gargalo, em <a href="componentes.html">Laplaciano, componentes e gargalos</a> ($\lambda_2\le4\,\text{corte}/n$ para grupos de mesmo tamanho), lida no outro sentido. No caratê, $n\lambda_2/4\approx3{,}98$: nenhuma bisseção corta menos de $4$ links.</li>
         <li><b>Uma receita:</b> a solução relaxada é $q_2$, que tem coordenadas reais quaisquer. Para voltar a um $s$ de $\pm1$, é preciso <b>arredondar</b>.</li>
       </ul>
       <p>Há três jeitos usuais de arredondar:</p>
@@ -159,7 +159,7 @@
 
       <aside class="box exercicio">
         <p class="tag">2. A mesma cota, dos dois lados</p>
-        <p>Na página anterior vimos $\lambda_2\le\text{corte}(S)\cdot n/(|S|\,|\bar S|)$ para qualquer $S$. (a) Mostre que, para $|S|=n/2$, isso é exatamente $\text{corte}\ge n\lambda_2/4$. (b) No caratê, $n\lambda_2/4\approx3{,}98$ e as facções cortam $11$ links. O que a cota diz sobre a bisseção mínima, e o que ela não diz?</p>
+        <p>Em <a href="componentes.html">Laplaciano, componentes e gargalos</a> vimos $\lambda_2\le\text{corte}(S)\cdot n/(|S|\,|\bar S|)$ para qualquer $S$. (a) Mostre que, para $|S|=n/2$, isso é exatamente $\text{corte}\ge n\lambda_2/4$. (b) No caratê, $n\lambda_2/4\approx3{,}98$ e as facções cortam $11$ links. O que a cota diz sobre a bisseção mínima, e o que ela não diz?</p>
       </aside>
       <details>
         <summary>Solução</summary>

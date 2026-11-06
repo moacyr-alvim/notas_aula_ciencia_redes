@@ -68,7 +68,7 @@
       <details>
         <summary>E a volta? $\lambda_2$ pequeno obriga a existir um gargalo?</summary>
         <div class="body">
-          <p>Sim, e esse é um teorema mais difícil, a <b>desigualdade de Cheeger</b> para grafos. Ela diz que, se $\lambda_2$ é pequeno, existe um grupo $S$ cujo corte é pequeno comparado com o tamanho do grupo; mais precisamente, $h\le\sqrt{2\,d_{\max}\lambda_2}$, onde $h$ é o menor valor de $\text{corte}(S)/|S|$ entre os grupos com $|S|\le n/2$. Juntando com a cota acima: $\lambda_2$ pequeno $\Longleftrightarrow$ existe gargalo. E o grupo $S$ que a prova constrói sai do vetor $q_2$, o que leva à próxima página.</p>
+          <p>Sim, e esse é um teorema mais difícil, a <b>desigualdade de Cheeger</b> para grafos. Ela diz que, se $\lambda_2$ é pequeno, existe um grupo $S$ cujo corte é pequeno comparado com o tamanho do grupo; mais precisamente, $h\le\sqrt{2\,d_{\max}\lambda_2}$, onde $h$ é o menor valor de $\text{corte}(S)/|S|$ entre os grupos com $|S|\le n/2$. Juntando com a cota acima: $\lambda_2$ pequeno $\Longleftrightarrow$ existe gargalo. E o grupo $S$ que a prova constrói sai do vetor $q_2$, o que leva a <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>.</p>
         </div>
       </details>
 
@@ -107,7 +107,7 @@
         <li><b>Contar pedaços:</b> a multiplicidade do autovalor $0$. Num programa, contar componentes por busca em largura é mais barato; o interesse do espectro está no que vem a seguir.</li>
         <li><b>Medir gargalos e robustez:</b> $\lambda_2$, a <b>conectividade algébrica</b>, é uma medida contínua de quão longe a rede está de se partir. Retirar um link nunca aumenta $\lambda_2$; o quanto ele cai mede quão crítico é aquele link. Fiedler mostrou que, se a rede não é completa, $\lambda_2$ não passa do número mínimo de vértices que é preciso retirar para desconectá-la. No caratê, retirar o vértice $0$ isola o $11$, e de fato $\lambda_2\approx0{,}47\le1$.</li>
         <li><b>Velocidade de espalhamento:</b> difusão, consenso e passeios aleatórios se misturam em $\sim1/(c\lambda_2)$ passos. Redes com $\lambda_2$ grande espalham depressa; com $\lambda_2$ pequeno, ficam presas em grupos.</li>
-        <li><b>Achar comunidades:</b> o vetor $q_2$ aponta os dois lados do gargalo (<a href="fiedler.html">próxima página</a>).</li>
+        <li><b>Achar comunidades:</b> o vetor $q_2$ aponta os dois lados do gargalo (<a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>).</li>
       </ul>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
