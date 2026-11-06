@@ -39,6 +39,7 @@ jobs:
           node tests/redes-core.test.js
           MPLBACKEND=Agg python3 tests/run_python_cells.py
           python3 tests/check_site.py
+          python3 tests/registro_links.py --conferir
 
       - uses: actions/configure-pages@v5
 

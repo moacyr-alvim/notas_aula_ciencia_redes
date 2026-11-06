@@ -83,12 +83,20 @@ com um script velho, as páginas pedem `assets/arquivo.js?v=<hash>`. Depois de m
 `assets/`, rode `python3 tests/carimbar_versoes.py` antes do commit; `tests/check_site.py` (que roda no GitHub)
 falha se algum carimbo estiver desatualizado.
 
+## Registro de links
+
+`LINKS.md` lista, para cada página, quem aponta para ela (com o texto de cada link), para onde ela aponta,
+o rótulo dela no mapa e as setas do mapa. É gerado por `python3 tests/registro_links.py`; rode depois de
+mexer em links ou títulos. O teste do GitHub falha se o registro estiver desatualizado. Para renomear uma
+página, procure o nome antigo na seção dela em `LINKS.md`.
+
 ## Testes
 
 ```bash
 node tests/redes-core.test.js       # L = D − A, autopares, conservação, princípio do máximo, Runge–Kutta, valores citados no texto
 python3 tests/run_python_cells.py   # roda os py/*.py como o worker faz (precisa de numpy, matplotlib e networkx)
 python3 tests/check_site.py         # links, âncoras, ids, tags e fórmulas
+python3 tests/registro_links.py --conferir   # LINKS.md está em dia
 ```
 
 O que **não** é coberto: a renderização real no navegador e o carregamento do Pyodide pelo CDN.
