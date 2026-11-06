@@ -233,5 +233,46 @@ const LF = K.laplacianoSinais(8, K.SINAIS.faccoes.make().edges), u0f = Array.fro
 const Sf2 = K.itera(LF, u0f, 0.9 / 4, 500), alvo = sf.reduce((a, x, i) => a + x * u0f[i], 0) / 8;
 check("duas facções: sᵀu se conserva e o limite é (sᵀu₀/n)·s", Sf2.every(u => near(sf.reduce((a, x, i) => a + x * u[i], 0), 8 * alvo, 1e-10)) && Sf2[500].every((x, i) => near(x, alvo * sf[i], 1e-9)));
 
+// ---------- página Frustração espectral ----------
+const ciclo1 = n => Array.from({ length: n }, (_, i) => [i, (i + 1) % n, i === n - 1 ? -1 : 1]);
+let okCot = true, okNorm = true, okLoc = true, okMeio = true;
+for (let sd = 1; sd <= 120; sd++) {
+  const Rr = K.rng(5000 + sd), n = 8, e = [];
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (Rr() < 0.5) e.push([i, j, Rr() < 0.4 ? -1 : 1]);
+  if (e.length < 2) continue;
+  const fr = K.frustracao(n, e), l1 = K.eigSym(K.laplacianoSinais(n, e)).values[0];
+  if (l1 > 4 * fr.indice / n + 1e-9) okCot = false;
+  const deg = K.laplacianoSinais(n, e).map((r, i) => r[i]);
+  if (deg.every(d => d > 0) && K.eigSym(K.laplacianoSinaisNorm(n, e)).values[0] > 2 * fr.indice / e.length + 1e-9) okNorm = false;
+  const cl = K.buscaLocal(n, e, Array.from({ length: n }, () => Rr() < 0.5 ? 1 : -1)), cc = K.contrariados(e, cl);
+  if (cc < fr.indice) okLoc = false;
+  if (cc > e.length / 2) okMeio = false;
+  // depois da busca local, em cada vértice, satisfeitos ≥ contrariados
+  for (let v = 0; v < n; v++) { let g = 0; e.forEach(x => { if (x[0] === v || x[1] === v) g += cl[x[0]] * cl[x[1]] !== x[2] ? 1 : -1; }); if (g > 0) okLoc = false; }
+}
+check("λ₁ ≤ 4f/n (120 redes sorteadas)", okCot);
+check("normalizado: λ̂₁ ≤ 2f/m", okNorm);
+check("busca local: nunca abaixo de f, e em cada vértice satisfeitos ≥ contrariados", okLoc);
+check("busca local contraria no máximo m/2 laços", okMeio);
+const fc = K.FRUST.ciclo.make(), fk = K.FRUST.completo.make();
+const l1c = K.eigSym(K.laplacianoSinais(15, fc.edges)).values[0], l1k = K.eigSym(K.laplacianoSinais(8, fk.edges)).values[0];
+check("mesmo f = 1: ciclo de 15 λ₁ ≈ 0,044, completo de 8 λ₁ ≈ 0,417", K.frustracao(15, fc.edges).indice === 1 && K.frustracao(8, fk.edges).indice === 1 && near(l1c, 2 - 2 * Math.cos(Math.PI / 15), 1e-10) && near(l1k, 0.4174, 1e-4));
+check("Gahuku-Gama: λ̂₁ ≈ 0,155 ≤ 2f/m = 14/58", near(K.eigSym(K.laplacianoSinaisNorm(16, GG.edges)).values[0], 0.1548, 1e-4) && 0.1548 <= 14 / 58);
+const q1g = K.eigSym(K.laplacianoSinais(16, GG.edges)).vectors[0].map(x => x >= 0 ? 1 : -1);
+check("Gahuku-Gama: sinal de q₁ contraria 8; seguido de busca local, 7 (o ótimo)", K.contrariados(GG.edges, q1g) === 8 && K.contrariados(GG.edges, K.buscaLocal(16, GG.edges, q1g)) === 7);
+// rede toda negativa: f = m − corte máximo
+let okMC = true;
+for (let sd = 1; sd <= 40; sd++) {
+  const Rr = K.rng(7000 + sd), n = 7, e = [];
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (Rr() < 0.5) e.push([i, j, -1]);
+  let mc = 0; for (let m = 0; m < (1 << n); m++) { let c = 0; e.forEach(x => { if (((m >> x[0]) & 1) !== ((m >> x[1]) & 1)) c++; }); mc = Math.max(mc, c); }
+  if (K.frustracao(n, e).indice !== e.length - mc) okMC = false;
+}
+check("rede toda negativa: f = m − corte máximo", okMC);
+const nomeIdx = Object.fromEntries(GG.nomes.map((x, i) => [x, i]));
+const cinco = ["KOTUN GAHUK NOTOH", "GAHUK MASIL UHETO", "NOTOH GEHAM NAGAD", "GEHAM UHETO GAMA", "ASARO SEUVE GAMA"].map(t => t.split(" ").map(x => nomeIdx[x]));
+const lacosC = cinco.flatMap(t => [[t[0], t[1]], [t[0], t[2]], [t[1], t[2]]].map(p => Math.min(...p) + "-" + Math.max(...p)));
+check("Gahuku-Gama: os 5 triângulos do exercício 4 são desequilibrados e não compartilham laços", cinco.every(t => K.sinalEntre(GG.edges, t[0], t[1]) * K.sinalEntre(GG.edges, t[0], t[2]) * K.sinalEntre(GG.edges, t[1], t[2]) === -1) && new Set(lacosC).size === 15);
+
 console.log("\nfalhas:", fails);
 process.exit(fails ? 1 : 0);

@@ -253,12 +253,49 @@
     return L;
   }
 
+  /* quantos laços uma pintura (cor[i] = ±1) contraria */
+  function contrariados(edges, cor) { var c = 0; edges.forEach(function (e) { if (cor[e[0]] * cor[e[1]] !== e[2]) c++; }); return c; }
+  /* busca local: enquanto mudar um vértice de lado diminuir os laços contrariados, muda (o que mais diminuir) */
+  function buscaLocal(n, edges, cor0) {
+    var cor = cor0.slice(), viz = [], i;
+    for (i = 0; i < n; i++) viz.push([]);
+    edges.forEach(function (e) { viz[e[0]].push([e[1], e[2]]); viz[e[1]].push([e[0], e[2]]); });
+    for (var passo = 0; passo < 10 * n * n; passo++) {
+      var melhor = 0, mv = -1;
+      for (i = 0; i < n; i++) {   // ganho de mudar i: contrariados que viram satisfeitos menos o contrário
+        var g = 0; viz[i].forEach(function (js) { g += cor[i] * cor[js[0]] !== js[1] ? 1 : -1; });
+        if (g > melhor) { melhor = g; mv = i; }
+      }
+      if (mv < 0) break;
+      cor[mv] = -cor[mv];
+    }
+    return cor;
+  }
+  /* laplaciano com sinais normalizado  D̄^{-1/2} L D̄^{-1/2}  (vértices isolados ficam com linha zero) */
+  function laplacianoSinaisNorm(n, edges) {
+    var L = laplacianoSinais(n, edges), d = L.map(function (r, i) { return r[i]; });
+    return L.map(function (r, i) { return r.map(function (x, j) { return d[i] && d[j] ? x / Math.sqrt(d[i] * d[j]) : 0; }); });
+  }
+
   /* Tribos Gahuku-Gama (Read, 1954): 16 tribos do planalto central da Nova Guiné; +1 aliança, −1 hostilidade.
    * Posições: Kamada–Kawai com distância 1 nos laços positivos e 2,2 nos negativos. */
   var GAMA_NOMES = ["GAVEV", "KOTUN", "OVE", "ALIKA", "NAGAM", "GAHUK", "MASIL", "UKUDZ", "NOTOH", "KOHIK", "GEHAM", "ASARO", "UHETO", "SEUVE", "NAGAD", "GAMA"];
   var GAMA_E = [[0,1,1],[0,2,-1],[0,3,-1],[0,4,-1],[0,5,-1],[0,11,-1],[0,14,1],[0,15,1],[1,2,-1],[1,4,-1],[1,5,-1],[1,8,-1],[1,9,-1],[1,14,1],[1,15,1],[2,3,1],[2,5,1],[2,6,1],[2,7,1],[3,7,1],[4,6,1],[4,8,1],[4,13,1],[4,14,-1],[4,15,-1],[5,6,1],[5,7,1],[5,8,-1],[5,10,1],[5,11,1],[5,12,-1],[5,15,-1],[6,7,1],[6,10,1],[6,11,1],[6,12,1],[7,10,1],[7,11,1],[7,13,-1],[8,9,1],[8,10,-1],[8,12,1],[8,14,-1],[9,10,-1],[9,12,1],[9,14,-1],[10,11,1],[10,12,-1],[10,14,-1],[10,15,-1],[11,13,-1],[11,14,-1],[11,15,-1],[12,13,1],[12,14,-1],[12,15,-1],[13,15,-1],[14,15,1]];
   var GAMA_P = [[0.806,0.528],[0.704,0.43],[0.501,0.724],[0.466,0.9],[0.401,0.338],[0.416,0.622],[0.335,0.518],[0.32,0.749],[0.183,0.23],[0.269,0.1],[0.189,0.578],[0.269,0.647],[0.299,0.304],[0.454,0.168],[0.697,0.285],[0.817,0.362]];
   function gama() { return { n: 16, edges: GAMA_E.map(function (e) { return e.slice(); }), pos: GAMA_P.map(function (p) { return p.slice(); }), nomes: GAMA_NOMES.slice() }; }
+
+  /* redes da página de frustração: o mesmo f = 1 em lugares diferentes */
+  var FRUST = {
+    gama: { label: "Tribos Gahuku-Gama (16)", make: gama },
+    ciclo: { label: "Ciclo de 15, um laço negativo", make: function () {
+      var e = [], p = []; for (var i = 0; i < 15; i++) { var a = Math.PI / 2 - 2 * Math.PI * i / 15; p.push([0.5 + 0.4 * Math.cos(a), 0.5 - 0.4 * Math.sin(a)]); e.push([i, (i + 1) % 15, i === 14 ? -1 : 1]); }
+      return { n: 15, edges: e, pos: p }; } },
+    completo: { label: "Completo de 8, um laço negativo", make: function () {
+      var e = [], p = []; for (var i = 0; i < 8; i++) { var a = Math.PI / 2 + Math.PI / 8 - 2 * Math.PI * i / 8; p.push([0.5 + 0.4 * Math.cos(a), 0.5 - 0.4 * Math.sin(a)]); for (var j = i + 1; j < 8; j++) e.push([i, j, i === 0 && j === 1 ? -1 : 1]); }
+      return { n: 8, edges: e, pos: p }; } },
+    traidor: { label: "Duas facções com um traidor (8)", make: function () {
+      var g = SINAIS.faccoes.make(); g.edges.forEach(function (e) { if (e[0] === 2 && e[1] === 4) e[2] = 1; }); return g; } }
+  };
 
   /* pequenas redes com sinais para a demo */
   var SINAIS = {
@@ -329,7 +366,8 @@
              graus: d, dmax: Math.max.apply(null, d), fonte: R.fonte };
   }
 
-  return { incidenciaSinais: incidenciaSinais, laplacianoSinais: laplacianoSinais,
+  return { contrariados: contrariados, buscaLocal: buscaLocal, laplacianoSinaisNorm: laplacianoSinaisNorm, FRUST: FRUST,
+           incidenciaSinais: incidenciaSinais, laplacianoSinais: laplacianoSinais,
            pinturaArvore: pinturaArvore, cicloFundamental: cicloFundamental, cicloImpar: cicloImpar, sinalEntre: sinalEntre, frustracao: frustracao,
            triangulos: triangulos, gama: gama, SINAIS: SINAIS,
            corte: corte, divide: divide, acertos: acertos, rng: rng, blocos: blocos, molas: molas, faccoes: faccoes,

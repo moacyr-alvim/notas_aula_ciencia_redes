@@ -52,8 +52,8 @@
       desc: "Laços positivos e negativos, as tríades de Heider, equilíbrio por ciclos e o teorema de estrutura de Harary (equilibrada ⇔ agrupável em dois), com prova pela árvore geradora. As tribos Gahuku-Gama. Demo e Python." },
     { id: "lapsinal", lane: "sin", col: 2, label: "Laplaciano\ncom sinais", href: "paginas/lapsinal.html", trails: ["sinais"],
       desc: "A incidência com sinais (dois +1 no laço negativo), L = BᵀB = D̄ − A_σ, o teorema λ₁ = 0 ⇔ equilibrada, a troca de sinais como mudança de base, λ₁ como conflito algébrico e as opiniões que polarizam ou se apagam. Demo e Python." },
-    { id: "frustr", lane: "sin", col: 3, label: "Quão longe\ndo equilíbrio", href: null, trails: ["sinais"],
-      desc: "O índice de frustração, por que calculá-lo é difícil, e o menor autovalor do laplaciano com sinais como cota e como aproximação." },
+    { id: "frustr", lane: "sin", col: 3, label: "Frustração\nespectral", href: "paginas/frustracao.html", trails: ["sinais"],
+      desc: "Quão longe do equilíbrio: λ₁ do laplaciano com sinais contra o índice de frustração f. A cota λ₁ ≤ 4f/n, conflito diluído contra concentrado, o tempo de despolarização, a versão normalizada, por que f é difícil. Demo-jogo e Python." },
     { id: "davis", lane: "sin", col: 1, row: 1, label: "Equilíbrio fraco\n(Davis)", href: null, trails: ["sinais"],
       desc: "Aceitar a tríade − − − e permitir mais de dois grupos: agrupável em k grupos ⇔ nenhum ciclo com exatamente um laço negativo." }
   );

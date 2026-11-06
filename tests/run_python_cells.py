@@ -87,5 +87,15 @@ check("lapsinal: versão equilibrada polariza em ± (sᵀu₀)/n", all(abs(v - f
 s, _ = rodar("lapsinal_lacunas.py")
 check("lapsinal (lacunas): roda sem completar", "L = D̄ - A_σ ? False" in s)
 
+# frustração espectral: ruído sobre rede equilibrada
+s, _ = rodar("frust_solucao.py")
+lin = [list(map(float, l.split())) for l in re.findall(r"^[0-9]\.[0-9]{2}\s+[-0-9. ]+$", s, re.M)]
+check("frust: 9 valores de ε", len(lin) == 9, str(len(lin)))
+check("frust: ε = 0 dá f = 0 e cota 0", lin[0][1] == 0 and lin[0][2] == 0)
+check("frust: cota ≤ f ≤ q1+local ≤ q1 em todos os ε", all(r[2] <= r[1] + 1e-9 and r[1] <= r[4] + 1e-9 and r[4] <= r[3] + 1e-9 for r in lin))
+check("frust: f cresce com o ruído e fica abaixo de 1/2", lin[-1][1] > lin[1][1] and max(r[1] for r in lin) < 0.5)
+s, _ = rodar("frust_lacunas.py")
+check("frust (lacunas): roda sem completar", "eps    f/m" in s)
+
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)
