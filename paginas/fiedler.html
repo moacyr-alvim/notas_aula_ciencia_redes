@@ -57,10 +57,13 @@
       </ul>
       <p>Há três jeitos usuais de arredondar:</p>
       <ol>
-        <li><b>Pelo sinal:</b> $S=\{i:\ q_{2,i}>0\}$. É o arredondamento mais direto de "número real" para "$\pm1$". Os grupos não saem necessariamente do mesmo tamanho, mas saem parecidos, porque $q_2\perp\mathbf 1$ obriga as coordenadas positivas e negativas a se equilibrarem.</li>
+        <li><b>Pelo sinal:</b> $S=\{i:\ q_{2,i}>0\}$. É o arredondamento mais direto de "número real" para "$\pm1$". Os tamanhos dos grupos ficam livres: $q_2\perp\mathbf 1$ equilibra a <em>soma</em> dos valores positivos com a dos negativos, não o <em>número</em> de vértices de cada sinal. Poucos vértices com valores grandes podem compensar muitos com valores pequenos. No caratê saem $19$ e $15$; numa rede com um pedaço pequeno quase solto, a divisão pode sair bem desequilibrada.</li>
         <li><b>Pela mediana:</b> põe em $S$ a metade dos vértices com os maiores valores de $q_2$. Sai uma bisseção de verdade.</li>
         <li><b>Por varredura:</b> ordene os vértices por $q_2$ e teste os $n-1$ cortes "os $j$ maiores de um lado, o resto do outro". Fique com o de menor $\text{corte}\cdot n/(|S|\,|\bar S|)$, a quantidade que aparecia na cota do gargalo. O tamanho dos grupos fica livre: a varredura procura o gargalo mais estreito, seja ele qual for. É esse o grupo que a desigualdade de Cheeger garante que existe.</li>
       </ol>
+      <p><b>A mesma relaxação, sem fixar os tamanhos.</b> Por que o sinal e a varredura podem dar grupos de tamanhos diferentes, se a conta partiu da bisseção? Porque o mesmo $q_2$ é também a relaxação de outro problema. Para um grupo $S$ qualquer, o vetor de teste da cota do gargalo, $v_i=1/|S|$ em $S$ e $v_i=-1/|\bar S|$ fora, é ortogonal a $\mathbf 1$ e tem quociente de Rayleigh
+      $$\frac{v^\top Lv}{v^\top v}=\text{corte}(S)\cdot\frac{n}{|S|\,|\bar S|},$$
+      a <b>razão de corte</b> (<em>ratio cut</em>; Hagen e Kahng, 1992). Minimizar a razão de corte é minimizar o quociente de Rayleigh entre os vetores dessa forma especial; relaxando para todo $v\perp\mathbf 1$, o mínimo é $\lambda_2$, atingido em $q_2$. A razão de corte não proíbe grupos de tamanhos diferentes: só os penaliza pelo fator $n/(|S||\bar S|)$, que cresce quando um dos lados é pequeno. Separar um grupinho compensa se ele estiver ligado ao resto por pouquíssimos links. Resumindo: <b>mediana</b> é a resposta para "bisseção"; <b>varredura</b> é a resposta para "menor razão de corte"; o <b>sinal</b> fica entre as duas.</p>
 
       <h2 id="porque" data-toc="Por que funciona">Por que funciona: o último desequilíbrio a morrer</h2>
       <p>Na <a href="difusao.html#modos">página de difusão</a>, depois que os modos rápidos morrem, sobra
@@ -136,9 +139,9 @@
       </aside>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
-      <p>A primeira parte faz a bisseção espectral do caratê pelo sinal e pela mediana, compara com as facções reais e confere a cota $n\lambda_2/4$. A segunda sorteia modelos de blocos maiores (dois grupos de $50$) para vários valores de $p_{\text{out}}$ e mede a fração de acertos: o gráfico mostra a queda de quase $100\%$ para perto de $50\%$ conforme $p_{\text{out}}$ se aproxima de $p_{\text{in}}$.</p>
+      <p>A primeira parte divide o caratê pelo sinal de $q_2$ (tamanhos livres) e pela mediana (bisseção), compara com as facções reais e confere a cota $n\lambda_2/4$. A segunda sorteia modelos de blocos maiores (dois grupos de $50$) para vários valores de $p_{\text{out}}$ e mede a fração de acertos: o gráfico mostra a queda de quase $100\%$ para perto de $50\%$ conforme $p_{\text{out}}$ se aproxima de $p_{\text{in}}$.</p>
 
-      <div class="pycell" data-title="Bisseção espectral"
+      <div class="pycell" data-title="Divisão espectral"
            data-starter="../py/fiedler_lacunas.py"
            data-solution="../py/fiedler_solucao.py"></div>
 
