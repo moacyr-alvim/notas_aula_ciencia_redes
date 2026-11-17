@@ -97,5 +97,15 @@ check("frust: f cresce com o ruído e fica abaixo de 1/2", lin[-1][1] > lin[1][1
 s, _ = rodar("frust_lacunas.py")
 check("frust (lacunas): roda sem completar", "eps    f/m" in s)
 
+# SIS clássico
+s, _ = rodar("sis_solucao.py")
+check("sis: R0 = 2, r = 1,2, equilíbrio 0,5", "R0 = beta <k> / mu = 2.00" in s and "= 1.200" in s and "1 - 1/R0 = 0.500" in s)
+rs = {m.group(1): (float(m.group(2)), float(m.group(3))) for m in re.finditer(r"(mistura|fixa): razão no começo = ([0-9.]+)\s+equilíbrio \(últimos 20 passos\) = ([0-9.]+)", s)}
+check("sis: mistura cresce com razão ≈ 1,2 e equilibra perto de 0,46 (forma exata)", abs(rs["mistura"][0] - 1.2) < 0.04 and abs(rs["mistura"][1] - 0.458) < 0.02, str(rs))
+check("sis: rede fixa cresce e equilibra um pouco abaixo da mistura", rs["fixa"][1] < rs["mistura"][1] and 1.12 < rs["fixa"][0] < 1.21, str(rs))
+check("sis: R0 de volta pelo tempo de duplicação", "R0 = 1 + (2^(1/dup) - 1)/mu = 2.00" in s)
+s, _ = rodar("sis_lacunas.py")
+check("sis (lacunas): roda sem completar", "r = 1 - mu + beta <k> = 1.000" in s)
+
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

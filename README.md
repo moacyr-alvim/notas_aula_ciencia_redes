@@ -49,6 +49,7 @@ assets/
   redes-core.js       L = D − A, autovalores (Jacobi), evolução modo a modo e o catálogo de redes da demo
                       (caminho, anel, estrela, grade, dois grupos, clube de caratê); testável em Node
   difusao-demo.js     desenho da demo de difusão
+  epi-core.js         o modelo SIS em tempo discreto: equações de diferenças, redes de contatos e simulação (testável em Node)
 tests/                testes (veja abaixo)
 ```
 
@@ -93,6 +94,7 @@ página, procure o nome antigo na seção dela em `LINKS.md`.
 ## Testes
 
 ```bash
+node tests/epi-core.test.js         # SIS: razão no começo, R0, equilíbrio, simulações em quatro redes
 node tests/redes-core.test.js       # L = D − A, autopares, conservação, princípio do máximo, Runge–Kutta, valores citados no texto
 python3 tests/run_python_cells.py   # roda os py/*.py como o worker faz (precisa de numpy, matplotlib e networkx)
 python3 tests/check_site.py         # links, âncoras, ids, tags e fórmulas

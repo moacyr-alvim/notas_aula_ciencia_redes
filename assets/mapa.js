@@ -12,7 +12,8 @@
     { id: "din",   label: "Dinâmicas\nna rede" },
     { id: "esp",   label: "Espectro e\nestrutura" },
     { id: "pas",   label: "Passeios\naleatórios" },
-    { id: "sin",   label: "Redes com\nsinais" }
+    { id: "sin",   label: "Redes com\nsinais" },
+    { id: "epi",   label: "Epidemias\nem redes" }
   ];
 
   var TRAILS = [
@@ -20,7 +21,8 @@
     { id: "dinamica", label: "Dinâmicas" },
     { id: "espectro", label: "Espectro e comunidades" },
     { id: "passeios", label: "Passeios aleatórios" },
-    { id: "sinais",   label: "Redes com sinais" }
+    { id: "sinais",   label: "Redes com sinais" },
+    { id: "epidemias", label: "Epidemias em redes" }
   ];
 
   // href: null  =>  "em breve"
@@ -58,10 +60,24 @@
       desc: "Aceitar a tríade − − − e permitir mais de dois grupos: agrupável em k grupos ⇔ nenhum ciclo com exatamente um link negativo." }
   );
 
+  NODES.push(
+    { id: "sis", lane: "epi", col: 0, label: "O modelo SIS\nclássico", href: "paginas/sis.html", trails: ["epidemias"],
+      desc: "Suscetível, infectado, suscetível de novo, em equações de diferenças. A rede escondida (contatos sorteados ao acaso), a progressão geométrica do começo, R₀ = β⟨k⟩/μ, r − 1 = μ(R₀ − 1) e o equilíbrio 1 − 1/R₀. Simulação em quatro redes e Python." },
+    { id: "sir", lane: "epi", col: 1, label: "O modelo SIR", href: null, trails: ["epidemias"],
+      desc: "Quem se cura fica imune: a epidemia passa e acaba. O pico, o tamanho final e a imunidade de rebanho, 1 − 1/R₀." },
+    { id: "heterog", lane: "epi", col: 1, row: 1, label: "Graus heterogêneos:\n⟨k²⟩/⟨k⟩", href: null, trails: ["epidemias"],
+      desc: "Quando uns têm muito mais contatos que outros, quem pega primeiro são os mais conectados, e R₀ passa a depender de ⟨k²⟩/⟨k⟩. Redes livres de escala quase sem limiar." },
+    { id: "limiar", lane: "epi", col: 2, row: 1, label: "O limiar e o maior\nautovalor de A", href: null, trails: ["epidemias"],
+      desc: "Numa rede fixa qualquer, o começo da epidemia é uma progressão geométrica com a matriz de adjacência: o limiar é β·λ_max(A) = μ." },
+    { id: "vacina", lane: "epi", col: 2, row: 0, label: "Imunizar\nquem?", href: null, trails: ["epidemias"],
+      desc: "Vacinar ao acaso, vacinar os hubs, ou vacinar os amigos de pessoas sorteadas: o que cada estratégia faz com R₀." }
+  );
+
   var EDGES = [
     ["difusao", "consenso"], ["consenso", "sincr"],
     ["difusao", "comp"], ["comp", "fiedler"], ["fiedler", "desenho"], ["difusao", "modos"], ["modos", "desenho"],
     ["difusao", "passeio"], ["passeio", "pagerank"], ["passeio", "resist"],
+    ["sis", "sir"], ["sis", "heterog"], ["heterog", "limiar"], ["heterog", "vacina"],
     ["sinais", "lapsinal"], ["comp", "lapsinal"], ["lapsinal", "frustr"], ["sinais", "davis"]
   ];
 

@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O modelo SIS clássico — O laplaciano em redes</title>
+  <link rel="stylesheet" href="../assets/style.css?v=55ab22b5">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js?v=d64d5c9e"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <style>
+    #demo-sis canvas { height: 340px; }
+    .tabela { border-collapse: collapse; margin: 1rem auto; font-family: var(--sans); font-size: .92rem; }
+    .tabela th, .tabela td { border-bottom: 1px solid var(--rule); padding: .35rem .8rem; text-align: center; }
+    .tabela th { color: var(--ink-soft); font-weight: 600; }
+    .tabela td:first-child { text-align: left; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O modelo SIS clássico</h1>
+        <p class="lede">Uma doença que não deixa imunidade: quem se cura volta a poder pegar. O modelo SIS descreve isso com uma única equação de diferenças, e dela saem o número básico de reprodução $R_0=\beta\langle k\rangle/\mu$, o crescimento em progressão geométrica no começo da epidemia e o nível em que ela se estabiliza. A equação parece não falar de rede nenhuma, mas tem uma rede escondida: a de contatos sorteados ao acaso.</p>
+        <p class="meta">Primeira página da trilha <em>Epidemias em redes</em>. Não usa o laplaciano nem equações diferenciais: só probabilidade básica e progressões geométricas.</p>
+      </header>
+
+      <h2 id="modelo" data-toc="O modelo">O modelo, um passo de cada vez</h2>
+      <p>Cada pessoa está em um de dois estados: <b>suscetível</b> (S), que pode pegar a doença, ou <b>infectada</b> (I), que pode transmiti-la. O tempo anda em passos, $t=0,1,2,\dots$ (dias, por exemplo). Em cada passo:</p>
+      <ul>
+        <li>cada pessoa infectada se <b>cura</b> com probabilidade $\mu$ e volta a ser suscetível; com probabilidade $1-\mu$, continua infectada;</li>
+        <li>cada pessoa tem $\langle k\rangle$ <b>contatos</b>; em cada contato entre uma suscetível e uma infectada, a doença é <b>transmitida</b> com probabilidade $\beta$.</li>
+      </ul>
+
+      <figure class="fig">
+<svg viewBox="0 0 420 130" role="img" aria-labelledby="fsis" style="width:100%;height:auto;max-width:420px;display:block;margin:0 auto">
+  <title id="fsis">Diagrama do modelo SIS: suscetível passa a infectada por contato com infectados, e infectada volta a suscetível com probabilidade mu.</title>
+  <defs><marker id="sa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1 L9,5 L0,9 z" style="fill:var(--ink)"/></marker></defs>
+  <rect x="30" y="40" width="80" height="50" rx="8" style="fill:var(--paper);stroke:var(--carac)" stroke-width="2.4"/>
+  <rect x="310" y="40" width="80" height="50" rx="8" style="fill:var(--paper);stroke:var(--choque)" stroke-width="2.4"/>
+  <g font-family="sans-serif" font-size="22" font-weight="bold" text-anchor="middle"><text x="70" y="73" style="fill:var(--carac)">S</text><text x="350" y="73" style="fill:var(--choque)">I</text></g>
+  <path d="M115 52 Q210 10 305 52" style="fill:none;stroke:var(--ink)" stroke-width="1.8" marker-end="url(#sa)"/>
+  <path d="M305 80 Q210 122 115 80" style="fill:none;stroke:var(--ink)" stroke-width="1.8" marker-end="url(#sa)"/>
+  <g font-family="sans-serif" font-size="13" text-anchor="middle" style="fill:var(--ink)"><text x="210" y="22">contágio: β por contato com infectado</text><text x="210" y="126">cura: probabilidade μ por passo</text></g>
+</svg>
+<figcaption>O ciclo do SIS. Resfriado comum e várias infecções bacterianas tratadas com antibiótico se comportam assim: a cura não protege contra a próxima infecção.</figcaption>
+</figure>
+
+      <p>Chame de $i_t$ a <b>fração</b> da população que está infectada no passo $t$; a fração suscetível é $1-i_t$. Num passo:</p>
+      <ul>
+        <li><b>Saem</b> do grupo dos infectados, em média, $\mu\,i_t$ (os que se curam).</li>
+        <li><b>Entram</b> os suscetíveis que pegam a doença. Uma pessoa suscetível tem $\langle k\rangle$ contatos; <em>se cada um deles está infectado com probabilidade $i_t$</em>, ela encontra em média $\langle k\rangle\,i_t$ infectados, e cada um transmite com probabilidade $\beta$. Enquanto $\beta\langle k\rangle i_t$ é pequeno, a chance de ela se infectar é $\approx\beta\langle k\rangle\,i_t$. Como são $1-i_t$ suscetíveis, entram $\beta\langle k\rangle\,i_t\,(1-i_t)$.</li>
+      </ul>
+      <p>Juntando:
+      $$\boxed{\,i_{t+1}=i_t+\beta\langle k\rangle\,i_t\,(1-i_t)-\mu\,i_t.\,}$$
+      É a <b>equação de diferenças do SIS</b>. Dado $i_0$, ela dá $i_1$, depois $i_2$, e assim por diante: é só iterar, como uma planilha.</p>
+
+      <details>
+        <summary>A conta sem a aproximação</summary>
+        <div class="body">
+          <p>A chance de uma suscetível com $\langle k\rangle$ contatos <em>não</em> ser infectada é a chance de nenhum contato transmitir. Cada contato transmite com probabilidade $\beta i_t$ (estar infectado e transmitir), então essa chance é $(1-\beta i_t)^{\langle k\rangle}$, e
+          $$i_{t+1}=(1-\mu)\,i_t+(1-i_t)\Big(1-(1-\beta i_t)^{\langle k\rangle}\Big).$$
+          Para $\beta i_t$ pequeno, $1-(1-\beta i_t)^{\langle k\rangle}\approx\beta\langle k\rangle i_t$, e volta-se à equação clássica. A clássica conta duas vezes quem é atingido por dois contatos ao mesmo tempo, então ela <em>superestima</em> os novos casos quando a epidemia já está grande (exercício 5). No começo, quando $i_t$ é pequeno, as duas são iguais.</p>
+        </div>
+      </details>
+
+      <h2 id="rede" data-toc="Onde está a rede?">Onde está a rede?</h2>
+      <p>A equação não menciona rede alguma, e nos textos clássicos ela costuma aparecer como "$\beta SI/N$", com a explicação de que a população é "homogeneamente misturada". Mas a frase em itálico acima, <em>cada contato de uma suscetível está infectado com probabilidade $i_t$</em>, é uma afirmação forte sobre <b>quem encontra quem</b>. Ela diz que os contatos de uma pessoa são uma amostra sorteada da população inteira, sem nenhuma relação com quem ela é, onde mora ou com quem esteve no passo anterior.</p>
+      <aside class="box atencao">
+        <p class="tag">A rede escondida</p>
+        <p>A equação clássica do SIS supõe, sem dizer, uma rede de contatos com duas propriedades:</p>
+        <ol>
+          <li><b>Uniforme:</b> todos têm o mesmo número de contatos, $\langle k\rangle$. Ou, ao menos, o número de contatos de alguém não está relacionado com a chance de esse alguém estar infectado.</li>
+          <li><b>Aleatória:</b> os contatos de cada pessoa são sorteados na população. A versão em que isso vale exatamente é a de uma rede <em>sorteada de novo a cada passo</em>: hoje você encontra $\langle k\rangle$ pessoas ao acaso, amanhã outras $\langle k\rangle$. Uma rede fixa, mas sorteada ao acaso e sem estrutura (sem bairros, sem panelinhas), fica perto disso.</li>
+        </ol>
+        <p>Nos textos clássicos, $\beta\langle k\rangle$ aparece fundido num único número, a "taxa de contatos efetivos". Separar os dois fatores é o que deixa a rede à vista.</p>
+      </aside>
+      <p>Quando a rede real não é assim, a equação erra. A demo e a última seção mostram quanto.</p>
+
+      <h2 id="comeco" data-toc="O começo">O começo: uma progressão geométrica</h2>
+      <p>No começo da epidemia quase todo mundo é suscetível: $i_t$ é muito pequeno e $1-i_t\approx1$. A equação fica
+      $$i_{t+1}\approx i_t+\beta\langle k\rangle\,i_t-\mu\,i_t=\big(1-\mu+\beta\langle k\rangle\big)\,i_t.$$
+      Cada passo multiplica o número de infectados pelo mesmo fator. É uma <b>progressão geométrica</b>:
+      $$i_t\approx i_0\,r^t,\qquad r=1-\mu+\beta\langle k\rangle.$$
+      Em palavras: de cada infectado, uma fração $1-\mu$ continua infectada no passo seguinte, e cada um produz em média $\beta\langle k\rangle$ novos casos. Se $r>1$, a epidemia cresce; se $r&lt;1$, ela some. Num gráfico com o eixo vertical em escala logarítmica, o começo é uma reta de inclinação $\log r$. É esse o padrão que se vê nas curvas de casos de qualquer surto, até a epidemia começar a "sentir" que está ficando sem suscetíveis.</p>
+      <p>O <b>tempo de duplicação</b> é o número de passos para dobrar: $r^{t_2}=2$, isto é, $t_2=\log2/\log r$.</p>
+
+      <h2 id="r0" data-toc="O número R₀">O número básico de reprodução $R_0$</h2>
+      <p>$R_0$ é <b>quantas pessoas, em média, um infectado contagia ao longo de toda a sua infecção</b>, numa população em que todos são suscetíveis. Para calculá-lo, precisamos de duas coisas.</p>
+      <p><b>Quanto tempo dura uma infecção.</b> A cada passo, o infectado se cura com probabilidade $\mu$. A duração $D$ (o número de passos em que ele fica infectado) segue uma <b>distribuição geométrica</b>:
+      $$P(D=1)=\mu,\quad P(D=2)=(1-\mu)\mu,\quad\dots,\quad P(D=n)=(1-\mu)^{n-1}\mu,$$
+      e a duração média é $\mathbb E[D]=1/\mu$. Com $\mu=0{,}2$ por dia, a infecção dura em média $5$ dias.</p>
+      <p><b>Quantos ele contagia por passo.</b> No começo, todos os seus $\langle k\rangle$ contatos são suscetíveis, e cada um é contagiado com probabilidade $\beta$: em média $\beta\langle k\rangle$ por passo.</p>
+      <p>Multiplicando:
+      $$\boxed{\,R_0=\beta\langle k\rangle\times\frac1\mu=\frac{\beta\langle k\rangle}{\mu}.\,}$$
+      A mesma conta, somando passo a passo: o infectado ainda está infectado no seu $(t+1)$-ésimo passo com probabilidade $(1-\mu)^t$, então $R_0=\sum_{t\ge0}\beta\langle k\rangle(1-\mu)^t=\beta\langle k\rangle/\mu$, pela soma da progressão geométrica.</p>
+
+      <h2 id="ligacao" data-toc="R₀ e a razão r">$R_0$ e a razão $r$: a mesma progressão, dois relógios</h2>
+      <p>Compare as duas fórmulas: $r=1-\mu+\beta\langle k\rangle$ e $R_0=\beta\langle k\rangle/\mu$. Eliminando $\beta\langle k\rangle=\mu R_0$:
+      $$\boxed{\,r-1=\mu\,(R_0-1).\,}$$
+      Como $\mu>0$, os dois sinais andam juntos:
+      $$r>1\iff R_0>1\iff\beta\langle k\rangle>\mu.$$
+      É o <b>limiar epidêmico</b>: a doença invade a população se, e só se, cada infectado contagia mais de uma pessoa antes de se curar.</p>
+      <p>As duas razões medem o crescimento da mesma progressão geométrica com relógios diferentes. $r$ é a razão <b>por passo de tempo</b>: quanto o número de infectados se multiplica de um dia para o outro. $R_0$ é a razão <b>por geração</b>: quanto ele se multiplica de uma geração de infectados para a seguinte (os contagiados pelos contagiados pelos...). Uma geração dura, em média, o tempo de uma infecção, mas as gerações se sobrepõem, porque um infectado contagia pessoas ao longo de vários dias, e por isso as duas razões não são simplesmente "uma elevada à duração da outra" (exercício 4).</p>
+      <p>A relação $r-1=\mu(R_0-1)$ também funciona de trás para a frente, e é assim que $R_0$ é estimado na prática: mede-se o tempo de duplicação no começo de um surto, tira-se $r=2^{1/t_2}$, e com a duração média da infecção $1/\mu$ obtém-se $R_0=1+(r-1)/\mu$ (exercício 3).</p>
+
+      <h2 id="fim" data-toc="O fim">O fim: o equilíbrio endêmico</h2>
+      <p>O SIS não acaba: como os curados voltam a ser suscetíveis, a doença se estabiliza num nível $i^*$ em que entram e saem infectados no mesmo ritmo. Fazendo $i_{t+1}=i_t=i^*$ na equação, $\beta\langle k\rangle\,i^*(1-i^*)=\mu\,i^*$. Uma solução é $i^*=0$ (sem doença); a outra é
+      $$\boxed{\,i^*=1-\frac{\mu}{\beta\langle k\rangle}=1-\frac1{R_0}.\,}$$
+      Ela só faz sentido (é positiva) se $R_0>1$. Com $R_0=2$, metade da população está infectada a cada momento; com $R_0=4$, três quartos.</p>
+      <p>Uma leitura bonita: no equilíbrio, só uma fração $1-i^*=1/R_0$ dos contatos é suscetível, então cada infectado contagia em média $R_0\times(1-i^*)=1$ pessoa. A epidemia se mantém exatamente substituindo cada infectado por um novo. Esse produto, $R_0$ vezes a fração suscetível, é o <b>número de reprodução efetivo</b>.</p>
+
+      <h2 id="demo" data-toc="Simule">Simule pessoas numa rede</h2>
+      <p>A demo simula $1600$ pessoas, uma a uma, começando com $1\%$ delas infectadas, com as regras do começo da página: em cada passo, cada infectada se cura com probabilidade $\mu$ e cada contato infectado de uma suscetível transmite com probabilidade $\beta$. São $8$ simulações (linhas vermelhas finas), a média delas (vermelha grossa) e a equação de diferenças clássica (azul tracejada). O pontilhado horizontal é o equilíbrio $1-1/R_0$; na escala logarítmica, o pontilhado inclinado é a progressão geométrica $i_0r^t$. À esquerda, a população de uma das simulações no passo $t$, com as infectadas em vermelho.</p>
+      <p>A <b>rede de contatos</b> pode ser:</p>
+      <ul>
+        <li><b>mistura</b>: a cada passo, cada pessoa sorteia $\langle k\rangle$ contatos novos na população inteira. É exatamente a hipótese da equação.</li>
+        <li><b>aleatória fixa</b>: uma rede de Erdős–Rényi sorteada uma vez, com grau médio $\langle k\rangle$ (os graus variam de pessoa para pessoa).</li>
+        <li><b>regular aleatória</b>: uma rede sorteada uma vez, em que todos têm exatamente $\langle k\rangle$ contatos.</li>
+        <li><b>anel</b>: cada pessoa só encontra os $\langle k\rangle$ vizinhos mais próximos numa fila circular (na grade, a fila é lida linha por linha). É o caso extremo de contatos "geográficos".</li>
+      </ul>
+
+      <div class="demo" id="demo-sis">
+        <div class="controls">
+          <label>rede <select id="e-rede" aria-label="Rede de contatos">
+            <option value="mistura">mistura (contatos novos a cada passo)</option>
+            <option value="er">aleatória fixa (Erdős–Rényi)</option>
+            <option value="regular">regular aleatória</option>
+            <option value="anel">anel (só vizinhos próximos)</option>
+          </select></label>
+          <button id="e-nova" type="button">Novas simulações</button>
+          <label><input type="checkbox" id="e-log"> escala log</label>
+        </div>
+        <div class="controls">
+          <label>β <input type="range" id="e-beta" min="0.005" max="0.1" step="0.005" value="0.05" aria-label="Probabilidade de transmissão por contato"> <output id="e-betav">0,050</output></label>
+          <label>⟨k⟩ <input type="range" id="e-k" min="2" max="12" step="1" value="8" aria-label="Número de contatos por pessoa"> <output id="e-kv">8</output></label>
+          <label>μ <input type="range" id="e-mu" min="0.02" max="0.5" step="0.01" value="0.2" aria-label="Probabilidade de cura por passo"> <output id="e-muv">0,20</output></label>
+        </div>
+        <div class="controls">
+          <label>passo t <input type="range" id="e-t" min="0" max="150" step="1" value="0" aria-label="Passo de tempo"> <output id="e-tv">0</output></label>
+          <button id="e-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="e-pop-canvas" role="img" aria-label="A população, com as pessoas infectadas em vermelho"></canvas>
+          <canvas id="e-curva-canvas" role="img" aria-label="Fração de infectados ao longo dos passos: simulações, média e equação de diferenças"></canvas>
+        </div>
+        <div class="readout" id="e-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--choque)"></i>simulações e média</span>
+          <span><i style="border-color:var(--carac);border-top-style:dashed"></i>equação de diferenças</span>
+          <span><i style="border-color:var(--ink);border-top-style:dotted"></i>equilíbrio 1 − 1/R₀ e, na escala log, i₀rᵗ</span>
+        </div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li><b>O limiar.</b> Com a mistura, ajuste $\beta$, $\langle k\rangle$ e $\mu$ para $R_0$ logo abaixo de $1$ e logo acima. Abaixo, tudo some; acima, a doença se instala. Repare que só importa a combinação $\beta\langle k\rangle/\mu$: dobrar $\beta$ ou dobrar $\langle k\rangle$ dá o mesmo efeito.</li>
+        <li><b>A reta.</b> Marque a escala log. Nos primeiros passos, a média das simulações segue a reta $i_0r^t$; depois se curva e para no equilíbrio.</li>
+        <li><b>Mistura contra a equação.</b> A simulação fica um pouco abaixo de $1-1/R_0$: com $R_0=2$, perto de $0{,}46$ em vez de $0{,}50$. É o efeito de contar duas vezes, da caixa "A conta sem a aproximação"; a forma exata prevê $0{,}458$.</li>
+        <li><b>Redes fixas.</b> Troque para a aleatória fixa e a regular: o crescimento fica um pouco mais lento e o equilíbrio um pouco mais baixo. O motivo é que, numa rede fixa, um dos contatos de quem acabou de se infectar é justamente quem o infectou, e esse já está infectado: sobram cerca de $\langle k\rangle-1$ contatos para contagiar.</li>
+        <li><b>O anel.</b> Agora a equação falha completamente. A doença avança como uma frente, só pelas bordas dos grupos de infectados (veja a grade), o crescimento não é geométrico e o equilíbrio fica muito abaixo do previsto. Os mesmos $\beta$, $\langle k\rangle$ e $\mu$, o mesmo $R_0$ da fórmula, e uma epidemia completamente diferente.</li>
+      </ol>
+
+      <h2 id="importa" data-toc="Quando a rede importa">Quando a rede importa</h2>
+      <p>Com $\beta=0{,}05$, $\langle k\rangle=8$ e $\mu=0{,}2$ (isto é, $R_0=2$ e $r=1{,}2$), começando com $1\%$ de infectados, em médias de $20$ simulações com $1600$ pessoas:</p>
+      <table class="tabela">
+        <thead><tr><th>rede de contatos</th><th>infectados no passo 20</th><th>equilíbrio</th></tr></thead>
+        <tbody>
+          <tr><td>equação clássica</td><td>23%</td><td>50%</td></tr>
+          <tr><td>equação sem contar duas vezes</td><td>22%</td><td>46%</td></tr>
+          <tr><td>simulação: mistura</td><td>22%</td><td>46%</td></tr>
+          <tr><td>simulação: aleatória fixa (Erdős–Rényi)</td><td>18%</td><td>44%</td></tr>
+          <tr><td>simulação: regular aleatória</td><td>12%</td><td>43%</td></tr>
+          <tr><td>simulação: anel</td><td>4%</td><td>13%</td></tr>
+        </tbody>
+      </table>
+      <p>A equação descreve muito bem a rede para a qual ela foi feita, a de contatos sorteados ao acaso, e razoavelmente bem as redes fixas que se parecem com essa. Quando os contatos têm estrutura, como no anel, a equação deixa de servir.</p>
+      <p>Há outra estrutura que importa muito e que nenhuma destas redes tem: <b>graus muito diferentes</b>. Em redes reais de contato, algumas pessoas têm muito mais contatos que outras, e essas pessoas pegam e transmitem mais. Aí $\langle k\rangle$ deixa de ser o número certo na fórmula de $R_0$: entra o segundo momento, $\langle k^2\rangle/\langle k\rangle$. É o assunto de uma próxima página.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>A célula itera a equação de diferenças, simula $2000$ pessoas com contatos de mistura e numa rede aleatória fixa, mede a razão da progressão geométrica no começo e o equilíbrio, e recupera $R_0$ a partir do tempo de duplicação. Os gráficos mostram as mesmas curvas em escala linear e logarítmica.</p>
+
+      <div class="pycell" data-title="O SIS em equações de diferenças e em simulação"
+           data-starter="../py/sis_lacunas.py"
+           data-solution="../py/sis_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. A razão no começo</p>
+        <p>Com $\beta=0{,}03$, $\langle k\rangle=10$ e $\mu=0{,}1$: calcule $R_0$, a razão $r$, o tempo de duplicação no começo e o equilíbrio $i^*$. Confira na demo.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\beta\langle k\rangle=0{,}3$. $R_0=0{,}3/0{,}1=3$; $r=1-0{,}1+0{,}3=1{,}2$; $t_2=\log2/\log1{,}2\approx3{,}8$ passos; $i^*=1-1/3\approx0{,}67$. Repare que $r$ é o mesmo do exemplo da página ($1{,}2$), mas $R_0$ é outro: a mesma velocidade inicial pode vir de doenças com $R_0$ diferentes, se as durações forem diferentes.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. $R_0$ pela soma</p>
+        <p>(a) Mostre que a probabilidade de um infectado ainda estar infectado $t$ passos depois de se infectar é $(1-\mu)^t$. (b) Use isso para mostrar que $R_0=\sum_{t\ge0}\beta\langle k\rangle(1-\mu)^t=\beta\langle k\rangle/\mu$. (c) Mostre que a duração média da infecção é $\mathbb E[D]=1/\mu$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Para continuar infectado por $t$ passos, ele precisa não se curar em cada um deles, independentemente: $(1-\mu)^t$. (b) Em cada passo em que está infectado, contagia em média $\beta\langle k\rangle$; somando a média de todos os passos, $\sum_{t\ge0}\beta\langle k\rangle(1-\mu)^t=\beta\langle k\rangle\cdot\frac1{1-(1-\mu)}=\frac{\beta\langle k\rangle}\mu$. (c) $D\ge t+1$ exatamente quando ele está infectado no passo $t$, então $\mathbb E[D]=\sum_{t\ge0}P(D\ge t+1)=\sum_{t\ge0}(1-\mu)^t=1/\mu$. O item (b) é o item (c) multiplicado por $\beta\langle k\rangle$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. $R_0$ a partir dos dados</p>
+        <p>No começo de um surto, os casos dobram a cada $5$ dias, e sabe-se que a infecção dura em média $7$ dias. Supondo o modelo SIS com passos de um dia, estime $R_0$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$r=2^{1/5}\approx1{,}149$ e $\mu=1/7$. De $r-1=\mu(R_0-1)$: $R_0=1+(r-1)/\mu\approx1+0{,}149\times7\approx2{,}04$. Repare que a estimativa depende da duração: com a mesma duplicação e uma infecção de $14$ dias, sairia $R_0\approx3{,}1$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Dois relógios</p>
+        <p>Com $\mu=0{,}2$ e $R_0=2$ (logo $r=1{,}2$), uma geração dura em média $1/\mu=5$ passos. Compare $r^5$ com $R_0$. Por que não são iguais?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$r^5=1{,}2^5\approx2{,}49>R_0=2$. Em $5$ passos, o número de infectados cresce mais do que uma geração faria, porque as gerações se sobrepõem: quem foi infectado no primeiro dia já começa a contagiar no segundo, enquanto o infectado original ainda está contagiando. Além disso, a duração é aleatória: alguns infectados duram muito mais que $5$ passos e contagiam muito mais que a média. $R_0$ conta filhos por pai, não crescimento por unidade de tempo. Nos dois relógios, porém, "maior que $1$" significa o mesmo: $r>1\iff R_0>1$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Contar duas vezes</p>
+        <p>(a) Mostre que $1-(1-x)^k\le kx$ para $0\le x\le1$ e $k$ inteiro positivo. (Dica: indução, ou "a chance de pelo menos um evento não passa da soma das chances".) (b) Conclua que a equação clássica prevê mais casos novos do que a forma exata, com igualdade aproximada quando $i_t$ é pequeno. (c) Por que, então, a razão $r$ e o $R_0$ são os mesmos nas duas?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Com $k$ eventos de probabilidade $x$ cada, a chance de pelo menos um acontecer é $1-(1-x)^k$, e ela não passa de $kx$, a soma das chances (a soma conta duas vezes os casos em que dois acontecem). (b) Com $x=\beta i_t$, os novos casos da forma exata, $(1-i_t)\big(1-(1-\beta i_t)^{\langle k\rangle}\big)$, não passam dos da clássica, $(1-i_t)\beta\langle k\rangle i_t$. A diferença é da ordem de $(\beta i_t)^2$: desprezível no começo. (c) $r$ e $R_0$ são decididos no começo, quando $i_t\approx0$, e lá as duas fórmulas coincidem. O que muda é o fim: o equilíbrio da forma exata é mais baixo ($0{,}458$ contra $0{,}5$ no exemplo da página).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Onde a equação falha</p>
+        <p>No anel, cada pessoa só tem contato com os vizinhos próximos. Argumente por que, no começo, o número de infectados num anel não cresce como uma progressão geométrica. (Dica: num trecho contínuo de infectados, quem pode contagiar alguém novo?)</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Num trecho de infectados ao longo do anel, só os que estão perto das duas pontas têm vizinhos suscetíveis; os do meio só encontram outros infectados (ou recém-curados, que logo são reinfectados pelos vizinhos). Então o número de casos novos por passo não é proporcional ao número de infectados, como na progressão geométrica, e sim ao número de <em>pontas</em>, que não cresce. O trecho infectado avança como uma frente, com velocidade aproximadamente constante: o crescimento é linear, não geométrico. A hipótese "cada contato está infectado com probabilidade $i_t$" falha porque os contatos de um infectado estão muito mais infectados que a média.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li>Probabilidade básica: eventos independentes, média, distribuição geométrica</li>
+            <li>Progressões geométricas e a soma de uma progressão geométrica infinita</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li>O modelo SIR <span class="soon">(em breve)</span></li>
+            <li>Graus heterogêneos: ⟨k²⟩/⟨k⟩ <span class="soon">(em breve)</span></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/epi-core.js?v=305e064a"></script>
+  <script src="../assets/sis-demo.js?v=5bb78fdc"></script>
+  <script src="../assets/pyrunner.js?v=54fb0c98"></script>
+</body>
+</html>
