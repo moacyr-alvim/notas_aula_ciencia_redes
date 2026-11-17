@@ -64,7 +64,7 @@
     { id: "sis", lane: "epi", col: 0, label: "O modelo SIS\nclássico", href: "paginas/sis.html", trails: ["epidemias"],
       desc: "Suscetível, infectado, suscetível de novo, em equações de diferenças. A rede escondida (contatos sorteados ao acaso), a progressão geométrica do começo, R₀ = β⟨k⟩/μ, r − 1 = μ(R₀ − 1) e o equilíbrio 1 − 1/R₀. Simulação em quatro redes e Python." },
     { id: "sir", lane: "epi", col: 1, label: "O modelo SIR", href: "paginas/sir.html", trails: ["epidemias"],
-      desc: "A família dos modelos compartimentais e o SIR: quem se cura fica imune. O mesmo R₀ do SIS, o pico quando os suscetíveis caem a 1/R₀, a altura do pico, o tamanho final e a imunidade de rebanho. Demo e Python." },
+      desc: "A família dos modelos compartimentais e o SIR: quem se cura fica imune. O mesmo R₀ do SIS, o pico quando os suscetíveis caem a 1/R₀ e a imunidade de rebanho. Demo." },
     { id: "heterog", lane: "epi", col: 1, row: 1, label: "Graus heterogêneos:\n⟨k²⟩/⟨k⟩", href: null, trails: ["epidemias"],
       desc: "Quando uns têm muito mais contatos que outros, quem pega primeiro são os mais conectados, e R₀ passa a depender de ⟨k²⟩/⟨k⟩. Redes livres de escala quase sem limiar." },
     { id: "limiar", lane: "epi", col: 2, row: 1, label: "O limiar e o maior\nautovalor de A", href: null, trails: ["epidemias"],

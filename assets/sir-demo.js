@@ -55,9 +55,8 @@
 
     read.innerHTML = "<span>R₀ = β⟨k⟩/μ = <b>" + fmt(R0) + "</b> · razão no começo r = 1 − μ + β⟨k⟩ = <b>" + fmt(1 - mu + beta * k, 3) + "</b> (as mesmas do SIS)</span>" +
       (R0 > 1
-        ? "<span>pico no passo <b>" + tp + "</b>, com <b>" + fmt(100 * S[tp][1], 1) + "%</b> infectados ao mesmo tempo · fórmula: <b>" + fmt(100 * E.picoAprox(R0), 1) + "%</b></span>" +
-          "<span>no pico, suscetíveis s = <b>" + fmt(S[tp][0], 3) + "</b> ≈ 1/R₀ = <b>" + fmt(1 / R0, 3) + "</b> · já imunes: <b>" + fmt(100 * S[tp][2], 1) + "%</b></span>" +
-          "<span>no fim, pegaram a doença: <b>" + fmt(100 * S[T][2], 1) + "%</b> · fórmula do tamanho final: <b>" + fmt(100 * E.tamanhoFinal(R0), 1) + "%</b> · nunca pegaram: <b>" + fmt(100 * S[T][0], 1) + "%</b></span>"
+        ? "<span>pico no passo <b>" + tp + "</b> · nele, suscetíveis s = <b>" + fmt(S[tp][0], 3) + "</b> ≈ 1/R₀ = <b>" + fmt(1 / R0, 3) + "</b></span>" +
+          "<span>imunidade de rebanho: <b>" + fmt(100 * (1 - 1 / R0), 0) + "%</b> imunes antes de a doença chegar impedem a epidemia · no fim, nunca pegaram a doença: <b>" + fmt(100 * S[T][0], 1) + "%</b></span>"
         : "<span>R₀ ≤ 1: não há pico, os poucos casos iniciais somem</span>");
   }
   function schedule() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; draw(); }); }

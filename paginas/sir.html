@@ -76,40 +76,14 @@
       $$R_0=\frac{\beta\langle k\rangle}{\mu}.$$
       O que acontece com o curado depois (volta a ser suscetível ou fica imune) não importa no começo, porque nessa hora quase ninguém se curou ainda. O limiar também é o mesmo: a epidemia decola se, e só se, $R_0>1$.</p>
 
-      <h2 id="pico" data-toc="O pico">O pico</h2>
-      <p><b>Quando acontece.</b> Pela equação dos infectados,
+      <h2 id="pico" data-toc="O pico e o rebanho">O pico e a imunidade de rebanho</h2>
+      <p>Pela equação dos infectados,
       $$i_{t+1}-i_t=\big(\beta\langle k\rangle\,s_t-\mu\big)\,i_t,$$
       então o número de infectados <b>cresce enquanto $\beta\langle k\rangle\,s_t>\mu$</b>, isto é, enquanto
       $$s_t>\frac1{R_0}.$$
       Como $s_t$ só diminui, ele cruza $1/R_0$ uma única vez, e é nesse passo que $i_t$ deixa de crescer: <b>o pico acontece quando a fração de suscetíveis cai a $1/R_0$</b>. Depois disso, cada infectado contagia, em média, menos de uma pessoa ($R_0\,s_t&lt;1$), e a epidemia definha mesmo que ainda haja muitos suscetíveis.</p>
       <p>A mesma conta, lida ao contrário, é a <b>imunidade de rebanho</b>: se, antes de a doença chegar, uma fração maior que $1-1/R_0$ já estiver imune (por vacina, por exemplo), então $s_0&lt;1/R_0$ e a epidemia não decola. Com $R_0=3$, é preciso imunizar dois terços da população.</p>
-      <p><b>Quão alto.</b> Uma conta aproximada dá a altura do pico só em função de $R_0$:
-      $$\boxed{\,i_{\text{pico}}\approx1-\frac1{R_0}-\frac{\ln R_0}{R_0}.\,}$$</p>
-
-      <details>
-        <summary>De onde vem a fórmula do pico</summary>
-        <div class="body">
-          <p>Da primeira equação, $s_{t+1}=s_t\,(1-\beta\langle k\rangle i_t)$. Tomando o logaritmo e usando $\ln(1-x)\approx-x$ para $x$ pequeno:
-          $$\ln s_{t+1}-\ln s_t\approx-\beta\langle k\rangle\,i_t.$$
-          Da terceira, $r_{t+1}-r_t=\mu\,i_t$. Dividindo uma pela outra, a cada passo $\ln s$ cai $\beta\langle k\rangle/\mu=R_0$ vezes o que $r$ sobe. Somando todos os passos desde o começo ($s_0\approx1$, $r_0=0$):
-          $$\ln s_t\approx-R_0\,r_t,\qquad\text{isto é,}\qquad s_t\approx e^{-R_0r_t}.$$
-          No pico, $s=1/R_0$, então $r=\ln R_0/R_0$, e $i=1-s-r=1-1/R_0-\ln R_0/R_0$.</p>
-          <p>A mesma relação dá o <b>tamanho final</b> da epidemia: no fim não há mais infectados, $s_\infty=1-r_\infty$, e
-          $$r_\infty\approx1-e^{-R_0\,r_\infty}.$$
-          A aproximação $\ln(1-x)\approx-x$ é tanto melhor quanto menor for $\beta\langle k\rangle i_t$, isto é, quanto menores os passos de tempo. Com $R_0=2$ e $\mu=0{,}2$, a equação de diferenças dá um pico de $16{,}1\%$ contra $15{,}3\%$ da fórmula; com $\mu=0{,}02$ (passos dez vezes menores), $15{,}4\%$.</p>
-        </div>
-      </details>
-
-      <table class="tabela">
-        <thead><tr><th>$R_0$</th><th>suscetíveis no pico ($1/R_0$)</th><th>infectados no pico</th><th>pegam a doença ao todo</th></tr></thead>
-        <tbody>
-          <tr><td>1,5</td><td>67%</td><td>6%</td><td>58%</td></tr>
-          <tr><td>2</td><td>50%</td><td>15%</td><td>80%</td></tr>
-          <tr><td>3</td><td>33%</td><td>30%</td><td>94%</td></tr>
-          <tr><td>5</td><td>20%</td><td>48%</td><td>99%</td></tr>
-        </tbody>
-      </table>
-      <p>Repare em duas coisas. A epidemia não para quando acabam os suscetíveis, para antes: com $R_0=2$, um quinto da população nunca pega a doença. E o pico é bem menor que o total: os infectados não estão todos doentes <em>ao mesmo tempo</em>. É por isso que "achatar a curva" (diminuir $R_0$, mesmo pouco) faz tanta diferença para hospitais.</p>
+      <p>Repare que a epidemia não para quando acabam os suscetíveis, para antes: a partir do pico, mesmo com uma fração $1/R_0$ da população ainda suscetível, cada infectado já não consegue se substituir. Como ela ainda faz alguns casos na descida, no fim sobram menos de $1/R_0$ suscetíveis, mas sobram: parte da população nunca pega a doença.</p>
 
       <h2 id="demo" data-toc="Veja o pico">Veja o pico</h2>
       <p>As curvas de $s_t$ (azul), $i_t$ (vermelha) e $r_t$ (preta) pela equação de diferenças, começando com $0{,}1\%$ de infectados. O ponto marca o pico; as linhas pontilhadas mostram $s=1/R_0$ e o passo do pico, e elas se cruzam sobre a curva azul. Marque a caixa para comparar com o SIS de mesmos parâmetros.</p>
@@ -136,17 +110,10 @@
       <p>Para explorar:</p>
       <ol>
         <li>Em qualquer configuração com $R_0>1$, confira na leitura que, no pico, $s\approx1/R_0$.</li>
-        <li>Diminua $\mu$ e $\beta$ na mesma proporção (o $R_0$ não muda, os passos ficam "menores"): o pico fica mais tarde, com quase a mesma altura, e a fórmula fica cada vez mais precisa.</li>
+        <li>Mude $\beta$, $\langle k\rangle$ e $\mu$ mantendo $R_0$ fixo: o pico muda de lugar no tempo, mas os suscetíveis no pico continuam em $1/R_0$.</li>
         <li>Compare com o SIS: no começo as duas curvas de infectados coincidem; depois o SIS se estabiliza em $1-1/R_0$ e o SIR sobe até o pico e cai a zero.</li>
         <li>Ponha $R_0$ pouco acima de $1$: a epidemia é lenta, o pico é baixo, e ainda assim boa parte da população acaba pegando a doença.</li>
       </ol>
-
-      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
-      <p>A célula itera as três equações, acha o pico, confere que nele $s\approx1/R_0$, compara a altura com a fórmula e o tamanho final com a equação $r_\infty=1-e^{-R_0r_\infty}$, e desenha o SIS de mesmos parâmetros para comparar.</p>
-
-      <div class="pycell" data-title="O SIR em equações de diferenças"
-           data-starter="../py/sir_lacunas.py"
-           data-solution="../py/sir_solucao.py"></div>
 
       <h2 id="exercicios">Exercícios</h2>
 
@@ -163,12 +130,12 @@
 
       <aside class="box exercicio">
         <p class="tag">2. Pico e rebanho</p>
-        <p>Para uma doença com $R_0=4$: (a) que fração da população ainda é suscetível no pico? (b) Que fração precisa estar imune, antes de a doença chegar, para que ela não decole? (c) Estime a fração de infectados no pico.</p>
+        <p>Para uma doença com $R_0=4$: (a) que fração da população ainda é suscetível no pico? (b) Que fração precisa estar imune, antes de a doença chegar, para que ela não decole?</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) $1/R_0=25\%$. (b) $1-1/R_0=75\%$. (c) $1-\tfrac14-\tfrac{\ln4}{4}\approx1-0{,}25-0{,}35=0{,}40$: cerca de $40\%$ da população infectada ao mesmo tempo.</p>
+          <p>(a) $1/R_0=25\%$. (b) $1-1/R_0=75\%$.</p>
         </div>
       </details>
 
@@ -200,8 +167,7 @@
     </main>
   </div>
 
-  <script src="../assets/epi-core.js?v=abcb1b39"></script>
-  <script src="../assets/sir-demo.js?v=ce6f0b0b"></script>
-  <script src="../assets/pyrunner.js?v=54fb0c98"></script>
-</body>
+  <script src="../assets/epi-core.js?v=463fbd39"></script>
+  <script src="../assets/sir-demo.js?v=e741e623"></script>
+  </body>
 </html>
