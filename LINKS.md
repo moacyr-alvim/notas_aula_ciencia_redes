@@ -152,11 +152,10 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 **No mapa:** “O modelo SIS clássico”
 
-**Quem aponta para ela** (11):
+**Quem aponta para ela** (10):
 - `index.html`: “O modelo SIS clássico”
 - `paginas/difusao.html`: “O modelo SIS clássico”
 - `paginas/limiar-pk.html`: “O modelo SIS clássico”
-- `paginas/limiar-pk.html`: “SIS”
 - `paginas/limiar-pk.html`: “SIS clássico”
 - `paginas/molloy-reed.html`: “O modelo SIS clássico”
 - `paginas/molloy-reed.html`: “SIS clássico”
