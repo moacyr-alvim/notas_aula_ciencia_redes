@@ -60,5 +60,18 @@ check("SIR: no fim sobra uma fração positiva de suscetíveis, abaixo de 1/R0",
 check("SIR: no pico, s cruza 1/R0 (antes acima, no pico abaixo ou igual)", S1[tp - 1][0] > 0.5 && S1[tp][0] <= 0.5 + 1e-12);
 check("imunidade de rebanho: com s0 < 1/R0 a epidemia não cresce", E.serieSIR(1e-4, 0.05, 8, 0.2, 1).length && (() => { const x = [0.45, 1e-4, 0.55 - 1e-4]; const y = E.passoSIR(x, 0.05, 8, 0.2); return y[1] < x[1]; })());
 
+// ---------- distribuições de grau, Molloy–Reed e SIS por classe de grau ----------
+check("Poisson: ⟨k²⟩/⟨k⟩ = c + 1", near(E.momento(E.poisson(6, 60), 2) / E.momento(E.poisson(6, 60), 1), 7, 1e-6));
+check("ponta de link: q soma 1 e tem média ⟨k²⟩/⟨k⟩", (() => { const p = E.leiPotencia(2.5, 3, 300), q = E.pontaDeLink(p); return near(q.reduce((a, b) => a + b, 0), 1, 1e-9) && near(E.momento(q, 1), E.momento(p, 2) / E.momento(p, 1), 1e-9); })());
+check("Molloy–Reed: mistura 1 e 3 troca de sinal em a = 3/4", E.molloyReed(E.doisGraus(0.74, 1, 3)) > 0 && E.molloyReed(E.doisGraus(0.76, 1, 3)) < 0);
+const gig = (p, s) => E.maiorComponente(3000, E.configuracao(3000, p, E.rng(s)).arestas);
+check("configuração: Poisson 0,7 sem gigante, Poisson 2 com gigante ≈ 0,8", gig(E.poisson(0.7, 40), 1) < 0.05 && near(gig(E.poisson(2, 40), 2), 0.797, 0.04), gig(E.poisson(2, 40), 2).toFixed(3));
+check("configuração: regular 3 é conexa quase toda", gig(E.regularDist(3), 3) > 0.97);
+const pp = E.leiPotencia(2.5, 3, 300), kap = E.momento(pp, 2) / E.momento(pp, 1), Sg = E.serieSISgrau(pp, 1e-4, 0.02, 0.2, 200);
+check("SIS por grau: razão de Θ no começo ≈ 1 − μ + β⟨k²⟩/⟨k⟩", near(E.theta(pp, Sg[6]) / E.theta(pp, Sg[5]), 1 - 0.2 + 0.02 * kap, 0.005), (E.theta(pp, Sg[6]) / E.theta(pp, Sg[5])).toFixed(4));
+check("SIS por grau: β⟨k⟩/μ < 1 mas a epidemia se instala (≈ 0,131)", 0.02 * E.momento(pp, 1) / 0.2 < 1 && near(E.media(pp, Sg[200]), 0.131, 0.005), E.media(pp, Sg[200]).toFixed(4));
+check("SIS por grau: no começo i_k ∝ k", near(Sg[10][100] / Sg[10][10], 10, 0.4));
+check("SIS por grau: regular coincide com o clássico exato", (() => { const r = E.serieSISgrau(E.regularDist(6), 1e-3, 0.04, 0.2, 150), h = E.serie(E.passoExato, 1e-3, 0.04, 6, 0.2, 150); return near(r[150][6], h[150], 1e-12); })());
+
 console.log("\nfalhas:", fails);
 process.exit(fails ? 1 : 0);

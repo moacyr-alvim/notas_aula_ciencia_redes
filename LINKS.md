@@ -8,17 +8,19 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 ### O laplaciano em redes (`index.html`)
 
-**Quem aponta para ela** (8):
+**Quem aponta para ela** (10):
 - `paginas/componentes.html`: “← Mapa de conceitos”
 - `paginas/difusao.html`: “← Mapa de conceitos”
 - `paginas/fiedler.html`: “← Mapa de conceitos”
 - `paginas/frustracao.html`: “← Mapa de conceitos”
 - `paginas/lapsinal.html`: “← Mapa de conceitos”
+- `paginas/limiar-pk.html`: “← Mapa de conceitos”
+- `paginas/molloy-reed.html`: “← Mapa de conceitos”
 - `paginas/sinais.html`: “← Mapa de conceitos”
 - `paginas/sir.html`: “← Mapa de conceitos”
 - `paginas/sis.html`: “← Mapa de conceitos”
 
-**Aponta para:** `paginas/componentes.html`, `paginas/difusao.html`, `paginas/fiedler.html`, `paginas/frustracao.html`, `paginas/lapsinal.html`, `paginas/sinais.html`, `paginas/sir.html`, `paginas/sis.html`
+**Aponta para:** `paginas/componentes.html`, `paginas/difusao.html`, `paginas/fiedler.html`, `paginas/frustracao.html`, `paginas/lapsinal.html`, `paginas/limiar-pk.html`, `paginas/molloy-reed.html`, `paginas/sinais.html`, `paginas/sir.html`, `paginas/sis.html`
 
 **Links para fora do site:** https://moacyr-alvim.github.io/notas_aula_edp/
 
@@ -56,13 +58,14 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 **No mapa:** “Comunidades pelo vetor de Fiedler”
 
-**Quem aponta para ela** (6):
+**Quem aponta para ela** (7):
 - `index.html`: “Comunidades pelo vetor de Fiedler”
 - `paginas/componentes.html`: “Comunidades pelo vetor de Fiedler”
 - `paginas/difusao.html`: “Comunidades pelo vetor de Fiedler”
 - `paginas/frustracao.html`: “Comunidades pelo vetor de Fiedler”
 - `paginas/frustracao.html` → `#relaxar`: “bisseção espectral”
 - `paginas/lapsinal.html`: “Comunidades pelo vetor de Fiedler”
+- `paginas/molloy-reed.html`: “Comunidades pelo vetor de Fiedler”
 
 **Aponta para:** `index.html`, `paginas/componentes.html`, `paginas/difusao.html`#exercicios, `paginas/difusao.html`#modos
 
@@ -94,6 +97,31 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 **Aponta para:** `index.html`, `paginas/componentes.html`, `paginas/difusao.html`, `paginas/difusao.html`#euler, `paginas/difusao.html`#modos, `paginas/fiedler.html`, `paginas/frustracao.html`, `paginas/sinais.html`, `paginas/sinais.html`#definicao, `paginas/sinais.html`#exercicios, `paginas/sinais.html`#gama
 
+### O limiar epidêmico com $p_k$ (`paginas/limiar-pk.html`)
+
+**No mapa:** “O limiar epidêmico com pₖ”
+
+**Quem aponta para ela** (4):
+- `index.html`: “O limiar epidêmico com pk”
+- `paginas/molloy-reed.html`: “O limiar epidêmico com pk”
+- `paginas/sir.html`: “O limiar epidêmico com pk”
+- `paginas/sis.html`: “O limiar epidêmico com pk”
+
+**Aponta para:** `index.html`, `paginas/molloy-reed.html`, `paginas/sir.html`, `paginas/sis.html`
+
+### Molloy–Reed e o paradoxo da amizade (`paginas/molloy-reed.html`)
+
+**No mapa:** “Molloy–Reed e o paradoxo da amizade”
+
+**Quem aponta para ela** (5):
+- `index.html`: “Molloy–Reed e o paradoxo da amizade”
+- `paginas/limiar-pk.html`: “Molloy–Reed e o paradoxo da amizade”
+- `paginas/limiar-pk.html`: “modelo de configuração”
+- `paginas/sir.html`: “Molloy–Reed e o paradoxo da amizade”
+- `paginas/sis.html`: “Molloy–Reed e o paradoxo da amizade”
+
+**Aponta para:** `index.html`, `paginas/fiedler.html`, `paginas/limiar-pk.html`, `paginas/sis.html`
+
 ### Redes com sinais e equilíbrio (`paginas/sinais.html`)
 
 **No mapa:** “Redes com sinais e equilíbrio”
@@ -112,25 +140,32 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 **No mapa:** “O modelo SIR”
 
-**Quem aponta para ela** (2):
+**Quem aponta para ela** (4):
 - `index.html`: “O modelo SIR”
+- `paginas/limiar-pk.html`: “O modelo SIR”
+- `paginas/limiar-pk.html`: “SIR”
 - `paginas/sis.html`: “O modelo SIR”
 
-**Aponta para:** `index.html`, `paginas/sis.html`, `paginas/sis.html`#comeco, `paginas/sis.html`#rede
+**Aponta para:** `index.html`, `paginas/limiar-pk.html`, `paginas/molloy-reed.html`, `paginas/sis.html`, `paginas/sis.html`#comeco, `paginas/sis.html`#rede
 
 ### O modelo SIS clássico (`paginas/sis.html`)
 
 **No mapa:** “O modelo SIS clássico”
 
-**Quem aponta para ela** (6):
+**Quem aponta para ela** (11):
 - `index.html`: “O modelo SIS clássico”
 - `paginas/difusao.html`: “O modelo SIS clássico”
+- `paginas/limiar-pk.html`: “O modelo SIS clássico”
+- `paginas/limiar-pk.html`: “SIS”
+- `paginas/limiar-pk.html`: “SIS clássico”
+- `paginas/molloy-reed.html`: “O modelo SIS clássico”
+- `paginas/molloy-reed.html`: “SIS clássico”
 - `paginas/sir.html`: “O modelo SIS clássico”
 - `paginas/sir.html`: “SIS”
 - `paginas/sir.html` → `#comeco`: “progressão geométrica”
 - `paginas/sir.html` → `#rede`: “rede escondida”
 
-**Aponta para:** `index.html`, `paginas/sir.html`
+**Aponta para:** `index.html`, `paginas/limiar-pk.html`, `paginas/molloy-reed.html`, `paginas/sir.html`
 
 ## Setas do mapa de conceitos
 
@@ -147,9 +182,10 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 | Passeio aleatório e L normalizado (em breve) | PageRank e redes dirigidas (em breve) |
 | Passeio aleatório e L normalizado (em breve) | Circuitos e resistência efetiva (em breve) |
 | O modelo SIS clássico (`paginas/sis.html`) | O modelo SIR (`paginas/sir.html`) |
-| O modelo SIS clássico (`paginas/sis.html`) | Graus heterogêneos: ⟨k²⟩/⟨k⟩ (em breve) |
-| Graus heterogêneos: ⟨k²⟩/⟨k⟩ (em breve) | O limiar e o maior autovalor de A (em breve) |
-| Graus heterogêneos: ⟨k²⟩/⟨k⟩ (em breve) | Imunizar quem? (em breve) |
+| O modelo SIS clássico (`paginas/sis.html`) | O limiar epidêmico com pₖ (`paginas/limiar-pk.html`) |
+| Molloy–Reed e o paradoxo da amizade (`paginas/molloy-reed.html`) | O limiar epidêmico com pₖ (`paginas/limiar-pk.html`) |
+| O limiar epidêmico com pₖ (`paginas/limiar-pk.html`) | O limiar e o maior autovalor de A (em breve) |
+| O limiar epidêmico com pₖ (`paginas/limiar-pk.html`) | Imunizar quem? (em breve) |
 | Redes com sinais e equilíbrio (`paginas/sinais.html`) | Laplaciano com sinais (`paginas/lapsinal.html`) |
 | Laplaciano, componentes e gargalos (`paginas/componentes.html`) | Laplaciano com sinais (`paginas/lapsinal.html`) |
 | Laplaciano com sinais (`paginas/lapsinal.html`) | Frustração espectral (`paginas/frustracao.html`) |

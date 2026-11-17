@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O limiar epidêmico com p_k — O laplaciano em redes</title>
+  <link rel="stylesheet" href="../assets/style.css?v=55ab22b5">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js?v=d64d5c9e"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <style>
+    #demo-lim canvas { height: 320px; }
+    .tabela { border-collapse: collapse; margin: 1rem auto; font-family: var(--sans); font-size: .92rem; }
+    .tabela th, .tabela td { border-bottom: 1px solid var(--rule); padding: .35rem .8rem; text-align: center; }
+    .tabela th { color: var(--ink-soft); font-weight: 600; }
+    .tabela td:first-child { text-align: left; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O limiar epidêmico com $p_k$</h1>
+        <p class="lede">Quando as pessoas têm números de contatos muito diferentes, o SIS clássico erra o limiar. Separando a população por grau, a mesma conta de progressão geométrica dá $R_0=\beta\langle k^2\rangle/(\mu\langle k\rangle)$: no lugar do grau médio entra o grau médio de quem está na ponta de um link, como no critério de Molloy–Reed. Em redes com hubs, $\langle k^2\rangle$ é enorme e o limiar quase desaparece.</p>
+        <p class="meta">Trilha <em>Epidemias em redes</em>. Usa <a href="sis.html">O modelo SIS clássico</a> e <a href="molloy-reed.html">Molloy–Reed e o paradoxo da amizade</a>. Só equações de diferenças.</p>
+      </header>
+
+      <h2 id="classes" data-toc="Uma equação por grau">Uma equação para cada grau</h2>
+      <p>A distribuição dos graus $p_k$ diz que fração das pessoas tem $k$ contatos. Em vez de uma única fração de infectados, acompanhamos uma para cada grau:
+      $$i_{k,t}=\text{fração infectada, no passo }t,\text{ entre as pessoas de grau }k.$$
+      A fração infectada da população inteira é a média $i_t=\sum_k p_k\,i_{k,t}$.</p>
+      <p>Como no <a href="sis.html">SIS clássico</a>, os contatos são sorteados ao acaso, só que agora respeitando os graus: é a rede do <a href="molloy-reed.html">modelo de configuração</a>. Um contato de alguém é a ponta de um link, e na ponta de um link está uma pessoa de grau $k$ com probabilidade $q_k=k\,p_k/\langle k\rangle$. Então a chance de um contato estar infectado é
+      $$\boxed{\,\Theta_t=\sum_k q_k\,i_{k,t}=\frac{1}{\langle k\rangle}\sum_k k\,p_k\,i_{k,t}.\,}$$
+      $\Theta_t$ é a média de $i_{k,t}$ com peso $k$: quem tem muitos contatos pesa mais, porque aparece como contato de muita gente. Repare que $\Theta_t$ não é $i_t$.</p>
+      <p>Uma pessoa suscetível de grau $k$ encontra em média $k\,\Theta_t$ infectados, e cada um transmite com probabilidade $\beta$. Repetindo o raciocínio do SIS clássico, grau por grau:
+      $$\boxed{\,i_{k,t+1}=i_{k,t}+\beta\,k\,\Theta_t\,(1-i_{k,t})-\mu\,i_{k,t},\qquad k=1,2,3,\dots\,}$$
+      São várias equações de diferenças acopladas, todas pelo mesmo número $\Theta_t$. Dado o começo, é só iterar.</p>
+
+      <details>
+        <summary>A conta sem a aproximação (usada na demo)</summary>
+        <div class="body">
+          <p>Como no SIS clássico, a forma sem contar duas vezes é
+          $$i_{k,t+1}=(1-\mu)\,i_{k,t}+(1-i_{k,t})\Big(1-(1-\beta\,\Theta_t)^{k}\Big).$$
+          Aqui ela faz mais diferença: um hub com $k=300$ e $\beta\Theta_t=0{,}01$ teria "$\beta k\Theta_t=3$" contágios esperados, e a forma aproximada daria uma chance de se infectar maior que $1$. A forma exata dá $1-0{,}99^{300}\approx0{,}95$. No começo, quando $\Theta_t$ é pequeno, as duas coincidem, e o limiar é o mesmo.</p>
+        </div>
+      </details>
+
+      <h2 id="comeco" data-toc="O começo">O começo: outra progressão geométrica</h2>
+      <p>No começo, quase todos são suscetíveis: $1-i_{k,t}\approx1$, e
+      $$i_{k,t+1}\approx(1-\mu)\,i_{k,t}+\beta\,k\,\Theta_t.$$
+      Para ver o que acontece com $\Theta$, multiplique por $k\,p_k/\langle k\rangle$ e some em $k$. O primeiro termo vira $(1-\mu)\,\Theta_t$; o segundo vira $\beta\,\Theta_t\sum_k k^2p_k/\langle k\rangle$:
+      $$\Theta_{t+1}\approx\Big(1-\mu+\beta\,\frac{\langle k^2\rangle}{\langle k\rangle}\Big)\,\Theta_t.$$
+      Uma progressão geométrica, com razão
+      $$r=1-\mu+\beta\,\frac{\langle k^2\rangle}{\langle k\rangle}.$$
+      É a razão do SIS clássico, $1-\mu+\beta\langle k\rangle$, com $\langle k\rangle$ trocado por $\langle k^2\rangle/\langle k\rangle$.</p>
+
+      <aside class="box">
+        <p class="tag">O limiar epidêmico numa rede com graus $p_k$</p>
+        <p>$$R_0=\frac{\beta}{\mu}\,\frac{\langle k^2\rangle}{\langle k\rangle},\qquad r-1=\mu\,(R_0-1),\qquad\text{a epidemia se instala}\iff\frac{\beta}{\mu}>\frac{\langle k\rangle}{\langle k^2\rangle}.$$</p>
+      </aside>
+      <p>A relação $r-1=\mu(R_0-1)$ é a mesma do SIS clássico, e pelo mesmo motivo. A leitura de $R_0$ também é a mesma, com uma correção: um infectado típico <b>não é uma pessoa típica</b>. Ele pegou a doença de um contato, isto é, foi alcançado por um link, e por isso o grau dele segue $q_k$, não $p_k$. Seu número médio de contatos é $\langle k^2\rangle/\langle k\rangle$, o grau médio na ponta de um link. Cada um desses contatos é contagiado com probabilidade $\beta$ por passo, durante $1/\mu$ passos em média. É o paradoxo da amizade trabalhando para a doença.</p>
+      <p>Como $\langle k^2\rangle/\langle k\rangle=\langle k\rangle+\operatorname{Var}(k)/\langle k\rangle$, o $R_0$ com graus é sempre pelo menos o do SIS clássico, e a diferença cresce com a desigualdade dos graus. Na rede regular, onde todos têm o mesmo grau, os dois coincidem.</p>
+
+      <h2 id="hubs" data-toc="Os hubs primeiro">Quem pega primeiro: os hubs</h2>
+      <p>Na equação linearizada, cada grau recebe casos novos na proporção $\beta k\Theta_t$. Depois de alguns passos, quando $\Theta_t$ já cresce como $r^t$, a fração infectada em cada classe fica <b>proporcional ao grau</b>:
+      $$i_{k,t}\approx\frac{\beta\,\Theta_t}{r-1+\mu}\;k\qquad\text{(exercício 4)}.$$
+      Uma pessoa com $100$ contatos tem, no começo, uma chance $10$ vezes maior de estar infectada que uma com $10$. A epidemia passa primeiro pelos hubs, e é a partir deles que se espalha. No equilíbrio a ordem continua, embora menos extrema: fazendo $i_{k,t+1}=i_{k,t}$ na equação, $i_k^*=\beta k\Theta^*/(\mu+\beta k\Theta^*)$, que cresce com $k$ e se aproxima de $1$ para os graus mais altos.</p>
+
+      <h2 id="livre" data-toc="Redes livres de escala">Redes com hubs: o limiar que some</h2>
+      <p>Em muitas redes reais de contato a distribuição dos graus tem cauda pesada, perto de uma lei de potência $p_k\propto k^{-\gamma}$ com $2&lt;\gamma\le3$. Aí o grau médio é moderado, mas $\langle k^2\rangle$ é dominado pelos maiores graus, e o maior grau cresce com o tamanho da rede (tipicamente $k_{\max}\approx k_{\min}\,n^{1/(\gamma-1)}$). Quanto maior a rede, maior $\langle k^2\rangle/\langle k\rangle$ e <b>menor o limiar</b>. Com $\gamma=2{,}5$ e $k_{\min}=3$:</p>
+      <table class="tabela">
+        <thead><tr><th>rede</th><th>$\langle k\rangle$</th><th>$\langle k^2\rangle/\langle k\rangle$</th><th>limiar: $\beta/\mu$ precisa passar de</th></tr></thead>
+        <tbody>
+          <tr><td>regular, grau $6$</td><td>6</td><td>6</td><td>0,167</td></tr>
+          <tr><td>Poisson, média $6$</td><td>6</td><td>7</td><td>0,143</td></tr>
+          <tr><td>lei de potência, $n=10^3$ ($k_{\max}=300$)</td><td>6,95</td><td>27,6</td><td>0,036</td></tr>
+          <tr><td>lei de potência, $n=10^5$ ($k_{\max}\approx6\,500$)</td><td>7,49</td><td>128</td><td>0,0078</td></tr>
+          <tr><td>lei de potência, $n=10^7$ ($k_{\max}\approx140\,000$)</td><td>7,61</td><td>593</td><td>0,0017</td></tr>
+        </tbody>
+      </table>
+      <p>O grau médio quase não muda, e o limiar cai para perto de zero. Numa rede muito grande com $\gamma\le3$, praticamente qualquer doença transmissível se instala (Pastor-Satorras e Vespignani, 2001). Isso também muda a estratégia de vacinação: vacinar ao acaso uma fração $v$ das pessoas multiplica $R_0$ por $1-v$, o que adianta pouco quando $R_0$ é enorme (exercício 6); vacinar os hubs derruba $\langle k^2\rangle$ diretamente. Quando não se sabe quem são os hubs, o paradoxo da amizade ajuda: vacinar um contato de uma pessoa sorteada atinge, em média, gente de grau $\langle k^2\rangle/\langle k\rangle$.</p>
+
+      <h2 id="demo" data-toc="Experimente">Experimente</h2>
+      <p>A demo itera as equações por classe de grau (forma exata), começando com $0{,}1\%$ de infectados em todas as classes, e compara com o SIS clássico de mesmo grau médio, que não olha a distribuição (azul tracejado). À esquerda, a fração infectada ao longo do tempo; à direita, a fração infectada $i_k$ em cada classe de grau, no passo escolhido. As três famílias têm grau médio entre $6$ e $7$; a lei de potência vai de $k=3$ a $k=300$.</p>
+
+      <div class="demo" id="demo-lim">
+        <div class="controls">
+          <label>graus <select id="l-fam" aria-label="Distribuição dos graus">
+            <option value="potencia">lei de potência, 3 ≤ k ≤ 300</option>
+            <option value="poisson">Poisson, média 6</option>
+            <option value="regular">regular, grau 6</option>
+          </select></label>
+          <label>γ <input type="range" id="l-gama" min="2.1" max="4" step="0.05" value="2.5" aria-label="Expoente da lei de potência"> <output id="l-gamav">2,50</output></label>
+          <label><input type="checkbox" id="l-log"> escala log</label>
+        </div>
+        <div class="controls">
+          <label>β <input type="range" id="l-beta" min="0.002" max="0.08" step="0.002" value="0.02" aria-label="Probabilidade de transmissão por contato"> <output id="l-betav">0,020</output></label>
+          <label>μ <input type="range" id="l-mu" min="0.05" max="0.5" step="0.01" value="0.2" aria-label="Probabilidade de cura por passo"> <output id="l-muv">0,20</output></label>
+          <label>passo t <input type="range" id="l-t" min="0" max="150" step="1" value="10" aria-label="Passo de tempo mostrado à direita"> <output id="l-tv">10</output></label>
+        </div>
+        <div class="panels two">
+          <canvas id="l-curva-canvas" role="img" aria-label="Fração infectada ao longo do tempo, com e sem a distribuição dos graus"></canvas>
+          <canvas id="l-k-canvas" role="img" aria-label="Fração infectada em cada classe de grau no passo escolhido"></canvas>
+        </div>
+        <div class="readout" id="l-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--choque)"></i>SIS por classe de grau</span>
+          <span><i style="border-color:var(--carac);border-top-style:dashed"></i>SIS clássico com o mesmo ⟨k⟩</span>
+        </div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li><b>Abaixo do limiar clássico.</b> Na configuração inicial, $\beta\langle k\rangle/\mu\approx0{,}7$: o SIS clássico prevê que a doença some. Com os graus, $R_0\approx2{,}8$, e a doença se instala em cerca de $13\%$ da população.</li>
+        <li><b>Os hubs primeiro.</b> Com o passo $t$ em torno de $10$, os pontos da direita sobem quase em linha reta com $k$ (numa escala log em $k$ isso aparece como uma curva que acelera). Avance o passo: os hubs chegam perto de $80\%$ de infectados enquanto quem tem grau $3$ fica abaixo de $10\%$.</li>
+        <li><b>O expoente.</b> Aumente $\gamma$: a cauda encurta, $\langle k^2\rangle/\langle k\rangle$ cai, e a epidemia some. Diminua: o limiar despenca.</li>
+        <li><b>Sem desigualdade.</b> Na rede regular, as duas curvas coincidem. Na de Poisson, a diferença é pequena: $\langle k^2\rangle/\langle k\rangle=7$ contra $\langle k\rangle=6$.</li>
+      </ol>
+
+      <h2 id="sir" data-toc="E no SIR?">E no SIR? A mesma coisa</h2>
+      <p>No <a href="sir.html">SIR</a> a conta é a mesma, com dois ajustes pequenos. Primeiro, um infectado transmite por cada link <b>no máximo uma vez</b>, porque quem já pegou não pega de novo. A chance de um link transmitir antes de o infectado se curar é a <b>transmissibilidade</b>
+      $$T=\sum_{t\ge0}\big[(1-\beta)(1-\mu)\big]^t\beta=\frac{\beta}{\beta+\mu-\beta\mu}.$$
+      Segundo, numa rede fixa, um dos $k$ links de quem acabou de se infectar leva a quem o infectou, que não pode ser contagiado de novo: sobram $k-1$. Com grau seguindo $q_k$, a média de saídas novas é $\langle k^2\rangle/\langle k\rangle-1$, exatamente a razão $m$ da exploração da página <a href="molloy-reed.html">Molloy–Reed e o paradoxo da amizade</a>. Então
+      $$R_0^{\text{SIR}}=T\,\Big(\frac{\langle k^2\rangle}{\langle k\rangle}-1\Big)>1.$$
+      É o critério de Molloy–Reed aplicado à rede em que cada link é mantido com probabilidade $T$: os links que transmitiriam. A epidemia vira um pedaço conexo gigante dessa rede. A mensagem é a mesma do SIS: <b>quem manda é $\langle k^2\rangle/\langle k\rangle$</b>, e com $\gamma\le3$ o limiar some.</p>
+      <p>E por que o SIS daqui não tem o "$-1$"? Porque as equações por classe de grau tratam os contatos como sorteados de novo a cada passo (como a "mistura" da demo do <a href="sis.html">SIS</a>), e então quem infectou não está sistematicamente entre os contatos de amanhã. Além disso, no SIS, quem infectou pode se curar e ser reinfectado. Quando $\langle k^2\rangle/\langle k\rangle$ é grande, a diferença entre ele e ele menos $1$ é pequena.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>A célula itera o SIS por classe de grau com a lei de potência da demo, mede a razão de $\Theta$ no começo e compara com $1-\mu+\beta\langle k^2\rangle/\langle k\rangle$, confere que no começo $i_k$ é proporcional a $k$ e, por fim, simula $4000$ pessoas numa rede fixa sorteada com esses graus. Na versão para completar, $\Theta$ está calculado com o peso errado ($p_k$ em vez de $k\,p_k/\langle k\rangle$): a equação prevê que a doença some, e a simulação mostra que não.</p>
+
+      <div class="pycell" data-title="O SIS por classe de grau"
+           data-starter="../py/limiar_lacunas.py"
+           data-solution="../py/limiar_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Poisson</p>
+        <p>Numa rede com graus de Poisson de média $6$ e $\mu=0{,}2$, qual o menor $\beta$ para a doença se instalar? Compare com a previsão do SIS clássico.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\langle k^2\rangle/\langle k\rangle=c+1=7$. Precisa $\beta>\mu/7\approx0{,}0286$; o clássico diria $\beta>\mu/6\approx0{,}0333$. Uma diferença de cerca de $15\%$: com graus de Poisson, a desigualdade é modesta.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Duas turmas</p>
+        <p>Metade das pessoas tem $2$ contatos e metade tem $18$. (a) Calcule $\langle k\rangle$ e $\langle k^2\rangle/\langle k\rangle$. (b) Com $\mu=0{,}2$, compare o $\beta$ mínimo com o de uma rede regular de grau $10$. (c) Que fração dos links tem uma ponta numa pessoa de grau $18$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\langle k\rangle=10$; $\langle k^2\rangle=(4+324)/2=164$; $\langle k^2\rangle/\langle k\rangle=16{,}4$. (b) $\beta>0{,}2/16{,}4\approx0{,}0122$, contra $\beta>0{,}02$ na regular: o mesmo grau médio, um limiar $40\%$ menor. (c) $q_{18}=18\cdot\frac12/10=0{,}9$: $90\%$ das pontas de link estão no grupo de grau alto, embora ele seja só metade das pessoas.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. A equação de $\Theta$</p>
+        <p>Partindo de $i_{k,t+1}\approx(1-\mu)\,i_{k,t}+\beta k\Theta_t$, faça a conta que leva a $\Theta_{t+1}\approx\big(1-\mu+\beta\langle k^2\rangle/\langle k\rangle\big)\Theta_t$. Por que não dá para fazer o mesmo com $i_t=\sum_kp_k\,i_{k,t}$ e obter uma progressão geométrica só em $i_t$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\Theta_{t+1}=\frac1{\langle k\rangle}\sum_k kp_k\,i_{k,t+1}\approx(1-\mu)\frac1{\langle k\rangle}\sum_kkp_k\,i_{k,t}+\beta\Theta_t\frac1{\langle k\rangle}\sum_kk^2p_k=(1-\mu)\Theta_t+\beta\frac{\langle k^2\rangle}{\langle k\rangle}\Theta_t$. Com $i_t$: $i_{t+1}\approx(1-\mu)i_t+\beta\langle k\rangle\Theta_t$, e $\Theta_t$ não é um múltiplo fixo de $i_t$ (depende de como os infectados estão distribuídos entre os graus). A soma com peso $k$ fecha a conta porque é justamente esse peso que aparece no contágio. Depois de alguns passos, $i_t$ também cresce com a razão $r$, porque o perfil $i_{k,t}\propto k$ se estabiliza.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Os hubs primeiro</p>
+        <p>Suponha que $\Theta_t=\Theta_0\,r^t$. Mostre que $i_{k,t}=c\,k\,r^t$ satisfaz $i_{k,t+1}=(1-\mu)\,i_{k,t}+\beta k\Theta_t$ se $c=\beta\Theta_0/(r-1+\mu)$. Confira que, com esse perfil, $\sum_k q_k\,i_{k,t}$ dá de fato $\Theta_t$ quando $r=1-\mu+\beta\langle k^2\rangle/\langle k\rangle$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Substituindo: $ckr^{t+1}=(1-\mu)ckr^t+\beta k\Theta_0r^t$; dividindo por $kr^t$, $cr=(1-\mu)c+\beta\Theta_0$, isto é, $c=\beta\Theta_0/(r-1+\mu)$. Agora $\sum_kq_ki_{k,t}=cr^t\sum_k kq_k=cr^t\langle k^2\rangle/\langle k\rangle$, que é $\Theta_0r^t$ exatamente quando $c\,\langle k^2\rangle/\langle k\rangle=\Theta_0$, ou seja, $\beta\langle k^2\rangle/\langle k\rangle=r-1+\mu$. É a razão da página: o perfil proporcional a $k$ é consistente.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. SIR numa rede</p>
+        <p>Com $\beta=0{,}05$ e $\mu=0{,}2$, numa rede com graus de Poisson de média $6$: calcule a transmissibilidade $T$ e o $R_0$ do SIR. Compare com $\beta\langle k^2\rangle/(\mu\langle k\rangle)$ e explique a diferença.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$T=0{,}05/(0{,}05+0{,}2-0{,}01)\approx0{,}208$; $\langle k^2\rangle/\langle k\rangle-1=6$; $R_0^{\text{SIR}}=6T\approx1{,}25$. A fórmula por classe de grau daria $0{,}05\cdot7/0{,}2=1{,}75$. Duas coisas a reduzem: um link transmite no máximo uma vez ($T\approx0{,}21$, contra $\beta/\mu=0{,}25$ contágios esperados por link), e o link de volta para quem infectou não serve ($6$ saídas em vez de $7$). Os dois concordam sobre o que importa: o limiar depende de $\langle k^2\rangle/\langle k\rangle$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Vacinar ao acaso</p>
+        <p>Vacina-se ao acaso uma fração $v$ da população, que fica imune. (a) Mostre que, no começo, a razão passa a ser $1-\mu+(1-v)\beta\langle k^2\rangle/\langle k\rangle$, isto é, $R_0$ vira $(1-v)R_0$. (b) Que fração é preciso vacinar na rede da demo ($R_0\approx2{,}8$)? E na lei de potência com $n=10^7$ da tabela, com os mesmos $\beta=0{,}02$ e $\mu=0{,}2$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Os casos novos entre os de grau $k$ são $\beta k\Theta_t$ vezes a fração suscetível, que agora é no máximo $1-v$ em cada classe; no começo, exatamente $1-v$. A conta de $\Theta$ ganha o fator $1-v$ no segundo termo. (b) Precisa $(1-v)R_0&lt;1$, isto é, $v>1-1/R_0$. Com $R_0\approx2{,}76$: $v>64\%$. Com $n=10^7$: $R_0=0{,}02\cdot593/0{,}2\approx59$, e $v>98\%$. Vacinar ao acaso numa rede com hubs exige vacinar quase todos; por isso se procura vacinar os hubs.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="sis.html">O modelo SIS clássico</a></li>
+            <li><a href="molloy-reed.html">Molloy–Reed e o paradoxo da amizade</a></li>
+            <li><a href="sir.html">O modelo SIR</a>, para a seção sobre o SIR</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li>Imunizar quem? <span class="soon">(em breve)</span></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/epi-core.js?v=944095d2"></script>
+  <script src="../assets/limiar-demo.js?v=7adcb78e"></script>
+  <script src="../assets/pyrunner.js?v=54fb0c98"></script>
+</body>
+</html>

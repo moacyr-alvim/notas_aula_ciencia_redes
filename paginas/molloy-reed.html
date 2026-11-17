@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Molloy–Reed e o paradoxo da amizade — O laplaciano em redes</title>
+  <link rel="stylesheet" href="../assets/style.css?v=55ab22b5">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js?v=d64d5c9e"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <style>
+    #demo-mr canvas { height: 300px; }
+    .tabela { border-collapse: collapse; margin: 1rem auto; font-family: var(--sans); font-size: .92rem; }
+    .tabela th, .tabela td { border-bottom: 1px solid var(--rule); padding: .35rem .8rem; text-align: center; }
+    .tabela th { color: var(--ink-soft); font-weight: 600; }
+    .tabela td:first-child { text-align: left; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Molloy–Reed e o paradoxo da amizade</h1>
+        <p class="lede">Numa rede sorteada só a partir da distribuição dos graus, quem está na ponta de um link tem, em média, mais vizinhos que um vértice qualquer: $\langle k^2\rangle/\langle k\rangle$ em vez de $\langle k\rangle$. Daí sai, numa linha, o critério de Molloy–Reed para a rede ter um pedaço conexo gigante: $\langle k^2\rangle/\langle k\rangle>2$. É a mesma conta que vai dar o limiar de uma epidemia.</p>
+        <p class="meta">Página da raia <em>Redes aleatórias</em>, preparação para <a href="limiar-pk.html">O limiar epidêmico com p<sub>k</sub></a>. Só usa médias e progressões geométricas.</p>
+      </header>
+
+      <h2 id="graus" data-toc="Redes com graus dados">Redes sorteadas com graus dados</h2>
+      <p>A <b>distribuição dos graus</b> $p_k$ é a fração de vértices com exatamente $k$ vizinhos: $p_0+p_1+p_2+\dots=1$. Dela saem as médias que vamos usar, chamadas <b>momentos</b>:
+      $$\langle k\rangle=\sum_k k\,p_k\quad\text{(grau médio)},\qquad \langle k^2\rangle=\sum_k k^2\,p_k\quad\text{(segundo momento)}.$$
+      Lembre que a variância dos graus é $\operatorname{Var}(k)=\langle k^2\rangle-\langle k\rangle^2\ge0$: o segundo momento é grande quando os graus são muito desiguais.</p>
+      <p>Muitas redes diferentes têm a mesma $p_k$. Para falar da "rede típica com essa distribuição", sorteamos uma pelo <b>modelo de configuração</b>:</p>
+      <ol>
+        <li>sorteie o grau $k_i$ de cada vértice $i$ com as probabilidades $p_k$;</li>
+        <li>dê ao vértice $i$ exatamente $k_i$ <b>meios-links</b> (pontas soltas);</li>
+        <li>junte as pontas soltas em pares ao acaso; cada par vira um link.</li>
+      </ol>
+      <p>Saem alguns links de um vértice para ele mesmo e alguns links repetidos; numa rede grande eles são poucos, e a gente os descarta. O que importa é o passo 3: <b>quem fica ligado a quem é decidido ao acaso</b>, sem bairros, sem panelinhas. É a mesma ideia da rede escondida no <a href="sis.html">SIS clássico</a>, agora com graus que podem ser bem diferentes de pessoa para pessoa.</p>
+
+      <h2 id="ponta" data-toc="A ponta de um link">O que há na ponta de um link</h2>
+      <p>Sorteie um <b>vértice</b> ao acaso: o grau dele é $k$ com probabilidade $p_k$. Agora sorteie um <b>link</b> ao acaso e olhe para uma das pontas. Qual o grau do vértice que está lá?</p>
+      <p>Não é $p_k$. Um vértice de grau $k$ é ponta de $k$ links, então aparece na ponta de um link sorteado $k$ vezes mais do que um vértice de grau $1$. A probabilidade fica proporcional a $k\,p_k$, e dividindo pelo total $\sum_k k\,p_k=\langle k\rangle$:
+      $$\boxed{\,q_k=\frac{k\,p_k}{\langle k\rangle}\,}\qquad\text{(grau de quem está na ponta de um link).}$$
+      Vértices de grau $0$ nunca são alcançados ($q_0=0$); vértices de grau alto são super-representados. O grau médio na ponta de um link é
+      $$\sum_k k\,q_k=\frac{\sum_k k^2p_k}{\langle k\rangle}=\frac{\langle k^2\rangle}{\langle k\rangle}.$$</p>
+
+      <aside class="box atencao">
+        <p class="tag">O paradoxo da amizade</p>
+        <p>Como $\langle k^2\rangle=\langle k\rangle^2+\operatorname{Var}(k)$,
+        $$\frac{\langle k^2\rangle}{\langle k\rangle}=\langle k\rangle+\frac{\operatorname{Var}(k)}{\langle k\rangle}\ \ge\ \langle k\rangle.$$
+        <b>Seus amigos têm, em média, mais amigos que você</b>, e a diferença é tanto maior quanto mais desiguais forem os graus. Não é azar nem autoestima baixa: quem tem muitos amigos aparece na lista de amigos de muita gente. Só há empate quando todos têm o mesmo grau.</p>
+        <p>No clube de caratê de Zachary (a rede da página <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>), o grau médio de um membro é $4{,}59$, e o grau médio de quem está na ponta de um link é $7{,}77$. Essa conta vale para qualquer rede, sorteada ou não: sortear um link e olhar a ponta é sempre amostrar com peso $k$.</p>
+      </aside>
+
+      <h2 id="explorar" data-toc="Explorando a rede">Explorando a rede a partir de um vértice</h2>
+      <p>Comece num vértice e vá descobrindo a rede em camadas: primeiro os vizinhos dele, depois os vizinhos dos vizinhos, e assim por diante. Chegamos a cada vértice novo <b>por um link</b>, então o grau dele segue $q_k$, não $p_k$. Desse grau, um link é o que usamos para chegar; sobram $k-1$ <b>saídas novas</b>. Em média:
+      $$m=\sum_k (k-1)\,q_k=\frac{\langle k^2\rangle}{\langle k\rangle}-1=\frac{\langle k^2\rangle-\langle k\rangle}{\langle k\rangle}.$$
+      Enquanto a parte explorada é pequena perto da rede, as pontas soltas se juntam a vértices ainda não vistos (num sorteio ao acaso, voltar para um vértice já visto é raro). Então cada camada tem, em média, $m$ vezes mais vértices que a anterior:
+      $$\text{camada }1:\ \langle k\rangle,\qquad \text{camada }2:\ \langle k\rangle\,m,\qquad \text{camada }3:\ \langle k\rangle\,m^2,\qquad\dots$$
+      Mais uma <b>progressão geométrica</b>, agora de razão $m$. Se $m&lt;1$, as camadas encolhem e a exploração para logo: o pedaço conexo de cada vértice é pequeno, de tamanho médio finito. Se $m>1$, as camadas crescem até a exploração alcançar uma fração da rede inteira: existe um <b>pedaço conexo gigante</b>, com uma fração positiva dos vértices.</p>
+
+      <aside class="box teorema">
+        <p class="tag">Critério de Molloy–Reed (1995)</p>
+        <p>Numa rede grande sorteada pelo modelo de configuração com graus $p_k$, há um pedaço conexo gigante se, e só se,
+        $$\frac{\langle k^2\rangle}{\langle k\rangle}>2,\qquad\text{ou, equivalentemente,}\qquad \sum_k k\,(k-2)\,p_k>0.$$</p>
+      </aside>
+      <p>As duas formas são a mesma: $m>1\iff\langle k^2\rangle>2\langle k\rangle\iff\langle k^2\rangle-2\langle k\rangle>0$, e $\langle k^2\rangle-2\langle k\rangle=\sum_k(k^2-2k)p_k$. A segunda forma tem uma leitura direta: vértices de grau $1$ são becos sem saída e puxam a soma para baixo; vértices de grau $2$ só passam adiante e não contam; vértices de grau $3$ ou mais ramificam e puxam para cima, com peso $k(k-2)$ que cresce rápido com $k$.</p>
+
+      <h2 id="exemplos" data-toc="Exemplos">Exemplos</h2>
+      <ul>
+        <li><b>Graus de Poisson</b> (é a rede de Erdős–Rényi): $p_k=e^{-c}c^k/k!$, com $\langle k\rangle=c$ e $\operatorname{Var}(k)=c$, logo $\langle k^2\rangle/\langle k\rangle=c+1$. O critério dá $c>1$: o famoso limiar de Erdős–Rényi, <b>grau médio maior que $1$</b>.</li>
+        <li><b>Rede regular</b>, todos com grau $k$: $\langle k^2\rangle/\langle k\rangle=k>2$. Com $k=1$ só há pares soltos; com $k\ge3$, a rede é praticamente toda um pedaço só. O caso $k=2$ é a fronteira exata, onde a regra não decide: a rede é uma coleção de ciclos, cada exploração anda em fila sem ramificar, e o tamanho do maior ciclo varia muito de sorteio para sorteio.</li>
+        <li><b>Mistura de graus $1$ e $3$</b>: uma fração $a$ dos vértices tem grau $1$ e o resto tem grau $3$. $\sum k(k-2)p_k=1\cdot(-1)\,a+3\cdot1\,(1-a)=3-4a$, positivo se $a&lt;3/4$. Até três quartos de becos sem saída, a rede ainda se mantém conectada em grande escala.</li>
+        <li><b>Lei de potência</b>, $p_k\propto k^{-\gamma}$ para $k\ge1$: com $\gamma\le3$, o segundo momento $\langle k^2\rangle$ cresce sem limite quando a rede cresce (os hubs dominam a soma), e o critério é sempre satisfeito numa rede grande. Para $\gamma$ maior, o critério só vale até $\gamma\approx3{,}48$ (na demo, com o grau limitado a $1000$, até $3{,}45$): graus que caem rápido demais deixam a rede em pedaços.</li>
+      </ul>
+
+      <h2 id="demo" data-toc="Experimente">Experimente</h2>
+      <p>Escolha uma família de distribuições e mova o parâmetro. À esquerda, as barras azuis são $p_k$ (o grau de um vértice sorteado) e as vermelhas são $q_k$ (o grau de quem está na ponta de um link); as linhas tracejadas marcam as médias $\langle k\rangle$ e $\langle k^2\rangle/\langle k\rangle$. À direita, cada ponto é uma rede de $3000$ vértices sorteada pelo modelo de configuração, com a fração dos vértices que está no maior pedaço conexo; a linha tracejada vertical é o limiar de Molloy–Reed, e o ponto vermelho é o valor atual do parâmetro.</p>
+
+      <div class="demo" id="demo-mr">
+        <div class="controls">
+          <label>graus <select id="m-fam" aria-label="Família de distribuições de grau">
+            <option value="poisson">Poisson (Erdős–Rényi)</option>
+            <option value="regular">regular</option>
+            <option value="mistura">mistura de graus 1 e 3</option>
+            <option value="potencia">lei de potência, k ≥ 1</option>
+          </select></label>
+          <button id="m-nova" type="button">Sortear de novo</button>
+        </div>
+        <div class="controls">
+          <label><span id="m-parl">⟨k⟩</span> <input type="range" id="m-par" min="0.2" max="4" step="0.05" value="1.5" aria-label="Parâmetro da distribuição"> <output id="m-parv">1,50</output></label>
+        </div>
+        <div class="panels two">
+          <canvas id="m-dist-canvas" role="img" aria-label="Distribuição dos graus de um vértice e de quem está na ponta de um link"></canvas>
+          <canvas id="m-gig-canvas" role="img" aria-label="Fração dos vértices no maior pedaço conexo em função do parâmetro"></canvas>
+        </div>
+        <div class="readout" id="m-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>p<sub>k</sub>: vértice sorteado</span>
+          <span><i style="border-color:var(--choque)"></i>q<sub>k</sub> = k p<sub>k</sub>/⟨k⟩: ponta de um link</span>
+          <span><i style="border-color:var(--ink);border-top-style:dashed"></i>limiar de Molloy–Reed</span>
+        </div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li><b>Poisson.</b> Abaixo de $\langle k\rangle=1$, o maior pedaço tem uma fração desprezível dos vértices; logo acima, ele começa a crescer, e com $\langle k\rangle=2$ já tem perto de $80\%$. Numa rede finita a transição é um pouco arredondada perto do limiar.</li>
+        <li><b>As barras vermelhas.</b> Em qualquer família, $q_k$ fica deslocada para a direita de $p_k$, e $q_0=0$. Na lei de potência, a média vermelha fica muito à direita da azul: é o paradoxo da amizade levado ao extremo.</li>
+        <li><b>A mistura.</b> O limiar está em $a=3/4$: com $70\%$ de vértices de grau $1$ ainda existe um pedaço gigante.</li>
+        <li><b>A lei de potência.</b> Para $\gamma$ perto de $2$, quase todos os vértices têm grau $1$, e mesmo assim a rede tem um pedaço gigante, sustentado pelos poucos hubs. Do outro lado, entre $\gamma\approx3{,}2$ e o limiar $3{,}45$, o critério garante um pedaço gigante, mas ele é tão pequeno (uma fração mínima dos vértices) que numa rede de $3000$ vértices quase não se distingue dos outros pedaços.</li>
+      </ol>
+
+      <h2 id="epidemias" data-toc="E as epidemias?">E as epidemias?</h2>
+      <p>Troque "explorar a rede" por "a doença se espalhar". Um infectado foi contagiado por um link; dos seus vizinhos, um é quem o contagiou, e os outros $k-1$ são alvos novos. O grau dele segue $q_k$, porque ele foi alcançado por um link. É a mesma ramificação, com a mesma razão $\langle k^2\rangle/\langle k\rangle-1$, agora multiplicada pela chance de cada link realmente transmitir. Por isso, numa rede com graus desiguais, <b>o que manda no limiar epidêmico é $\langle k^2\rangle/\langle k\rangle$, e não $\langle k\rangle$</b>. A conta completa, para o SIS, está em <a href="limiar-pk.html">O limiar epidêmico com p<sub>k</sub></a>.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>A célula mede o paradoxo da amizade no clube de caratê e depois sorteia redes pelo modelo de configuração (com <code>networkx.configuration_model</code>), com graus de Poisson e com a mistura de graus $1$ e $3$, para ver o pedaço gigante aparecer nos limiares $\langle k\rangle=1$ e $a=3/4$.</p>
+
+      <div class="pycell" data-title="O paradoxo da amizade e o pedaço gigante"
+           data-starter="../py/mr_lacunas.py"
+           data-solution="../py/mr_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Uma rede pequena</p>
+        <p>Uma estrela tem um centro ligado a $4$ folhas. (a) Calcule $p_k$, $\langle k\rangle$ e $\langle k^2\rangle/\langle k\rangle$. (b) Sorteie uma das $5$ pessoas: qual a média do número de amigos? (c) Sorteie uma pessoa e um amigo dela ao acaso: qual a média do número de amigos do amigo? Por que (c) não é $\langle k^2\rangle/\langle k\rangle$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $p_1=4/5$, $p_4=1/5$; $\langle k\rangle=8/5=1{,}6$; $\langle k^2\rangle=(4+16)/5=4$, então $\langle k^2\rangle/\langle k\rangle=2{,}5$. Sorteando um <em>link</em> (são $4$) e uma ponta ao acaso, metade das vezes cai no centro (grau $4$) e metade numa folha (grau $1$): média $2{,}5$. (b) $1{,}6$. (c) Se a pessoa sorteada é uma folha (chance $4/5$), o amigo é o centro, grau $4$; se é o centro, o amigo é uma folha, grau $1$. Média $4\cdot\frac45+1\cdot\frac15=3{,}4$. É diferente porque aqui se sorteia uma <em>pessoa</em> primeiro e depois um amigo dela, o que dá peso igual a cada pessoa e não a cada link. Mesmo assim, $3{,}4>1{,}6$: o paradoxo vale nas duas formas.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. O paradoxo, em fórmula</p>
+        <p>Mostre que $\dfrac{\langle k^2\rangle}{\langle k\rangle}-\langle k\rangle=\dfrac{\operatorname{Var}(k)}{\langle k\rangle}$. Quando a diferença é zero?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\dfrac{\langle k^2\rangle}{\langle k\rangle}-\langle k\rangle=\dfrac{\langle k^2\rangle-\langle k\rangle^2}{\langle k\rangle}=\dfrac{\operatorname{Var}(k)}{\langle k\rangle}$. É zero exatamente quando a variância é zero, isto é, quando todos os vértices (com $k>0$) têm o mesmo grau: na rede regular.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. O limiar de Erdős–Rényi</p>
+        <p>Para graus de Poisson com média $c$, use $\operatorname{Var}(k)=c$ para mostrar que $\langle k^2\rangle/\langle k\rangle=c+1$ e que o critério de Molloy–Reed dá $c>1$. Qual a razão $m$ da progressão das camadas com $c=1{,}5$? E com $c=0{,}5$, qual o tamanho médio esperado de um pedaço (some a progressão)?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\langle k^2\rangle=c^2+c$, então $\langle k^2\rangle/\langle k\rangle=c+1>2\iff c>1$. A razão é $m=c$: com $c=1{,}5$, cada camada tem $1{,}5$ vez a anterior. Com $c=0{,}5$, o vértice inicial mais as camadas dão $1+c+c\cdot m+c\cdot m^2+\dots=1+\dfrac{c}{1-m}=1+\dfrac{0{,}5}{0{,}5}=2$ vértices em média. Na fórmula geral, $1+\langle k\rangle/(1-m)$, que explode quando $m\to1$: perto do limiar, os pedaços ficam enormes.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Becos sem saída</p>
+        <p>Uma fração $a$ dos vértices tem grau $1$ e o resto tem grau $4$. Até que valor de $a$ existe pedaço gigante? E se o resto tiver grau $2$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\sum k(k-2)p_k=-a+8(1-a)=8-9a>0\iff a&lt;8/9\approx0{,}89$. Com o resto de grau $2$: $-a+0\cdot(1-a)=-a$, nunca positivo (exceto $a=0$, a fronteira). Vértices de grau $2$ só alongam caminhos, não ramificam: misturados a becos sem saída, formam apenas fios curtos. Confira a primeira resposta na demo trocando mentalmente o $3$ pelo $4$: o limiar sobe de $3/4$ para $8/9$, porque um vértice de grau $4$ ramifica mais.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Quem não tem vizinhos</p>
+        <p>Acrescente a uma rede uma fração de vértices isolados (grau $0$). (a) Isso muda $\sum k(k-2)p_k$? (b) Muda $\langle k^2\rangle/\langle k\rangle$? (c) Por que faz sentido que o critério não mude?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Os outros $p_k$ são multiplicados pelo mesmo fator $1-p_0$, e o termo de $k=0$ vale zero: a soma só é multiplicada por $1-p_0$, e o sinal não muda. (b) Não: numerador e denominador são multiplicados pelo mesmo fator. (c) Vértices isolados nunca estão na ponta de um link ($q_0=0$): a exploração a partir de um link não os enxerga, e a ramificação é exatamente a mesma. Só muda que a fração da rede no pedaço gigante fica menor, porque eles ficam de fora.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li>Média e variância de uma distribuição discreta</li>
+            <li><a href="sis.html">O modelo SIS clássico</a>, para a progressão geométrica e a rede escondida</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="limiar-pk.html">O limiar epidêmico com p<sub>k</sub></a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/epi-core.js?v=944095d2"></script>
+  <script src="../assets/mr-demo.js?v=dcf3cd57"></script>
+  <script src="../assets/pyrunner.js?v=54fb0c98"></script>
+</body>
+</html>

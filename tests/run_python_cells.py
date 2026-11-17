@@ -107,5 +107,18 @@ check("sis: R0 de volta pelo tempo de duplicação", "R0 = 1 + (2^(1/dup) - 1)/m
 s, _ = rodar("sis_lacunas.py")
 check("sis (lacunas): roda sem completar", "r = 1 - mu + beta <k> = 1.000" in s)
 
+s, _ = rodar("mr_solucao.py")
+check("molloy: paradoxo da amizade no caratê (4,59 contra 7,77)", "= 4.59" in s and "ponta de um link = 7.77" in s)
+gp = {float(l.split()[0]): float(l.split()[1]) for l in s.splitlines() if l.startswith(" " * 18) and len(l.split()) == 2}
+check("molloy: Poisson sem gigante abaixo de 1, com gigante acima", gp[0.6] < 0.05 and gp[1.8] > 0.6 and gp[3.0] > 0.9, str(gp))
+s, _ = rodar("mr_lacunas.py")
+check("molloy (lacunas): roda sem completar", "ponta de um link = 0.00" in s)
+s, _ = rodar("limiar_solucao.py")
+check("limiar: R0 sem graus 0,695 e com graus 2,755", "= 0.695" in s and "= 2.755" in s)
+check("limiar: razão de Θ bate com a previsão", "= 1.3498" in s and "= 1.3510" in s)
+sim = float(s.split("últimos 50 passos = ")[1].split()[0])
+check("limiar: simulação na rede fixa sustenta a epidemia (≈ 0,1)", 0.06 < sim < 0.2, str(sim))
+s, _ = rodar("limiar_lacunas.py")
+check("limiar (lacunas): roda e prevê que a doença some", "i = 0.000" in s)
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

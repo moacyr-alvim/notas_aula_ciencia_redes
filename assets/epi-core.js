@@ -108,7 +108,63 @@
     return Math.pow(frac[t1] / frac[t0], 1 / (t1 - t0));
   }
 
-  return { passoSIR: passoSIR, serieSIR: serieSIR,
+  /* ---------- distribuições de graus (vetores p[k], k = 0..kmax) ---------- */
+  function poisson(c, kmax) { var p = [], t = Math.exp(-c); for (var k = 0; k <= kmax; k++) { p.push(t); t *= c / (k + 1); } return normaliza(p); }
+  function regularDist(k0) { var p = new Array(k0 + 1).fill(0); p[k0] = 1; return p; }
+  function doisGraus(a, k1, k2) { var p = new Array(Math.max(k1, k2) + 1).fill(0); p[k1] += a; p[k2] += 1 - a; return p; }
+  function leiPotencia(gama, kmin, kmax) { var p = []; for (var k = 0; k <= kmax; k++) p.push(k >= kmin ? Math.pow(k, -gama) : 0); return normaliza(p); }
+  function normaliza(p) { var s = p.reduce(function (a, x) { return a + x; }, 0); return p.map(function (x) { return x / s; }); }
+  function momento(p, m) { var s = 0; for (var k = 0; k < p.length; k++) s += Math.pow(k, m) * p[k]; return s; }
+  /* distribuição do grau de quem está na ponta de um link: q_k = k p_k / ⟨k⟩ */
+  function pontaDeLink(p) { var m = momento(p, 1); return p.map(function (x, k) { return m ? k * x / m : 0; }); }
+  /* critério de Molloy–Reed: Σ k(k − 2) p_k > 0, isto é, ⟨k²⟩/⟨k⟩ > 2 */
+  function molloyReed(p) { var s = 0; for (var k = 0; k < p.length; k++) s += k * (k - 2) * p[k]; return s; }
+
+  /* sorteia graus com distribuição p e liga as pontas ao acaso (modelo de configuração);
+   * laços num vértice só e links repetidos são descartados (o efeito some para n grande) */
+  function configuracao(n, p, R) {
+    var acum = [], s = 0, k, i; for (k = 0; k < p.length; k++) { s += p[k]; acum.push(s); }
+    var graus = [];
+    for (i = 0; i < n; i++) { var u = R() * s; k = 0; while (k < acum.length - 1 && acum[k] < u) k++; graus.push(k); }
+    var pontas = []; graus.forEach(function (g, v) { for (var c = 0; c < g; c++) pontas.push(v); });
+    if (pontas.length % 2) { pontas.pop(); }
+    for (i = pontas.length - 1; i > 0; i--) { var j = Math.floor(R() * (i + 1)), x = pontas[i]; pontas[i] = pontas[j]; pontas[j] = x; }
+    var arestas = [], vistos = {};
+    for (i = 0; i + 1 < pontas.length; i += 2) {
+      var a = pontas[i], b = pontas[i + 1], ch = a < b ? a * n + b : b * n + a;
+      if (a !== b && !vistos[ch]) { vistos[ch] = 1; arestas.push([a, b]); }
+    }
+    return { n: n, graus: graus, arestas: arestas };
+  }
+  /* tamanho do maior pedaço conexo, como fração de n */
+  function maiorComponente(n, arestas) {
+    var pai = new Int32Array(n), tam = new Int32Array(n).fill(1), i;
+    for (i = 0; i < n; i++) pai[i] = i;
+    var raiz = function (x) { while (pai[x] !== x) { pai[x] = pai[pai[x]]; x = pai[x]; } return x; };
+    arestas.forEach(function (e) { var a = raiz(e[0]), b = raiz(e[1]); if (a !== b) { if (tam[a] < tam[b]) { var t = a; a = b; b = t; } pai[b] = a; tam[a] += tam[b]; } });
+    var m = 0; for (i = 0; i < n; i++) if (pai[i] === i && tam[i] > m) m = tam[i];
+    return m / n;
+  }
+
+  /* ---------- SIS por classe de grau (campo médio heterogêneo) ----------
+   * i[k] = fração infectada entre os de grau k; Θ = Σ k p_k i_k / ⟨k⟩ (chance de a ponta de um link estar infectada)
+   * i_k' = (1 − μ) i_k + (1 − i_k)(1 − (1 − βΘ)^k)                                                    */
+  function theta(p, i) { var s = 0, m = momento(p, 1); for (var k = 0; k < p.length; k++) s += k * p[k] * i[k]; return s / m; }
+  function passoSISgrau(p, i, beta, mu) {
+    var th = theta(p, i);
+    return i.map(function (x, k) { return (1 - mu) * x + (1 - x) * (1 - Math.pow(1 - beta * th, k)); });
+  }
+  function serieSISgrau(p, i0, beta, mu, T) {
+    var i = p.map(function () { return i0; }), out = [i];
+    for (var t = 0; t < T; t++) { i = passoSISgrau(p, i, beta, mu); out.push(i); }
+    return out;
+  }
+  function media(p, i) { var s = 0; for (var k = 0; k < p.length; k++) s += p[k] * i[k]; return s; }
+
+  return { poisson: poisson, regularDist: regularDist, doisGraus: doisGraus, leiPotencia: leiPotencia, momento: momento,
+           pontaDeLink: pontaDeLink, molloyReed: molloyReed, configuracao: configuracao, maiorComponente: maiorComponente,
+           theta: theta, passoSISgrau: passoSISgrau, serieSISgrau: serieSISgrau, media: media,
+           passoSIR: passoSIR, serieSIR: serieSIR,
            rng: rng, passoClassico: passoClassico, passoExato: passoExato, serie: serie,
            erdosRenyi: erdosRenyi, regularAleatoria: regularAleatoria, anel: anel, simula: simula, razaoInicial: razaoInicial };
 });

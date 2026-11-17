@@ -13,6 +13,7 @@
     { id: "esp",   label: "Espectro e\nestrutura" },
     { id: "pas",   label: "Passeios\naleatórios" },
     { id: "sin",   label: "Redes com\nsinais" },
+    { id: "rand",  label: "Redes\naleatórias" },
     { id: "epi",   label: "Epidemias\nem redes" }
   ];
 
@@ -61,12 +62,14 @@
   );
 
   NODES.push(
+    { id: "molloy", lane: "rand", col: 0, label: "Molloy–Reed e o\nparadoxo da amizade", href: "paginas/molloy-reed.html", trails: ["epidemias"],
+      desc: "Redes sorteadas com graus pₖ (modelo de configuração), o grau de quem está na ponta de um link, kpₖ/⟨k⟩, o paradoxo da amizade e o critério ⟨k²⟩/⟨k⟩ > 2 para o pedaço gigante. Demo e Python." },
     { id: "sis", lane: "epi", col: 0, label: "O modelo SIS\nclássico", href: "paginas/sis.html", trails: ["epidemias"],
       desc: "Suscetível, infectado, suscetível de novo, em equações de diferenças. A rede escondida (contatos sorteados ao acaso), a progressão geométrica do começo, R₀ = β⟨k⟩/μ, r − 1 = μ(R₀ − 1) e o equilíbrio 1 − 1/R₀. Simulação em quatro redes e Python." },
     { id: "sir", lane: "epi", col: 1, label: "O modelo SIR", href: "paginas/sir.html", trails: ["epidemias"],
       desc: "A família dos modelos compartimentais e o SIR: quem se cura fica imune. O mesmo R₀ do SIS, o pico quando os suscetíveis caem a 1/R₀ e a imunidade de rebanho. Demo." },
-    { id: "heterog", lane: "epi", col: 1, row: 1, label: "Graus heterogêneos:\n⟨k²⟩/⟨k⟩", href: null, trails: ["epidemias"],
-      desc: "Quando uns têm muito mais contatos que outros, quem pega primeiro são os mais conectados, e R₀ passa a depender de ⟨k²⟩/⟨k⟩. Redes livres de escala quase sem limiar." },
+    { id: "heterog", lane: "epi", col: 1, row: 1, label: "O limiar epidêmico\ncom pₖ", href: "paginas/limiar-pk.html", trails: ["epidemias"],
+      desc: "O SIS por classe de grau: R₀ = β⟨k²⟩/(μ⟨k⟩), os hubs infectados primeiro e o limiar que some nas redes livres de escala. O SIR é o critério de Molloy–Reed nos links que transmitem. Demo e Python." },
     { id: "limiar", lane: "epi", col: 2, row: 1, label: "O limiar e o maior\nautovalor de A", href: null, trails: ["epidemias"],
       desc: "Numa rede fixa qualquer, o começo da epidemia é uma progressão geométrica com a matriz de adjacência: o limiar é β·λ_max(A) = μ." },
     { id: "vacina", lane: "epi", col: 2, row: 0, label: "Imunizar\nquem?", href: null, trails: ["epidemias"],
@@ -77,7 +80,7 @@
     ["difusao", "consenso"], ["consenso", "sincr"],
     ["difusao", "comp"], ["comp", "fiedler"], ["fiedler", "desenho"], ["difusao", "modos"], ["modos", "desenho"],
     ["difusao", "passeio"], ["passeio", "pagerank"], ["passeio", "resist"],
-    ["sis", "sir"], ["sis", "heterog"], ["heterog", "limiar"], ["heterog", "vacina"],
+    ["sis", "sir"], ["sis", "heterog"], ["molloy", "heterog"], ["heterog", "limiar"], ["heterog", "vacina"],
     ["sinais", "lapsinal"], ["comp", "lapsinal"], ["lapsinal", "frustr"], ["sinais", "davis"]
   ];
 
