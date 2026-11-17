@@ -26,6 +26,16 @@
   function passoExato(i, beta, k, mu) { return (1 - mu) * i + (1 - i) * (1 - Math.pow(1 - beta * i, k)); }
   function serie(passo, i0, beta, k, mu, T) { var out = [i0], i = i0; for (var t = 0; t < T; t++) { i = passo(i, beta, k, mu); out.push(i); } return out; }
 
+  /* ---------- SIR: s, i, r (frações); quem se cura fica imune ---------- */
+  function passoSIR(x, beta, k, mu) {
+    var novos = beta * k * x[0] * x[1], cura = mu * x[1];
+    return [x[0] - novos, x[1] + novos - cura, x[2] + cura];
+  }
+  function serieSIR(i0, beta, k, mu, T) { var x = [1 - i0, i0, 0], out = [x]; for (var t = 0; t < T; t++) { x = passoSIR(x, beta, k, mu); out.push(x); } return out; }
+  /* aproximações (melhores quanto menores μ e β⟨k⟩): pico 1 − 1/R0 − ln(R0)/R0; tamanho final r∞ = 1 − e^{−R0 r∞} */
+  function picoAprox(R0) { return R0 > 1 ? 1 - 1 / R0 - Math.log(R0) / R0 : 0; }
+  function tamanhoFinal(R0) { if (R0 <= 1) return 0; var r = 0.5; for (var j = 0; j < 500; j++) r = 1 - Math.exp(-R0 * r); return r; }
+
   /* ---------- redes de contatos (listas de vizinhos) ---------- */
   function erdosRenyi(n, k, R) {          // cada par ligado com probabilidade k/(n − 1)
     var p = k / (n - 1), viz = [], i, j;
@@ -101,6 +111,7 @@
     return Math.pow(frac[t1] / frac[t0], 1 / (t1 - t0));
   }
 
-  return { rng: rng, passoClassico: passoClassico, passoExato: passoExato, serie: serie,
+  return { passoSIR: passoSIR, serieSIR: serieSIR, picoAprox: picoAprox, tamanhoFinal: tamanhoFinal,
+           rng: rng, passoClassico: passoClassico, passoExato: passoExato, serie: serie,
            erdosRenyi: erdosRenyi, regularAleatoria: regularAleatoria, anel: anel, simula: simula, razaoInicial: razaoInicial };
 });

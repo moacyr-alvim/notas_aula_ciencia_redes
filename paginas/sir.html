@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O modelo SIR — O laplaciano em redes</title>
+  <link rel="stylesheet" href="../assets/style.css?v=55ab22b5">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js?v=d64d5c9e"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <style>
+    #demo-sir canvas { height: 340px; }
+    .tabela { border-collapse: collapse; margin: 1rem auto; font-family: var(--sans); font-size: .92rem; }
+    .tabela th, .tabela td { border-bottom: 1px solid var(--rule); padding: .35rem .8rem; text-align: center; }
+    .tabela th { color: var(--ink-soft); font-weight: 600; }
+    .tabela td:first-child, .tabela th:first-child { text-align: left; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O modelo SIR</h1>
+        <p class="lede">O SIS não é o único modelo de compartimentos: trocando as setas entre as caixas, sai uma família inteira. No SIR, quem se cura fica imune. O começo da epidemia é igual ao do SIS, com o mesmo $R_0=\beta\langle k\rangle/\mu$. O fim é diferente: a epidemia passa por um pico e acaba, e o pico acontece exatamente quando os suscetíveis caem para $1/R_0$.</p>
+        <p class="meta">Continuação de <a href="sis.html">O modelo SIS clássico</a>, de onde vêm a equação de diferenças, a rede escondida e $R_0$.</p>
+      </header>
+
+      <h2 id="familia" data-toc="Uma família de modelos">Uma família de modelos</h2>
+      <p>Os <b>modelos compartimentais</b> dividem a população em caixas (compartimentos) conforme o estado de cada pessoa em relação à doença, e descrevem, a cada passo, quantas pessoas passam de uma caixa para outra. O nome do modelo é a sequência de caixas:</p>
+      <table class="tabela">
+        <thead><tr><th>modelo</th><th>o caminho de uma pessoa</th><th>exemplo típico</th></tr></thead>
+        <tbody>
+          <tr><td>SI</td><td>suscetível → infectado, para sempre</td><td>infecções crônicas, sem cura</td></tr>
+          <tr><td><a href="sis.html">SIS</a></td><td>suscetível → infectado → suscetível de novo</td><td>resfriado comum, gonorreia</td></tr>
+          <tr><td><b>SIR</b></td><td>suscetível → infectado → recuperado e imune</td><td>sarampo, catapora</td></tr>
+          <tr><td>SIRS</td><td>como o SIR, mas a imunidade se perde com o tempo</td><td>gripe sazonal</td></tr>
+          <tr><td>SEIR</td><td>suscetível → exposto (infectado, ainda sem transmitir) → infectado → recuperado</td><td>doenças com incubação longa</td></tr>
+        </tbody>
+      </table>
+      <p>Todos usam a mesma ideia do SIS: os contágios dependem de quantos contatos suscetível–infectado acontecem, e por isso todos carregam a mesma <a href="sis.html#rede">rede escondida</a> de contatos sorteados ao acaso. Esta página trata do SIR, o mais conhecido deles.</p>
+
+      <figure class="fig">
+<svg viewBox="0 0 560 110" role="img" aria-labelledby="fsir" style="width:100%;height:auto;max-width:560px;display:block;margin:0 auto">
+  <title id="fsir">Diagrama do modelo SIR: suscetível passa a infectado por contato, infectado passa a recuperado com probabilidade mu.</title>
+  <defs><marker id="sb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1 L9,5 L0,9 z" style="fill:var(--ink)"/></marker></defs>
+  <rect x="20" y="30" width="80" height="50" rx="8" style="fill:var(--paper);stroke:var(--carac)" stroke-width="2.4"/>
+  <rect x="240" y="30" width="80" height="50" rx="8" style="fill:var(--paper);stroke:var(--choque)" stroke-width="2.4"/>
+  <rect x="460" y="30" width="80" height="50" rx="8" style="fill:var(--paper);stroke:var(--ink)" stroke-width="2.4"/>
+  <g font-family="sans-serif" font-size="22" font-weight="bold" text-anchor="middle"><text x="60" y="63" style="fill:var(--carac)">S</text><text x="280" y="63" style="fill:var(--choque)">I</text><text x="500" y="63" style="fill:var(--ink)">R</text></g>
+  <line x1="104" y1="55" x2="234" y2="55" style="stroke:var(--ink)" stroke-width="1.8" marker-end="url(#sb)"/>
+  <line x1="324" y1="55" x2="454" y2="55" style="stroke:var(--ink)" stroke-width="1.8" marker-end="url(#sb)"/>
+  <g font-family="sans-serif" font-size="13" text-anchor="middle" style="fill:var(--ink)"><text x="170" y="45">contágio: β</text><text x="170" y="100">por contato com I</text><text x="390" y="45">cura: μ</text><text x="390" y="100">por passo</text></g>
+</svg>
+<figcaption>O SIR. A diferença para o SIS é uma seta só: a cura leva para R, de onde não se sai.</figcaption>
+</figure>
+
+      <h2 id="equacoes" data-toc="As equações">As equações de diferenças</h2>
+      <p>Agora há três frações: suscetíveis $s_t$, infectados $i_t$ e recuperados $r_t$, com $s_t+i_t+r_t=1$. As regras de um passo são as do SIS: cada infectado se cura com probabilidade $\mu$, e cada suscetível encontra $\langle k\rangle$ contatos, cada um infectado com probabilidade $i_t$ e transmitindo com probabilidade $\beta$. A única mudança é para onde vai quem se cura:
+      $$\begin{aligned}
+      s_{t+1}&=s_t-\beta\langle k\rangle\,s_t\,i_t,\\
+      i_{t+1}&=i_t+\beta\langle k\rangle\,s_t\,i_t-\mu\,i_t,\\
+      r_{t+1}&=r_t+\mu\,i_t.
+      \end{aligned}$$
+      No SIS, $s_t=1-i_t$ e bastava uma equação. Aqui os suscetíveis só diminuem: a doença vai consumindo o seu próprio combustível.</p>
+
+      <h2 id="r0" data-toc="O mesmo R₀">O mesmo $R_0$, o mesmo começo</h2>
+      <p>No começo quase todos são suscetíveis, $s_t\approx1$, e a equação dos infectados fica $i_{t+1}\approx(1-\mu+\beta\langle k\rangle)\,i_t$: a mesma <a href="sis.html#comeco">progressão geométrica</a> do SIS, com a mesma razão $r=1-\mu+\beta\langle k\rangle$. E o argumento para $R_0$ é o mesmo: um infectado fica infectado em média $1/\mu$ passos e contagia $\beta\langle k\rangle$ por passo, então
+      $$R_0=\frac{\beta\langle k\rangle}{\mu}.$$
+      O que acontece com o curado depois (volta a ser suscetível ou fica imune) não importa no começo, porque nessa hora quase ninguém se curou ainda. O limiar também é o mesmo: a epidemia decola se, e só se, $R_0>1$.</p>
+
+      <h2 id="pico" data-toc="O pico">O pico</h2>
+      <p><b>Quando acontece.</b> Pela equação dos infectados,
+      $$i_{t+1}-i_t=\big(\beta\langle k\rangle\,s_t-\mu\big)\,i_t,$$
+      então o número de infectados <b>cresce enquanto $\beta\langle k\rangle\,s_t>\mu$</b>, isto é, enquanto
+      $$s_t>\frac1{R_0}.$$
+      Como $s_t$ só diminui, ele cruza $1/R_0$ uma única vez, e é nesse passo que $i_t$ deixa de crescer: <b>o pico acontece quando a fração de suscetíveis cai a $1/R_0$</b>. Depois disso, cada infectado contagia, em média, menos de uma pessoa ($R_0\,s_t&lt;1$), e a epidemia definha mesmo que ainda haja muitos suscetíveis.</p>
+      <p>A mesma conta, lida ao contrário, é a <b>imunidade de rebanho</b>: se, antes de a doença chegar, uma fração maior que $1-1/R_0$ já estiver imune (por vacina, por exemplo), então $s_0&lt;1/R_0$ e a epidemia não decola. Com $R_0=3$, é preciso imunizar dois terços da população.</p>
+      <p><b>Quão alto.</b> Uma conta aproximada dá a altura do pico só em função de $R_0$:
+      $$\boxed{\,i_{\text{pico}}\approx1-\frac1{R_0}-\frac{\ln R_0}{R_0}.\,}$$</p>
+
+      <details>
+        <summary>De onde vem a fórmula do pico</summary>
+        <div class="body">
+          <p>Da primeira equação, $s_{t+1}=s_t\,(1-\beta\langle k\rangle i_t)$. Tomando o logaritmo e usando $\ln(1-x)\approx-x$ para $x$ pequeno:
+          $$\ln s_{t+1}-\ln s_t\approx-\beta\langle k\rangle\,i_t.$$
+          Da terceira, $r_{t+1}-r_t=\mu\,i_t$. Dividindo uma pela outra, a cada passo $\ln s$ cai $\beta\langle k\rangle/\mu=R_0$ vezes o que $r$ sobe. Somando todos os passos desde o começo ($s_0\approx1$, $r_0=0$):
+          $$\ln s_t\approx-R_0\,r_t,\qquad\text{isto é,}\qquad s_t\approx e^{-R_0r_t}.$$
+          No pico, $s=1/R_0$, então $r=\ln R_0/R_0$, e $i=1-s-r=1-1/R_0-\ln R_0/R_0$.</p>
+          <p>A mesma relação dá o <b>tamanho final</b> da epidemia: no fim não há mais infectados, $s_\infty=1-r_\infty$, e
+          $$r_\infty\approx1-e^{-R_0\,r_\infty}.$$
+          A aproximação $\ln(1-x)\approx-x$ é tanto melhor quanto menor for $\beta\langle k\rangle i_t$, isto é, quanto menores os passos de tempo. Com $R_0=2$ e $\mu=0{,}2$, a equação de diferenças dá um pico de $16{,}1\%$ contra $15{,}3\%$ da fórmula; com $\mu=0{,}02$ (passos dez vezes menores), $15{,}4\%$.</p>
+        </div>
+      </details>
+
+      <table class="tabela">
+        <thead><tr><th>$R_0$</th><th>suscetíveis no pico ($1/R_0$)</th><th>infectados no pico</th><th>pegam a doença ao todo</th></tr></thead>
+        <tbody>
+          <tr><td>1,5</td><td>67%</td><td>6%</td><td>58%</td></tr>
+          <tr><td>2</td><td>50%</td><td>15%</td><td>80%</td></tr>
+          <tr><td>3</td><td>33%</td><td>30%</td><td>94%</td></tr>
+          <tr><td>5</td><td>20%</td><td>48%</td><td>99%</td></tr>
+        </tbody>
+      </table>
+      <p>Repare em duas coisas. A epidemia não para quando acabam os suscetíveis, para antes: com $R_0=2$, um quinto da população nunca pega a doença. E o pico é bem menor que o total: os infectados não estão todos doentes <em>ao mesmo tempo</em>. É por isso que "achatar a curva" (diminuir $R_0$, mesmo pouco) faz tanta diferença para hospitais.</p>
+
+      <h2 id="demo" data-toc="Veja o pico">Veja o pico</h2>
+      <p>As curvas de $s_t$ (azul), $i_t$ (vermelha) e $r_t$ (preta) pela equação de diferenças, começando com $0{,}1\%$ de infectados. O ponto marca o pico; as linhas pontilhadas mostram $s=1/R_0$ e o passo do pico, e elas se cruzam sobre a curva azul. Marque a caixa para comparar com o SIS de mesmos parâmetros.</p>
+
+      <div class="demo" id="demo-sir">
+        <div class="controls">
+          <label>β <input type="range" id="r-beta" min="0.005" max="0.1" step="0.005" value="0.05" aria-label="Probabilidade de transmissão por contato"> <output id="r-betav">0,050</output></label>
+          <label>⟨k⟩ <input type="range" id="r-k" min="2" max="12" step="1" value="8" aria-label="Número de contatos por pessoa"> <output id="r-kv">8</output></label>
+          <label>μ <input type="range" id="r-mu" min="0.02" max="0.5" step="0.01" value="0.2" aria-label="Probabilidade de cura por passo"> <output id="r-muv">0,20</output></label>
+          <label><input type="checkbox" id="r-sis"> comparar com o SIS</label>
+        </div>
+        <div class="panels">
+          <canvas id="r-canvas" role="img" aria-label="Frações de suscetíveis, infectados e recuperados ao longo dos passos"></canvas>
+        </div>
+        <div class="readout" id="r-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>suscetíveis s</span>
+          <span><i style="border-color:var(--choque)"></i>infectados i</span>
+          <span><i style="border-color:var(--ink)"></i>recuperados r</span>
+          <span><i style="border-color:var(--choque);border-top-style:dashed"></i>infectados no SIS</span>
+        </div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li>Em qualquer configuração com $R_0>1$, confira na leitura que, no pico, $s\approx1/R_0$.</li>
+        <li>Diminua $\mu$ e $\beta$ na mesma proporção (o $R_0$ não muda, os passos ficam "menores"): o pico fica mais tarde, com quase a mesma altura, e a fórmula fica cada vez mais precisa.</li>
+        <li>Compare com o SIS: no começo as duas curvas de infectados coincidem; depois o SIS se estabiliza em $1-1/R_0$ e o SIR sobe até o pico e cai a zero.</li>
+        <li>Ponha $R_0$ pouco acima de $1$: a epidemia é lenta, o pico é baixo, e ainda assim boa parte da população acaba pegando a doença.</li>
+      </ol>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>A célula itera as três equações, acha o pico, confere que nele $s\approx1/R_0$, compara a altura com a fórmula e o tamanho final com a equação $r_\infty=1-e^{-R_0r_\infty}$, e desenha o SIS de mesmos parâmetros para comparar.</p>
+
+      <div class="pycell" data-title="O SIR em equações de diferenças"
+           data-starter="../py/sir_lacunas.py"
+           data-solution="../py/sir_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Ninguém some</p>
+        <p>Mostre que $s_t+i_t+r_t$ é o mesmo em todos os passos, e que $s_t$ nunca aumenta.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Somando as três equações, os termos $\beta\langle k\rangle s_ti_t$ e $\mu i_t$ aparecem uma vez com cada sinal e se cancelam: $s_{t+1}+i_{t+1}+r_{t+1}=s_t+i_t+r_t$. E $s_{t+1}-s_t=-\beta\langle k\rangle s_ti_t\le0$, porque todos os fatores são $\ge0$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Pico e rebanho</p>
+        <p>Para uma doença com $R_0=4$: (a) que fração da população ainda é suscetível no pico? (b) Que fração precisa estar imune, antes de a doença chegar, para que ela não decole? (c) Estime a fração de infectados no pico.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $1/R_0=25\%$. (b) $1-1/R_0=75\%$. (c) $1-\tfrac14-\tfrac{\ln4}{4}\approx1-0{,}25-0{,}35=0{,}40$: cerca de $40\%$ da população infectada ao mesmo tempo.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Depois do pico</p>
+        <p>Use $i_{t+1}=\big(1-\mu+\beta\langle k\rangle s_t\big)\,i_t$ para explicar por que, depois do pico, os infectados diminuem como uma progressão "quase geométrica" cada vez mais rápida, e qual é a razão dessa progressão no fim da epidemia.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>A razão de um passo para o outro é $1-\mu+\beta\langle k\rangle s_t=1-\mu\,(1-R_0s_t)$. Depois do pico, $R_0s_t&lt;1$ e a razão é menor que $1$; como $s_t$ continua caindo, a razão também cai, e os infectados diminuem cada vez mais depressa. No fim, $s_t\to s_\infty$ e a razão se aproxima de $1-\mu+\beta\langle k\rangle s_\infty$. É a mesma conta do começo da epidemia, com $s_\infty$ no lugar de $1$: o número de reprodução efetivo $R_0s_t$ decide tudo, nas duas pontas.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="sis.html">O modelo SIS clássico</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li>Graus heterogêneos: ⟨k²⟩/⟨k⟩ <span class="soon">(em breve)</span></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/epi-core.js?v=abcb1b39"></script>
+  <script src="../assets/sir-demo.js?v=ce6f0b0b"></script>
+  <script src="../assets/pyrunner.js?v=54fb0c98"></script>
+</body>
+</html>

@@ -74,6 +74,7 @@ need = {
     "paginas/lapsinal.html": ["demo-lsin", "l-rede", "l-restaura", "l-novas", "l-k", "l-kv", "l-play", "l-readout", "l-hover", "l-rede-canvas", "l-op-canvas", "tema", "toc"],
     "paginas/frustracao.html": ["demo-frust", "fr-rede", "fr-q1", "fr-local", "fr-otima", "fr-sorteia", "fr-readout", "fr-hover", "fr-rede-canvas", "fr-op-canvas", "tema", "toc"],
     "paginas/sis.html": ["demo-sis", "e-rede", "e-nova", "e-log", "e-beta", "e-betav", "e-k", "e-kv", "e-mu", "e-muv", "e-t", "e-tv", "e-play", "e-readout", "e-pop-canvas", "e-curva-canvas", "tema", "toc"],
+    "paginas/sir.html": ["demo-sir", "r-beta", "r-betav", "r-k", "r-kv", "r-mu", "r-muv", "r-sis", "r-readout", "r-canvas", "tema", "toc"],
     "index.html": ["mapa", "chips", "info", "trail-list", "tema"],
 }
 for f in sorted(root.rglob("*.html")):

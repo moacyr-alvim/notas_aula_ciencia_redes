@@ -8,16 +8,17 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 ### O laplaciano em redes (`index.html`)
 
-**Quem aponta para ela** (7):
+**Quem aponta para ela** (8):
 - `paginas/componentes.html`: “← Mapa de conceitos”
 - `paginas/difusao.html`: “← Mapa de conceitos”
 - `paginas/fiedler.html`: “← Mapa de conceitos”
 - `paginas/frustracao.html`: “← Mapa de conceitos”
 - `paginas/lapsinal.html`: “← Mapa de conceitos”
 - `paginas/sinais.html`: “← Mapa de conceitos”
+- `paginas/sir.html`: “← Mapa de conceitos”
 - `paginas/sis.html`: “← Mapa de conceitos”
 
-**Aponta para:** `paginas/componentes.html`, `paginas/difusao.html`, `paginas/fiedler.html`, `paginas/frustracao.html`, `paginas/lapsinal.html`, `paginas/sinais.html`, `paginas/sis.html`
+**Aponta para:** `paginas/componentes.html`, `paginas/difusao.html`, `paginas/fiedler.html`, `paginas/frustracao.html`, `paginas/lapsinal.html`, `paginas/sinais.html`, `paginas/sir.html`, `paginas/sis.html`
 
 **Links para fora do site:** https://moacyr-alvim.github.io/notas_aula_edp/
 
@@ -107,15 +108,29 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 **Aponta para:** `index.html`, `paginas/frustracao.html`, `paginas/lapsinal.html`, `paginas/lapsinal.html`#troca
 
+### O modelo SIR (`paginas/sir.html`)
+
+**No mapa:** “O modelo SIR”
+
+**Quem aponta para ela** (2):
+- `index.html`: “O modelo SIR”
+- `paginas/sis.html`: “O modelo SIR”
+
+**Aponta para:** `index.html`, `paginas/sis.html`, `paginas/sis.html`#comeco, `paginas/sis.html`#rede
+
 ### O modelo SIS clássico (`paginas/sis.html`)
 
 **No mapa:** “O modelo SIS clássico”
 
-**Quem aponta para ela** (2):
+**Quem aponta para ela** (6):
 - `index.html`: “O modelo SIS clássico”
 - `paginas/difusao.html`: “O modelo SIS clássico”
+- `paginas/sir.html`: “O modelo SIS clássico”
+- `paginas/sir.html`: “SIS”
+- `paginas/sir.html` → `#comeco`: “progressão geométrica”
+- `paginas/sir.html` → `#rede`: “rede escondida”
 
-**Aponta para:** `index.html`
+**Aponta para:** `index.html`, `paginas/sir.html`
 
 ## Setas do mapa de conceitos
 
@@ -131,7 +146,7 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 | Difusão em redes (`paginas/difusao.html`) | Passeio aleatório e L normalizado (em breve) |
 | Passeio aleatório e L normalizado (em breve) | PageRank e redes dirigidas (em breve) |
 | Passeio aleatório e L normalizado (em breve) | Circuitos e resistência efetiva (em breve) |
-| O modelo SIS clássico (`paginas/sis.html`) | O modelo SIR (em breve) |
+| O modelo SIS clássico (`paginas/sis.html`) | O modelo SIR (`paginas/sir.html`) |
 | O modelo SIS clássico (`paginas/sis.html`) | Graus heterogêneos: ⟨k²⟩/⟨k⟩ (em breve) |
 | Graus heterogêneos: ⟨k²⟩/⟨k⟩ (em breve) | O limiar e o maior autovalor de A (em breve) |
 | Graus heterogêneos: ⟨k²⟩/⟨k⟩ (em breve) | Imunizar quem? (em breve) |

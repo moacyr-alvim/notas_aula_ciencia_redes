@@ -107,5 +107,12 @@ check("sis: R0 de volta pelo tempo de duplicação", "R0 = 1 + (2^(1/dup) - 1)/m
 s, _ = rodar("sis_lacunas.py")
 check("sis (lacunas): roda sem completar", "r = 1 - mu + beta <k> = 1.000" in s)
 
+# SIR
+s, _ = rodar("sir_solucao.py")
+check("sir: pico de 16,1% com s ≈ 1/R0, fórmula 15,3%", "16.1% infectados ao mesmo tempo" in s and "s = 0.489  (1/R0 = 0.500)" in s and "= 15.3%" in s)
+check("sir: tamanho final 80,9% contra a fórmula 79,7%", "pegaram a doença: 80.9%   (fórmula: 79.7%)" in s)
+s, _ = rodar("sir_lacunas.py")
+check("sir (lacunas): roda sem completar", "pegaram a doença: 0.0%" in s)
+
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)
