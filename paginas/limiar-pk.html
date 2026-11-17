@@ -29,7 +29,7 @@
     <main>
       <header>
         <h1>O limiar epidêmico com $p_k$</h1>
-        <p class="lede">Quando as pessoas têm números de contatos muito diferentes, o SIS clássico erra o limiar. Separando a população por grau, a mesma conta de progressão geométrica dá $R_0=\beta\langle k^2\rangle/(\mu\langle k\rangle)$: no lugar do grau médio entra o grau médio de quem está na ponta de um link, como no critério de Molloy–Reed. Em redes com hubs, $\langle k^2\rangle$ é enorme e o limiar quase desaparece.</p>
+        <p class="lede">Quando as pessoas têm números de contatos muito diferentes, o SIS clássico erra o limiar. Separando a população por grau, a mesma conta de progressão geométrica dá $R_0=\beta\langle k^2\rangle/(\mu\langle k\rangle)$: no lugar do grau médio entra o grau médio de quem está na ponta de um link, como no critério de Molloy–Reed. O mesmo limiar sai de um processo de ramificação, como em Molloy–Reed, que dá também a chance de um único caso virar epidemia. Em redes com hubs, $\langle k^2\rangle$ é enorme e o limiar quase desaparece.</p>
         <p class="meta">Trilha <em>Epidemias em redes</em>. Usa <a href="sis.html">O modelo SIS clássico</a> e <a href="molloy-reed.html">Molloy–Reed e o paradoxo da amizade</a>. Só equações de diferenças.</p>
       </header>
 
@@ -69,50 +69,111 @@
       <p>A relação $r-1=\mu(R_0-1)$ é a mesma do SIS clássico, e pelo mesmo motivo. A leitura de $R_0$ também é a mesma, com uma correção: um infectado típico <b>não é uma pessoa típica</b>. Ele pegou a doença de um contato, isto é, foi alcançado por um link, e por isso o grau dele segue $q_k$, não $p_k$. Seu número médio de contatos é $\langle k^2\rangle/\langle k\rangle$, o grau médio na ponta de um link. Cada um desses contatos é contagiado com probabilidade $\beta$ por passo, durante $1/\mu$ passos em média. É o paradoxo da amizade trabalhando para a doença.</p>
       <p>Como $\langle k^2\rangle/\langle k\rangle=\langle k\rangle+\operatorname{Var}(k)/\langle k\rangle$, o $R_0$ com graus é sempre pelo menos o do SIS clássico, e a diferença cresce com a desigualdade dos graus. Na rede regular, onde todos têm o mesmo grau, os dois coincidem.</p>
 
-      <h2 id="mr" data-toc="O parentesco com Molloy–Reed">O parentesco com Molloy–Reed</h2>
-      <p>O limiar do SIS não é o critério de Molloy–Reed, mas os dois saem do mesmo raciocínio. Nos dois casos, acompanhamos uma <b>ramificação</b> geração a geração: alguém é alcançado por um link, e dali partem novas ramificações. Nos dois casos, quem é alcançado por um link tem grau com distribuição $q_k=kp_k/\langle k\rangle$ e média $\langle k^2\rangle/\langle k\rangle$: o paradoxo da amizade é o motor. E nos dois casos a pergunta é se a progressão geométrica das gerações tem razão maior ou menor que $1$.</p>
+      <h2 id="ramificacao" data-toc="O limiar por ramificação">O mesmo limiar por ramificação</h2>
+      <p>Na página <a href="molloy-reed.html">Molloy–Reed e o paradoxo da amizade</a>, exploramos a rede em camadas: cada vértice alcançado por um link tem grau sorteado por $q_k$ e abre $k-1$ saídas novas, cada uma levando a outro vértice com grau sorteado por $q_k$, e assim por diante. Isso é um <b>processo de ramificação</b>: cada indivíduo tem um número aleatório de filhos, sorteado independentemente dos outros, e cada filho faz o mesmo. Para eles vale um resultado simples, que aqui usamos sem demonstração:</p>
+      <aside class="box">
+        <p class="tag">Processos de ramificação</p>
+        <p>Um processo de ramificação começado por um indivíduo tem chance positiva de nunca se extinguir se, e só se, o <b>número médio de filhos</b> for maior que $1$. Se a média for menor que $1$ (ou igual, a menos de casos triviais), ele se extingue com certeza.</p>
+      </aside>
+      <p>Em Molloy–Reed, a média de filhos é $\langle k^2\rangle/\langle k\rangle-1$, e "nunca se extinguir" quer dizer estar no pedaço gigante. A mesma ferramenta serve para o SIS, trocando o que é um indivíduo e o que é um filho:</p>
+      <ul>
+        <li><b>Indivíduo:</b> um <em>episódio de infecção</em>. Se a mesma pessoa se infecta duas vezes, são dois indivíduos.</li>
+        <li><b>Grau:</b> quem se infectou pegou a doença de um contato, isto é, foi alcançado pela ponta de um link; seu grau $k$ segue $q_k=k\,p_k/\langle k\rangle$, como em Molloy–Reed.</li>
+        <li><b>Duração:</b> a cada passo, o infectado se cura com probabilidade $\mu$. A duração $D$ da infecção tem $P(D=d)=\mu(1-\mu)^{d-1}$, com média $1/\mu$, como no <a href="sis.html">SIS clássico</a>.</li>
+        <li><b>Filhos:</b> em cada passo, o infectado tem $k$ contatos, e cada um vira um contágio com probabilidade $\beta$. No começo quase todos são suscetíveis, e os contatos são sorteados de novo a cada passo, como nas equações por classe de grau. Em $D$ passos são $kD$ tentativas: o número de filhos é $N\sim\text{Binomial}(kD,\beta)$, com média $\beta\,k/\mu$.</li>
+        <li><b>Grau dos filhos:</b> cada filho também foi alcançado por um contato; seu grau segue $q_k$ de novo. O processo se repete.</li>
+      </ul>
+      <p>O número médio de filhos é a média de $\beta k/\mu$ com $k$ sorteado por $q_k$:
+      $$R_0=\sum_k q_k\,\frac{\beta\,k}{\mu}=\frac{\beta}{\mu}\,\frac{\langle k^2\rangle}{\langle k\rangle}.$$
+      É exatamente o limiar que as equações de diferenças deram, agora pelo caminho de Molloy–Reed. A estrutura é a mesma; só muda a regra dos filhos: <b>"$k-1$ saídas, todas usadas"</b> vira <b>"$kD$ encontros, cada um transmite com probabilidade $\beta$"</b>.</p>
+
+      <h3 id="surto">A chance de um surto</h3>
+      <p>O processo de ramificação responde uma pergunta que as equações de diferenças não respondem: <b>qual a chance de um único caso começar uma epidemia?</b> Mesmo acima do limiar, a cadeia de contágios pode morrer por azar nas primeiras gerações. Seja $u$ a chance de que a descendência de um infectado, alcançado por um contato, acabe se extinguindo. A descendência dele se extingue quando a de cada um dos seus $N$ filhos se extingue; como os filhos são independentes, isso acontece com chance $u^N$. Fazendo a média:
+      $$u=\sum_k q_k\,E\big[u^N\,\big|\,k\big],\qquad P(\text{surto})=1-\sum_k p_k\,E\big[u^N\,\big|\,k\big].$$
+      Na segunda fórmula o peso é $p_k$, porque o paciente zero é uma pessoa típica: ele não chegou por um link. É a mesma dupla de fórmulas que dá, em Molloy–Reed, a fração da rede no pedaço gigante: lá, $u=\sum_k q_k\,u^{k-1}$ e a fração é $1-\sum_k p_k\,u^k$.</p>
+      <p>A primeira equação tem sempre a solução $u=1$; acima do limiar, a que interessa é a menor solução entre $0$ e $1$. Para achá-la, basta iterar a partir de $u_0=0$: $u_{n+1}=\sum_k q_k\,E[u_n^N\mid k]$, onde $u_n$ é a chance de extinção em até $n$ gerações. É mais uma equação de diferenças.</p>
+      <details>
+        <summary>A conta de $E[x^N\mid k]$</summary>
+        <div class="body">
+          <p>Se a duração é $D=d$, há $kd$ tentativas independentes, e $E[x^N]=(1-\beta+\beta x)^{kd}$, porque cada tentativa contribui com $x$ (se transmite, com chance $\beta$) ou com $1$ (se não). Chamando $y=(1-\beta+\beta x)^k$ e fazendo a média sobre $D$, aparece uma progressão geométrica:
+          $$E[x^N\mid k]=\sum_{d\ge1}\mu(1-\mu)^{d-1}y^d=\frac{\mu\,y}{1-(1-\mu)\,y}.$$
+          Em Molloy–Reed o papel dessa expressão é feito por $x^{k-1}$: os $k-1$ filhos são certos.</p>
+        </div>
+      </details>
+      <p>Na lei de potência da demo ($\gamma=2{,}5$, $3\le k\le300$), com $\mu=0{,}2$:</p>
+      <table class="tabela">
+        <thead><tr><th>$\beta$</th><th>$R_0$</th><th>chance de surto a partir de $1$ caso</th></tr></thead>
+        <tbody>
+          <tr><td>0,005</td><td>0,69</td><td>0</td></tr>
+          <tr><td>0,008</td><td>1,10</td><td>0,7%</td></tr>
+          <tr><td>0,010</td><td>1,38</td><td>3%</td></tr>
+          <tr><td>0,020</td><td>2,76</td><td>16%</td></tr>
+          <tr><td>0,030</td><td>4,13</td><td>28%</td></tr>
+        </tbody>
+      </table>
+      <p>Mesmo com $R_0\approx2{,}8$, um caso isolado só vira epidemia uma vez em seis. O motivo é que o paciente zero costuma ter grau baixo: com $\beta=0{,}02$, a chance de surto é $9\%$ se ele tem grau $3$, $25\%$ com grau $10$, $52\%$ com grau $30$, $82\%$ com grau $100$ e $97\%$ com grau $300$. Os hubs aparecem de novo, agora como os que <b>iniciam</b> as epidemias. A segunda célula de <a href="#python">Rode você mesmo</a> faz essas contas e as confere simulando o processo.</p>
+
+      <aside class="box atencao">
+        <p class="tag">A hipótese que sustenta a ramificação no SIS</p>
+        <p>O processo de ramificação precisa que os filhos sejam independentes. Com os contatos sorteados de novo a cada passo, eles são. Numa <b>rede fixa</b>, não: quem me infectou se cura, volta a ser suscetível, e eu posso devolver a doença a ele pelo mesmo link. A infecção vai e volta entre vizinhos, e os episódios deixam de ser independentes. O efeito é forte em torno dos hubs: um hub e seus vizinhos formam um reservatório que se reinfecta sozinho. Por isso, numa rede fixa, o limiar exato do SIS não depende só de $\langle k^2\rangle/\langle k\rangle$, e sim da rede inteira, pelo maior autovalor da matriz de adjacência. É o assunto de uma página futura. No SIR não há reinfecção, e a ramificação vale também numa rede fixa: é o que faz o SIR ser Molloy–Reed sem aproximação (próxima seção).</p>
+      </aside>
+
+      <h2 id="mr" data-toc="Molloy–Reed, SIS e SIR">Molloy–Reed, SIS e SIR lado a lado</h2>
+      <p>No <a href="sir.html">SIR</a>, a ramificação fica ainda mais perto de Molloy–Reed, e numa rede fixa. Primeiro, um infectado transmite por cada link <b>no máximo uma vez</b>, porque quem já pegou não pega de novo. A chance de um link transmitir antes de o infectado se curar é a <b>transmissibilidade</b>
+      $$T=\sum_{t\ge0}\big[(1-\beta)(1-\mu)\big]^t\beta=\frac{\beta}{\beta+\mu-\beta\mu}.$$
+      Segundo, um dos $k$ links de quem acabou de se infectar leva a quem o infectou, que não pode ser contagiado de novo: sobram $k-1$. Os filhos são os links novos que transmitem, $N\sim\text{Binomial}(k-1,T)$, com média $T(k-1)$, e
+      $$R_0^{\text{SIR}}=T\,\Big(\frac{\langle k^2\rangle}{\langle k\rangle}-1\Big).$$
+      É o critério de Molloy–Reed aplicado à rede em que cada link é mantido com probabilidade $T$, os links que transmitiriam; a epidemia é o pedaço gigante dessa rede.</p>
 
       <figure class="fig">
-<svg viewBox="0 0 560 190" role="img" aria-labelledby="fmr" style="width:100%;height:auto;max-width:560px;display:block;margin:0 auto">
-  <title id="fmr">Um vértice alcançado por um link. Em Molloy–Reed, ele tem k menos 1 saídas novas, todas usadas. No SIS, ele tem k contatos, e cada um rende em média beta sobre mu contágios.</title>
+<svg viewBox="0 0 840 195" role="img" aria-labelledby="fmr" style="width:100%;height:auto;max-width:840px;display:block;margin:0 auto">
+  <title id="fmr">Um vértice de grau 4 alcançado por um link, em três regras. Molloy–Reed: 3 saídas novas, todas usadas. SIS: 4 contatos novos, cada um rende em média beta sobre mu contágios. SIR: 3 links novos, cada um transmite com chance T.</title>
   <defs><marker id="ma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1 L9,5 L0,9 z" style="fill:var(--ink)"/></marker></defs>
-  <g font-family="sans-serif" font-size="14" font-weight="bold" text-anchor="middle" style="fill:var(--ink)"><text x="140" y="18">Molloy–Reed</text><text x="420" y="18">SIS</text></g>
+  <g font-family="sans-serif" font-size="14" font-weight="bold" text-anchor="middle" style="fill:var(--ink)"><text x="140" y="18">Molloy–Reed</text><text x="420" y="18">SIS (contatos renovados)</text><text x="700" y="18">SIR (rede fixa)</text></g>
   <line x1="40" y1="100" x2="122" y2="100" style="stroke:var(--ink-soft)" stroke-width="2" stroke-dasharray="5 4"/>
   <circle cx="40" cy="100" r="9" style="fill:var(--paper);stroke:var(--ink-soft)" stroke-width="2"/>
   <circle cx="132" cy="100" r="11" style="fill:var(--carac)"/>
   <g style="stroke:var(--ink)" stroke-width="2" marker-end="url(#ma)"><line x1="143" y1="94" x2="222" y2="52"/><line x1="144" y1="100" x2="226" y2="100"/><line x1="143" y1="106" x2="222" y2="148"/></g>
   <g style="fill:var(--paper);stroke:var(--carac)" stroke-width="2"><circle cx="232" cy="47" r="9"/><circle cx="236" cy="100" r="9"/><circle cx="232" cy="153" r="9"/></g>
-  <g font-family="sans-serif" font-size="12" text-anchor="middle" style="fill:var(--ink)"><text x="80" y="90">chegada</text><text x="140" y="180">k − 1 saídas novas, todas usadas</text></g>
+  <g font-family="sans-serif" font-size="12" text-anchor="middle" style="fill:var(--ink)"><text x="80" y="90">chegada</text><text x="140" y="182">k − 1 saídas novas, todas usadas</text></g>
   <line x1="320" y1="100" x2="402" y2="100" style="stroke:var(--ink-soft)" stroke-width="2" stroke-dasharray="5 4"/>
   <circle cx="320" cy="100" r="9" style="fill:var(--paper);stroke:var(--ink-soft)" stroke-width="2"/>
   <circle cx="412" cy="100" r="11" style="fill:var(--choque)"/>
   <g style="stroke:var(--ink)" stroke-width="2" marker-end="url(#ma)"><line x1="420" y1="91" x2="472" y2="42"/><line x1="423" y1="96" x2="508" y2="78"/><line x1="423" y1="104" x2="508" y2="122"/><line x1="420" y1="109" x2="472" y2="158"/></g>
   <g style="fill:var(--paper);stroke:var(--choque)" stroke-width="2"><circle cx="479" cy="35" r="9"/><circle cx="518" cy="76" r="9"/><circle cx="518" cy="124" r="9"/><circle cx="479" cy="165" r="9"/></g>
-  <g font-family="sans-serif" font-size="12" text-anchor="middle" style="fill:var(--ink)"><text x="360" y="90">contágio</text><text x="420" y="186">k contatos, cada um rende β/μ contágios</text></g>
+  <g font-family="sans-serif" font-size="12" text-anchor="middle" style="fill:var(--ink)"><text x="360" y="90">contágio</text><text x="420" y="188">k contatos novos, cada um rende β/μ</text></g>
+  <line x1="600" y1="100" x2="682" y2="100" style="stroke:var(--ink-soft)" stroke-width="2" stroke-dasharray="5 4"/>
+  <circle cx="600" cy="100" r="9" style="fill:var(--paper);stroke:var(--ink-soft)" stroke-width="2"/>
+  <circle cx="692" cy="100" r="11" style="fill:var(--ink)"/>
+  <g style="stroke:var(--ink)" stroke-width="2" marker-end="url(#ma)"><line x1="703" y1="94" x2="782" y2="52"/><line x1="703" y1="106" x2="782" y2="148"/></g>
+  <line x1="704" y1="100" x2="786" y2="100" style="stroke:var(--ink-soft)" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <g style="fill:var(--paper);stroke:var(--ink)" stroke-width="2"><circle cx="792" cy="47" r="9"/><circle cx="792" cy="153" r="9"/></g>
+  <circle cx="796" cy="100" r="9" style="fill:var(--paper);stroke:var(--ink-soft)" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <g font-family="sans-serif" font-size="12" text-anchor="middle" style="fill:var(--ink)"><text x="640" y="90">contágio</text><text x="700" y="182">k − 1 links, cada um transmite com chance T</text></g>
 </svg>
-<figcaption>O mesmo começo, alguém alcançado por um link e com grau sorteado por $q_k$ (aqui, $k=4$), e duas regras para continuar. No SIS, quem transmitiu foi um contato de ontem; hoje são $k$ contatos novos.</figcaption>
+<figcaption>O mesmo começo, alguém alcançado por um link e com grau sorteado por $q_k$ (aqui, $k=4$), e três regras para continuar. No SIS, quem transmitiu foi um contato de ontem; hoje são $k$ contatos novos. No SIR, o link tracejado não transmitiu.</figcaption>
 </figure>
 
       <table class="tabela">
-        <thead><tr><th></th><th>Molloy–Reed</th><th>limiar do SIS</th></tr></thead>
+        <thead><tr><th></th><th>Molloy–Reed</th><th>SIS (ramificação)</th><th>SIR</th></tr></thead>
         <tbody>
-          <tr><td>quem é alcançado</td><td>um vértice, por um link</td><td>um infectado, por um contato</td></tr>
-          <tr><td>grau de quem é alcançado</td><td>$q_k$, média $\langle k^2\rangle/\langle k\rangle$</td><td>$q_k$, média $\langle k^2\rangle/\langle k\rangle$</td></tr>
-          <tr><td>por onde continua</td><td>$k-1$ links novos</td><td>$k$ contatos</td></tr>
-          <tr><td>quanto rende cada um</td><td>$1$ (o link existe)</td><td>$\beta/\mu$ contágios, em média</td></tr>
-          <tr><td>razão por geração</td><td>$\langle k^2\rangle/\langle k\rangle-1$</td><td>$R_0=\dfrac\beta\mu\,\dfrac{\langle k^2\rangle}{\langle k\rangle}$</td></tr>
-          <tr><td>condição</td><td>$\dfrac{\langle k^2\rangle}{\langle k\rangle}>2$</td><td>$\dfrac{\langle k^2\rangle}{\langle k\rangle}>\dfrac\mu\beta$</td></tr>
-          <tr><td>o que existe acima do limiar</td><td>um pedaço conexo gigante</td><td>um nível endêmico de infectados</td></tr>
+          <tr><td>indivíduo</td><td>vértice alcançado</td><td>episódio de infecção</td><td>pessoa infectada</td></tr>
+          <tr><td>grau</td><td>$q_k$</td><td>$q_k$</td><td>$q_k$</td></tr>
+          <tr><td>filhos</td><td>$k-1$ links novos</td><td>$\text{Bin}(kD,\beta)$ contágios</td><td>$\text{Bin}(k-1,T)$ links que transmitem</td></tr>
+          <tr><td>média de filhos</td><td>$\dfrac{\langle k^2\rangle}{\langle k\rangle}-1$</td><td>$\dfrac\beta\mu\,\dfrac{\langle k^2\rangle}{\langle k\rangle}$</td><td>$T\Big(\dfrac{\langle k^2\rangle}{\langle k\rangle}-1\Big)$</td></tr>
+          <tr><td>condição</td><td>$\dfrac{\langle k^2\rangle}{\langle k\rangle}>2$</td><td>$\dfrac{\langle k^2\rangle}{\langle k\rangle}>\dfrac\mu\beta$</td><td>$\dfrac{\langle k^2\rangle}{\langle k\rangle}>1+\dfrac1T$</td></tr>
+          <tr><td>rede</td><td>fixa</td><td>contatos renovados a cada passo</td><td>fixa</td></tr>
+          <tr><td>acima do limiar</td><td>pedaço conexo gigante</td><td>nível endêmico de infectados</td><td>surto que atinge uma fração da população</td></tr>
         </tbody>
       </table>
-      <p>Lidas assim, as duas condições dizem a mesma coisa: <b>$\langle k^2\rangle/\langle k\rangle$ precisa passar de um número</b>. Em Molloy–Reed o número é $2$, fixo, porque só a estrutura conta. No SIS é $\mu/\beta$, que depende da doença: quanto mais contagiosa e duradoura, mais fácil passar. A consequência mais importante também é comum: com uma lei de potência de expoente $\gamma\le3$, $\langle k^2\rangle/\langle k\rangle$ cresce sem limite com o tamanho da rede, e por isso, numa rede grande, <b>o pedaço gigante sempre existe e o limiar do SIS some</b>. Pelo mesmo motivo: os hubs.</p>
+      <p>Lidas assim, as três condições dizem a mesma coisa: <b>$\langle k^2\rangle/\langle k\rangle$ precisa passar de um número</b>. Em Molloy–Reed o número é $2$, fixo, porque só a estrutura conta. No SIS e no SIR ele depende da doença: quanto mais contagiosa e duradoura, mais fácil passar. A consequência mais importante também é comum: com uma lei de potência de expoente $\gamma\le3$, $\langle k^2\rangle/\langle k\rangle$ cresce sem limite com o tamanho da rede, e por isso, numa rede grande, <b>o pedaço gigante sempre existe e os limiares do SIS e do SIR somem</b>. Pelo mesmo motivo: os hubs.</p>
 
       <aside class="box atencao">
-        <p class="tag">Onde as duas contas diferem</p>
+        <p class="tag">Onde o SIS se afasta de Molloy–Reed</p>
         <ul>
-          <li><b>$1$ contra $\beta/\mu$.</b> Em Molloy–Reed, cada link é atravessado uma vez. No SIS, $\beta/\mu$ não é uma probabilidade, é um número médio de contágios por contato ao longo da infecção, e pode passar de $1$: as equações por classe de grau tratam os $k$ contatos como $k$ encontros por passo, com gente sorteada de novo a cada passo.</li>
+          <li><b>$\beta/\mu$ não é uma probabilidade.</b> Em Molloy–Reed, cada link é atravessado uma vez; no SIR, transmite no máximo uma vez, com chance $T&lt;1$. No SIS, $\beta/\mu$ é um número médio de contágios por contato ao longo da infecção, e pode passar de $1$, porque os $k$ contatos são $k$ encontros por passo, com gente nova a cada passo.</li>
           <li><b>$k$ contra $k-1$.</b> Pelo mesmo motivo, no SIS quem transmitiu não está sistematicamente entre os contatos de amanhã, e não há o "$-1$". Quando $\langle k^2\rangle/\langle k\rangle$ é grande, a diferença é pequena.</li>
-          <li><b>Estrutura contra processo.</b> Molloy–Reed fala da rede: se existe um pedaço gigante. O limiar do SIS fala de uma dinâmica: se a doença se mantém. Como os contatos são sorteados de novo a cada passo, a equação por classe de grau nem precisa que a rede seja conectada (exercício 7). Numa rede fixa, a doença só anda pelos links que existem, e o limiar exato do SIS passa a depender da rede inteira, pelo maior autovalor da matriz de adjacência. É o assunto de uma página futura.</li>
+          <li><b>Estrutura contra processo.</b> Com contatos renovados, o SIS nem precisa que a rede seja conectada (exercício 7). Numa rede fixa, a doença só anda pelos links que existem, e a reinfecção entre vizinhos quebra a ramificação, como na caixa da seção anterior.</li>
         </ul>
       </aside>
 
@@ -172,20 +233,18 @@
         <li><b>Sem desigualdade.</b> Na rede regular, as duas curvas coincidem. Na de Poisson, a diferença é pequena: $\langle k^2\rangle/\langle k\rangle=7$ contra $\langle k\rangle=6$.</li>
       </ol>
 
-      <h2 id="sir" data-toc="E no SIR?">E no SIR? A mesma coisa</h2>
-      <p>No <a href="sir.html">SIR</a> a conta é a mesma, com dois ajustes pequenos. Primeiro, um infectado transmite por cada link <b>no máximo uma vez</b>, porque quem já pegou não pega de novo. A chance de um link transmitir antes de o infectado se curar é a <b>transmissibilidade</b>
-      $$T=\sum_{t\ge0}\big[(1-\beta)(1-\mu)\big]^t\beta=\frac{\beta}{\beta+\mu-\beta\mu}.$$
-      Segundo, numa rede fixa, um dos $k$ links de quem acabou de se infectar leva a quem o infectou, que não pode ser contagiado de novo: sobram $k-1$. Com grau seguindo $q_k$, a média de saídas novas é $\langle k^2\rangle/\langle k\rangle-1$, exatamente a razão $m$ da exploração da página <a href="molloy-reed.html">Molloy–Reed e o paradoxo da amizade</a>. Então
-      $$R_0^{\text{SIR}}=T\,\Big(\frac{\langle k^2\rangle}{\langle k\rangle}-1\Big)>1.$$
-      É o critério de Molloy–Reed aplicado à rede em que cada link é mantido com probabilidade $T$: os links que transmitiriam. A epidemia vira um pedaço conexo gigante dessa rede. A mensagem é a mesma do SIS: <b>quem manda é $\langle k^2\rangle/\langle k\rangle$</b>, e com $\gamma\le3$ o limiar some.</p>
-      <p>Compare com a tabela de <a href="#mr">O parentesco com Molloy–Reed</a>: no SIR, os dois ajustes ($T$ no lugar de $\beta/\mu$ e $k-1$ no lugar de $k$) transformam o parentesco em igualdade.</p>
-
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
       <p>A célula itera o SIS por classe de grau com a lei de potência da demo, mede a razão de $\Theta$ no começo e compara com $1-\mu+\beta\langle k^2\rangle/\langle k\rangle$, confere que no começo $i_k$ é proporcional a $k$ e, por fim, simula $4000$ pessoas numa rede fixa sorteada com esses graus. Na versão para completar, $\Theta$ está calculado com o peso errado ($p_k$ em vez de $k\,p_k/\langle k\rangle$): a equação prevê que a doença some, e a simulação mostra que não.</p>
 
       <div class="pycell" data-title="O SIS por classe de grau"
            data-starter="../py/limiar_lacunas.py"
            data-solution="../py/limiar_solucao.py"></div>
+
+      <p>A segunda célula calcula a chance de surto pelo ponto fixo de $u$, para vários valores de $\beta$, e confere simulando o processo de ramificação diretamente: sorteia o paciente zero com $p_k$, a duração de cada infecção, o número de filhos de cada um e o grau dos filhos com $q_k$, até a cadeia morrer ou passar de $200$ infectados numa geração. Na versão para completar, falta a iteração de $u$.</p>
+
+      <div class="pycell" data-title="A chance de um surto"
+           data-starter="../py/surto_lacunas.py"
+           data-solution="../py/surto_solucao.py"></div>
 
       <h2 id="exercicios">Exercícios</h2>
 
@@ -263,6 +322,17 @@
         <summary>Solução</summary>
         <div class="body">
           <p>(a) $\langle k\rangle=\frac34\cdot1+\frac14\cdot3=1{,}5$ e $\langle k^2\rangle=\frac34\cdot1+\frac14\cdot9=3$, então $\langle k^2\rangle/\langle k\rangle=2$: a fronteira exata. (b) A doença se instala se $\beta/\mu>\langle k\rangle/\langle k^2\rangle=1/2$. Com $\beta/\mu=1$, $R_0=2$: sim. (c) As equações por classe de grau supõem contatos sorteados de novo a cada passo, e aí cada infectado encontra gente nova o tempo todo: a conectividade da rede fixa não entra. Numa rede fixa sem pedaço gigante, a doença fica presa em pedaços pequenos (árvores de poucos vértices) e acaba se extinguindo, por mais contagiosa que seja. Para uma doença se espalhar de verdade por uma rede fixa, é preciso, no mínimo, que a rede tenha um pedaço gigante.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">8. Uma ramificação à mão</p>
+        <p>Todos têm grau $2$, $\mu=1$ (a infecção dura exatamente um passo) e $\beta=0{,}75$. (a) Qual a distribuição do número de filhos $N$ de um infectado? Qual o $R_0$? (b) Escreva a equação de $u$ e resolva-a. (c) Qual a chance de que um caso inicial provoque um surto? (d) Itere $u_{n+1}=(0{,}25+0{,}75\,u_n)^2$ a partir de $u_0=0$ por alguns passos e veja de qual solução ela se aproxima.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Com $D=1$, há $2$ tentativas: $N\sim\text{Binomial}(2;\,0{,}75)$, e $R_0=2\cdot0{,}75=1{,}5$ (é também $\frac\beta\mu\frac{\langle k^2\rangle}{\langle k\rangle}=0{,}75\cdot2$). (b) $E[u^N]=(0{,}25+0{,}75u)^2$, então $u=(0{,}25+0{,}75u)^2$, ou $0{,}5625u^2-0{,}625u+0{,}0625=0$, com raízes $u=1$ e $u=1/9\approx0{,}111$. A que interessa é a menor. (c) O paciente zero também tem grau $2$: $P(\text{surto})=1-(0{,}25+0{,}75\cdot\tfrac19)^2=1-\tfrac19\approx0{,}89$. (d) $u_1=0{,}0625$, $u_2\approx0{,}0881$, $u_3\approx0{,}0999$, $u_4\approx0{,}1056$, … subindo para $1/9$: a chance de extinção em até $n$ gerações cresce e se aproxima da menor solução.</p>
         </div>
       </details>
 

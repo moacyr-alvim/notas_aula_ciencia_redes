@@ -69,7 +69,7 @@
     { id: "sir", lane: "epi", col: 1, label: "O modelo SIR", href: "paginas/sir.html", trails: ["epidemias"],
       desc: "A família dos modelos compartimentais e o SIR: quem se cura fica imune. O mesmo R₀ do SIS, o pico quando os suscetíveis caem a 1/R₀ e a imunidade de rebanho. Demo." },
     { id: "heterog", lane: "epi", col: 1, row: 1, label: "O limiar epidêmico\ncom pₖ", href: "paginas/limiar-pk.html", trails: ["epidemias"],
-      desc: "O SIS por classe de grau: R₀ = β⟨k²⟩/(μ⟨k⟩), os hubs infectados primeiro e o limiar que some nas redes livres de escala. O SIR é o critério de Molloy–Reed nos links que transmitem. Demo e Python." },
+      desc: "O SIS por classe de grau: R₀ = β⟨k²⟩/(μ⟨k⟩), os hubs infectados primeiro e o limiar que some nas redes livres de escala. O mesmo limiar por um processo de ramificação, como em Molloy–Reed, e a chance de um caso virar surto. O SIR é Molloy–Reed nos links que transmitem. Demo e Python." },
     { id: "limiar", lane: "epi", col: 2, row: 1, label: "O limiar e o maior\nautovalor de A", href: null, trails: ["epidemias"],
       desc: "Numa rede fixa qualquer, o começo da epidemia é uma progressão geométrica com a matriz de adjacência: o limiar é β·λ_max(A) = μ." },
     { id: "vacina", lane: "epi", col: 2, row: 0, label: "Imunizar\nquem?", href: null, trails: ["epidemias"],
