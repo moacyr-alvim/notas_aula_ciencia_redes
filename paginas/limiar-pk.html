@@ -40,14 +40,14 @@
       <p>Como no <a href="sis.html">SIS clássico</a>, os contatos são sorteados ao acaso, só que agora respeitando os graus: é a rede do <a href="molloy-reed.html">modelo de configuração</a>. Um contato de alguém é a ponta de um link, e na ponta de um link está uma pessoa de grau $k$ com probabilidade $q_k=k\,p_k/\langle k\rangle$. Então a chance de um contato estar infectado é
       $$\boxed{\,\Theta_t=\sum_k q_k\,i_{k,t}=\frac{1}{\langle k\rangle}\sum_k k\,p_k\,i_{k,t}.\,}$$
       $\Theta_t$ é a média de $i_{k,t}$ com peso $k$: quem tem muitos contatos pesa mais, porque aparece como contato de muita gente. Repare que $\Theta_t$ não é $i_t$.</p>
-      <p>Uma pessoa suscetível de grau $k$ encontra em média $k\,\Theta_t$ infectados, e cada um transmite com probabilidade $\beta$. Repetindo o raciocínio do SIS clássico, grau por grau:
+      <p>Uma pessoa suscetível de grau $k$ encontra um número binomial de infectados, de parâmetros $k$ e $\Theta_t$, em média $k\,\Theta_t$, e cada um transmite com probabilidade $\beta$. Repetindo o raciocínio do SIS clássico, grau por grau:
       $$\boxed{\,i_{k,t+1}=i_{k,t}+\beta\,k\,\Theta_t\,(1-i_{k,t})-\mu\,i_{k,t},\qquad k=1,2,3,\dots\,}$$
       São várias equações de diferenças acopladas, todas pelo mesmo número $\Theta_t$. Dado o começo, é só iterar.</p>
 
       <details>
         <summary>A conta sem a aproximação (usada na demo)</summary>
         <div class="body">
-          <p>Como no SIS clássico, a forma sem contar duas vezes é
+          <p>Como no SIS clássico, a forma sem contar duas vezes usa a chance de pelo menos um sucesso em $k$ tentativas independentes de probabilidade $\beta\Theta_t$, que é $1-(1-\beta\Theta_t)^k$:
           $$i_{k,t+1}=(1-\mu)\,i_{k,t}+(1-i_{k,t})\Big(1-(1-\beta\,\Theta_t)^{k}\Big).$$
           Aqui ela faz mais diferença: um hub com $k=300$ e $\beta\Theta_t=0{,}01$ teria "$\beta k\Theta_t=3$" contágios esperados, e a forma aproximada daria uma chance de se infectar maior que $1$. A forma exata dá $1-0{,}99^{300}\approx0{,}95$. No começo, quando $\Theta_t$ é pequeno, as duas coincidem, e o limiar é o mesmo.</p>
         </div>
@@ -66,7 +66,7 @@
         <p class="tag">O limiar epidêmico numa rede com graus $p_k$</p>
         <p>$$R_0=\frac{\beta}{\mu}\,\frac{\langle k^2\rangle}{\langle k\rangle},\qquad r-1=\mu\,(R_0-1),\qquad\text{a epidemia se instala}\iff\frac{\beta}{\mu}>\frac{\langle k\rangle}{\langle k^2\rangle}.$$</p>
       </aside>
-      <p>A relação $r-1=\mu(R_0-1)$ é a mesma do SIS clássico, e pelo mesmo motivo. A leitura de $R_0$ também é a mesma, com uma correção: um infectado típico <b>não é uma pessoa típica</b>. Ele pegou a doença de um contato, isto é, foi alcançado por um link, e por isso o grau dele segue $q_k$, não $p_k$. Seu número médio de contatos é $\langle k^2\rangle/\langle k\rangle$, o grau médio na ponta de um link. Cada um desses contatos é contagiado com probabilidade $\beta$ por passo, durante $1/\mu$ passos em média. É o paradoxo da amizade trabalhando para a doença.</p>
+      <p>A relação $r-1=\mu(R_0-1)$ é a mesma do SIS clássico, e pelo mesmo motivo. A leitura de $R_0$ também é a mesma, com uma correção: um infectado típico <b>não é uma pessoa típica</b>. Ele pegou a doença de um contato, isto é, foi alcançado por um link, e por isso o grau dele segue $q_k$, não $p_k$. Seu número médio de contatos é $\langle k^2\rangle/\langle k\rangle$, o grau médio na ponta de um link. Cada um desses contatos é contagiado com probabilidade $\beta$ por passo, durante $1/\mu$ passos em média (a duração é geométrica). É o paradoxo da amizade trabalhando para a doença.</p>
       <p>Como $\langle k^2\rangle/\langle k\rangle=\langle k\rangle+\operatorname{Var}(k)/\langle k\rangle$, o $R_0$ com graus é sempre pelo menos o do SIS clássico, e a diferença cresce com a desigualdade dos graus. Na rede regular, onde todos têm o mesmo grau, os dois coincidem.</p>
 
       <aside class="box">

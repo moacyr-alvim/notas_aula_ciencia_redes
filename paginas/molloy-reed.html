@@ -39,7 +39,7 @@
       Lembre que a variância dos graus é $\operatorname{Var}(k)=\langle k^2\rangle-\langle k\rangle^2\ge0$: o segundo momento é grande quando os graus são muito desiguais.</p>
       <p>Muitas redes diferentes têm a mesma $p_k$. Para falar da "rede típica com essa distribuição", sorteamos uma pelo <b>modelo de configuração</b>:</p>
       <ol>
-        <li>sorteie o grau $k_i$ de cada vértice $i$ com as probabilidades $p_k$;</li>
+        <li>sorteie o grau $k_i$ de cada vértice $i$ com as probabilidades $p_k$, independentemente;</li>
         <li>dê ao vértice $i$ exatamente $k_i$ <b>meios-links</b> (pontas soltas);</li>
         <li>junte as pontas soltas em pares ao acaso; cada par vira um link.</li>
       </ol>
@@ -51,6 +51,7 @@
       $$\boxed{\,q_k=\frac{k\,p_k}{\langle k\rangle}\,}\qquad\text{(grau de quem está na ponta de um link).}$$
       Vértices de grau $0$ nunca são alcançados ($q_0=0$); vértices de grau alto são super-representados. O grau médio na ponta de um link é
       $$\sum_k k\,q_k=\frac{\sum_k k^2p_k}{\langle k\rangle}=\frac{\langle k^2\rangle}{\langle k\rangle}.$$</p>
+      <p>Em probabilidade, $q_k$ tem nome: é a distribuição $p_k$ <b>ponderada pelo tamanho</b> (em inglês, <em>size-biased</em>), em que cada valor $k$ ganha peso proporcional a $k$. Ela aparece sempre que se sorteia "por dentro" em vez de "por fora". Pergunte a passageiros sorteados quantas pessoas havia no seu ônibus, e a média sai maior que a lotação média dos ônibus: ônibus cheios têm mais passageiros para responder.</p>
 
       <aside class="box atencao">
         <p class="tag">O paradoxo da amizade</p>
@@ -76,7 +77,7 @@
 
       <h2 id="exemplos" data-toc="Exemplos">Exemplos</h2>
       <ul>
-        <li><b>Graus de Poisson</b> (é a rede de Erdős–Rényi): $p_k=e^{-c}c^k/k!$, com $\langle k\rangle=c$ e $\operatorname{Var}(k)=c$, logo $\langle k^2\rangle/\langle k\rangle=c+1$. O critério dá $c>1$: o famoso limiar de Erdős–Rényi, <b>grau médio maior que $1$</b>.</li>
+        <li><b>Graus de Poisson</b> (é a rede de Erdős–Rényi): numa rede de Erdős–Rényi com $n$ vértices, cada um dos $n-1$ outros é vizinho com probabilidade $p$, independentemente, e o grau é binomial de parâmetros $n-1$ e $p$. Com $n$ grande e $c=(n-1)p$ fixo, a binomial fica muito perto da <b>Poisson</b> de média $c$ (a aproximação de Poisson para eventos raros): $p_k=e^{-c}c^k/k!$, com $\langle k\rangle=c$ e $\operatorname{Var}(k)=c$, logo $\langle k^2\rangle/\langle k\rangle=c+1$. O critério dá $c>1$: o famoso limiar de Erdős–Rényi, <b>grau médio maior que $1$</b>. Há uma propriedade bonita aí: $q_{k+1}=\frac{(k+1)\,p_{k+1}}{c}=e^{-c}\frac{c^k}{k!}=p_k$. O número de saídas novas, $k-1$, de quem está na ponta de um link é de novo Poisson de média $c$, e por isso $m=c$.</li>
         <li><b>Rede regular</b>, todos com grau $k$: $\langle k^2\rangle/\langle k\rangle=k>2$. Com $k=1$ só há pares soltos; com $k\ge3$, a rede é praticamente toda um pedaço só. O caso $k=2$ é a fronteira exata, onde a regra não decide: a rede é uma coleção de ciclos, cada exploração anda em fila sem ramificar, e o tamanho do maior ciclo varia muito de sorteio para sorteio.</li>
         <li><b>Mistura de graus $1$ e $3$</b>: uma fração $a$ dos vértices tem grau $1$ e o resto tem grau $3$. $\sum k(k-2)p_k=1\cdot(-1)\,a+3\cdot1\,(1-a)=3-4a$, positivo se $a&lt;3/4$. Até três quartos de becos sem saída, a rede ainda se mantém conectada em grande escala.</li>
         <li><b>Lei de potência</b>, $p_k\propto k^{-\gamma}$ para $k\ge1$: com $\gamma\le3$, o segundo momento $\langle k^2\rangle$ cresce sem limite quando a rede cresce (os hubs dominam a soma), e o critério é sempre satisfeito numa rede grande. Para $\gamma$ maior, o critério só vale até $\gamma\approx3{,}48$ (na demo, com o grau limitado a $1000$, até $3{,}45$): graus que caem rápido demais deixam a rede em pedaços.</li>
@@ -189,7 +190,7 @@
         <div>
           <h4>Ajuda ler antes</h4>
           <ul>
-            <li>Média e variância de uma distribuição discreta</li>
+            <li>Probabilidade básica: média e variância de uma distribuição discreta, as distribuições binomial e de Poisson</li>
             <li><a href="sis.html">O modelo SIS clássico</a>, para a progressão geométrica e a rede escondida</li>
           </ul>
         </div>

@@ -56,11 +56,11 @@
       Na segunda fórmula o peso é $p_k$, porque o paciente zero é uma pessoa típica: ele não chegou por um link. É a mesma dupla de fórmulas que dá, em Molloy–Reed, a fração da rede no pedaço gigante: lá, $u=\sum_k q_k\,u^{k-1}$ e a fração é $1-\sum_k p_k\,u^k$.</p>
       <p>A primeira equação tem sempre a solução $u=1$; acima do limiar, a que interessa é a menor solução entre $0$ e $1$. Para achá-la, basta iterar a partir de $u_0=0$: $u_{n+1}=\sum_k q_k\,E[u_n^N\mid k]$, onde $u_n$ é a chance de extinção em até $n$ gerações. É mais uma equação de diferenças.</p>
       <details>
-        <summary>A conta de $E[x^N\mid k]$</summary>
+        <summary>A conta de $E[x^N\mid k]$: funções geradoras</summary>
         <div class="body">
-          <p>Se a duração é $D=d$, há $kd$ tentativas independentes, e $E[x^N]=(1-\beta+\beta x)^{kd}$, porque cada tentativa contribui com $x$ (se transmite, com chance $\beta$) ou com $1$ (se não). Chamando $y=(1-\beta+\beta x)^k$ e fazendo a média sobre $D$, aparece uma progressão geométrica:
+          <p>$E[x^N]$, vista como função de $x$, é a <b>função geradora de probabilidades</b> de $N$: $\sum_n P(N=n)\,x^n$. Se a duração é $D=d$, $N$ é binomial com $kd$ tentativas, e a geradora da binomial é $(1-\beta+\beta x)^{kd}$: cada tentativa independente contribui com um fator $x$ (se transmite, com chance $\beta$) ou $1$ (se não). Chamando $y=(1-\beta+\beta x)^k$ e fazendo a média sobre a duração geométrica $D$, aparece a geradora da geométrica calculada em $y$:
           $$E[x^N\mid k]=\sum_{d\ge1}\mu(1-\mu)^{d-1}y^d=\frac{\mu\,y}{1-(1-\mu)\,y}.$$
-          Em Molloy–Reed o papel dessa expressão é feito por $x^{k-1}$: os $k-1$ filhos são certos.</p>
+          Em Molloy–Reed o papel dessa expressão é feito por $x^{k-1}$: os $k-1$ filhos são certos. Nas duas contas, a média de filhos é a derivada da geradora em $x=1$, e a chance de extinção $u$ é um ponto fixo dela.</p>
         </div>
       </details>
       <p>Na lei de potência da demo de <a href="limiar-pk.html">O limiar epidêmico por classes de grau</a> ($\gamma=2{,}5$, $3\le k\le300$), com $\mu=0{,}2$:</p>
@@ -84,6 +84,7 @@
       <h2 id="mr" data-toc="Molloy–Reed, SIS e SIR">Molloy–Reed, SIS e SIR lado a lado</h2>
       <p>No <a href="sir.html">SIR</a>, a ramificação fica ainda mais perto de Molloy–Reed, e numa rede fixa. Primeiro, um infectado transmite por cada link <b>no máximo uma vez</b>, porque quem já pegou não pega de novo. A chance de um link transmitir antes de o infectado se curar é a <b>transmissibilidade</b>
       $$T=\sum_{t\ge0}\big[(1-\beta)(1-\mu)\big]^t\beta=\frac{\beta}{\beta+\mu-\beta\mu}.$$
+      São duas geométricas correndo juntas: o passo da primeira transmissão pelo link é geométrico de parâmetro $\beta$, a duração da infecção é geométrica de parâmetro $\mu$, e $T$ é a chance de a transmissão chegar antes da cura. Cada termo da soma é a chance de passar $t$ passos sem transmitir e sem se curar e então transmitir.
       Segundo, um dos $k$ links de quem acabou de se infectar leva a quem o infectou, que não pode ser contagiado de novo: sobram $k-1$. Os filhos são os links novos que transmitem, $N\sim\text{Binomial}(k-1,T)$, com média $T(k-1)$, e
       $$R_0^{\text{SIR}}=T\,\Big(\frac{\langle k^2\rangle}{\langle k\rangle}-1\Big).$$
       É o critério de Molloy–Reed aplicado à rede em que cada link é mantido com probabilidade $T$, os links que transmitiriam; a epidemia é o pedaço gigante dessa rede.</p>
@@ -189,6 +190,7 @@
             <li><a href="molloy-reed.html">Molloy–Reed e o paradoxo da amizade</a></li>
             <li><a href="limiar-pk.html">O limiar epidêmico por classes de grau</a></li>
             <li><a href="sir.html">O modelo SIR</a>, para a comparação com o SIR</li>
+            <li>Probabilidade básica: distribuições geométrica e binomial; funções geradoras de probabilidades ajudam, mas não são necessárias</li>
           </ul>
         </div>
         <div>

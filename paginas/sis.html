@@ -57,7 +57,7 @@
       <p>Chame de $i_t$ a <b>fração</b> da população que está infectada no passo $t$; a fração suscetível é $1-i_t$. Num passo:</p>
       <ul>
         <li><b>Saem</b> do grupo dos infectados, em média, $\mu\,i_t$ (os que se curam).</li>
-        <li><b>Entram</b> os suscetíveis que pegam a doença. Uma pessoa suscetível tem $\langle k\rangle$ contatos; <em>se cada um deles está infectado com probabilidade $i_t$</em>, ela encontra em média $\langle k\rangle\,i_t$ infectados, e cada um transmite com probabilidade $\beta$. Enquanto $\beta\langle k\rangle i_t$ é pequeno, a chance de ela se infectar é $\approx\beta\langle k\rangle\,i_t$. Como são $1-i_t$ suscetíveis, entram $\beta\langle k\rangle\,i_t\,(1-i_t)$.</li>
+        <li><b>Entram</b> os suscetíveis que pegam a doença. Uma pessoa suscetível tem $\langle k\rangle$ contatos; <em>se cada um deles está infectado com probabilidade $i_t$</em>, independentemente, o número de contatos infectados que ela encontra tem <b>distribuição binomial</b> de parâmetros $\langle k\rangle$ e $i_t$, com média $\langle k\rangle\,i_t$, e cada um transmite com probabilidade $\beta$. Enquanto $\beta\langle k\rangle i_t$ é pequeno, a chance de ela se infectar é $\approx\beta\langle k\rangle\,i_t$. Como são $1-i_t$ suscetíveis, entram $\beta\langle k\rangle\,i_t\,(1-i_t)$.</li>
       </ul>
       <p>Juntando:
       $$\boxed{\,i_{t+1}=i_t+\beta\langle k\rangle\,i_t\,(1-i_t)-\mu\,i_t.\,}$$
@@ -66,7 +66,7 @@
       <details>
         <summary>A conta sem a aproximação</summary>
         <div class="body">
-          <p>A chance de uma suscetível com $\langle k\rangle$ contatos <em>não</em> ser infectada é a chance de nenhum contato transmitir. Cada contato transmite com probabilidade $\beta i_t$ (estar infectado e transmitir), então essa chance é $(1-\beta i_t)^{\langle k\rangle}$, e
+          <p>A chance de uma suscetível com $\langle k\rangle$ contatos <em>não</em> ser infectada é a chance de nenhum contato transmitir. Cada contato transmite com probabilidade $\beta i_t$ (estar infectado e transmitir), então o número de contatos que transmitem é binomial de parâmetros $\langle k\rangle$ e $\beta i_t$, e a chance de ele ser zero é $(1-\beta i_t)^{\langle k\rangle}$. Daí
           $$i_{t+1}=(1-\mu)\,i_t+(1-i_t)\Big(1-(1-\beta i_t)^{\langle k\rangle}\Big).$$
           Para $\beta i_t$ pequeno, $1-(1-\beta i_t)^{\langle k\rangle}\approx\beta\langle k\rangle i_t$, e volta-se à equação clássica. A clássica conta duas vezes quem é atingido por dois contatos ao mesmo tempo, então ela <em>superestima</em> os novos casos quando a epidemia já está grande (exercício 5). No começo, quando $i_t$ é pequeno, as duas são iguais.</p>
         </div>
@@ -98,10 +98,10 @@
       <p><b>Quanto tempo dura uma infecção.</b> A cada passo, o infectado se cura com probabilidade $\mu$. A duração $D$ (o número de passos em que ele fica infectado) segue uma <b>distribuição geométrica</b>:
       $$P(D=1)=\mu,\quad P(D=2)=(1-\mu)\mu,\quad\dots,\quad P(D=n)=(1-\mu)^{n-1}\mu,$$
       e a duração média é $\mathbb E[D]=1/\mu$. Com $\mu=0{,}2$ por dia, a infecção dura em média $5$ dias.</p>
-      <p><b>Quantos ele contagia por passo.</b> No começo, todos os seus $\langle k\rangle$ contatos são suscetíveis, e cada um é contagiado com probabilidade $\beta$: em média $\beta\langle k\rangle$ por passo.</p>
+      <p><b>Quantos ele contagia por passo.</b> No começo, todos os seus $\langle k\rangle$ contatos são suscetíveis, e cada um é contagiado com probabilidade $\beta$: o número de contagiados num passo é binomial de parâmetros $\langle k\rangle$ e $\beta$, com média $\beta\langle k\rangle$.</p>
       <p>Multiplicando:
       $$\boxed{\,R_0=\beta\langle k\rangle\times\frac1\mu=\frac{\beta\langle k\rangle}{\mu}.\,}$$
-      A mesma conta, somando passo a passo: o infectado ainda está infectado no seu $(t+1)$-ésimo passo com probabilidade $(1-\mu)^t$, então $R_0=\sum_{t\ge0}\beta\langle k\rangle(1-\mu)^t=\beta\langle k\rangle/\mu$, pela soma da progressão geométrica.</p>
+      A mesma conta, somando passo a passo: o infectado ainda está infectado no seu $(t+1)$-ésimo passo com probabilidade $P(D\ge t+1)=(1-\mu)^t$ (a cauda da geométrica), então $R_0=\sum_{t\ge0}\beta\langle k\rangle(1-\mu)^t=\beta\langle k\rangle/\mu$, pela soma da progressão geométrica.</p>
 
       <h2 id="ligacao" data-toc="R₀ e a razão r">$R_0$ e a razão $r$: a mesma progressão, dois relógios</h2>
       <p>Compare as duas fórmulas: $r=1-\mu+\beta\langle k\rangle$ e $R_0=\beta\langle k\rangle/\mu$. Eliminando $\beta\langle k\rangle=\mu R_0$:
@@ -123,7 +123,7 @@
       <p>A <b>rede de contatos</b> pode ser:</p>
       <ul>
         <li><b>mistura</b>: a cada passo, cada pessoa sorteia $\langle k\rangle$ contatos novos na população inteira. É exatamente a hipótese da equação.</li>
-        <li><b>aleatória fixa</b>: uma rede de Erdős–Rényi sorteada uma vez, com grau médio $\langle k\rangle$ (os graus variam de pessoa para pessoa).</li>
+        <li><b>aleatória fixa</b>: uma rede de Erdős–Rényi sorteada uma vez, com grau médio $\langle k\rangle$. Os graus variam de pessoa para pessoa: o de cada uma é binomial (cada uma das outras $n-1$ pessoas é vizinha com a mesma probabilidade), muito perto de uma Poisson de média $\langle k\rangle$.</li>
         <li><b>regular aleatória</b>: uma rede sorteada uma vez, em que todos têm exatamente $\langle k\rangle$ contatos.</li>
         <li><b>anel</b>: cada pessoa só encontra os $\langle k\rangle$ vizinhos mais próximos numa fila circular (na grade, a fila é lida linha por linha). É o caso extremo de contatos "geográficos".</li>
       </ul>
@@ -212,7 +212,7 @@
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) Para continuar infectado por $t$ passos, ele precisa não se curar em cada um deles, independentemente: $(1-\mu)^t$. (b) Em cada passo em que está infectado, contagia em média $\beta\langle k\rangle$; somando a média de todos os passos, $\sum_{t\ge0}\beta\langle k\rangle(1-\mu)^t=\beta\langle k\rangle\cdot\frac1{1-(1-\mu)}=\frac{\beta\langle k\rangle}\mu$. (c) $D\ge t+1$ exatamente quando ele está infectado no passo $t$, então $\mathbb E[D]=\sum_{t\ge0}P(D\ge t+1)=\sum_{t\ge0}(1-\mu)^t=1/\mu$. O item (b) é o item (c) multiplicado por $\beta\langle k\rangle$.</p>
+          <p>(a) Para continuar infectado por $t$ passos, ele precisa não se curar em cada um deles, independentemente: $(1-\mu)^t$. (b) Em cada passo em que está infectado, contagia em média $\beta\langle k\rangle$; somando a média de todos os passos, $\sum_{t\ge0}\beta\langle k\rangle(1-\mu)^t=\beta\langle k\rangle\cdot\frac1{1-(1-\mu)}=\frac{\beta\langle k\rangle}\mu$. (c) $D\ge t+1$ exatamente quando ele está infectado no passo $t$, então $\mathbb E[D]=\sum_{t\ge0}P(D\ge t+1)=\sum_{t\ge0}(1-\mu)^t=1/\mu$. É a fórmula da esperança pela cauda, $\mathbb E[D]=\sum_{t\ge0}P(D&gt;t)$, que vale para qualquer variável aleatória com valores inteiros não negativos; aqui ela dá a média da geométrica sem nenhuma derivada. O item (b) é o item (c) multiplicado por $\beta\langle k\rangle$.</p>
         </div>
       </details>
 
