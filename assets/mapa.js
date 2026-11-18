@@ -62,17 +62,19 @@
   );
 
   NODES.push(
-    { id: "molloy", lane: "rand", col: 0, label: "Molloy–Reed e o\nparadoxo da amizade", href: "paginas/molloy-reed.html", trails: ["epidemias"],
+    { id: "molloy", lane: "rand", col: 1, label: "Molloy–Reed e o\nparadoxo da amizade", href: "paginas/molloy-reed.html", trails: ["epidemias"],
       desc: "Redes sorteadas com graus pₖ (modelo de configuração), o grau de quem está na ponta de um link, kpₖ/⟨k⟩, o paradoxo da amizade e o critério ⟨k²⟩/⟨k⟩ > 2 para o pedaço gigante. Demo e Python." },
     { id: "sis", lane: "epi", col: 0, label: "O modelo SIS\nclássico", href: "paginas/sis.html", trails: ["epidemias"],
       desc: "Suscetível, infectado, suscetível de novo, em equações de diferenças. A rede escondida (contatos sorteados ao acaso), a progressão geométrica do começo, R₀ = β⟨k⟩/μ, r − 1 = μ(R₀ − 1) e o equilíbrio 1 − 1/R₀. Simulação em quatro redes e Python." },
-    { id: "sir", lane: "epi", col: 1, label: "O modelo SIR", href: "paginas/sir.html", trails: ["epidemias"],
+    { id: "sir", lane: "epi", col: 1, row: 1, label: "O modelo SIR", href: "paginas/sir.html", trails: ["epidemias"],
       desc: "A família dos modelos compartimentais e o SIR: quem se cura fica imune. O mesmo R₀ do SIS, o pico quando os suscetíveis caem a 1/R₀ e a imunidade de rebanho. Demo." },
-    { id: "heterog", lane: "epi", col: 1, row: 1, label: "O limiar epidêmico\ncom pₖ", href: "paginas/limiar-pk.html", trails: ["epidemias"],
-      desc: "O SIS por classe de grau: R₀ = β⟨k²⟩/(μ⟨k⟩), os hubs infectados primeiro e o limiar que some nas redes livres de escala. O mesmo limiar por um processo de ramificação, como em Molloy–Reed, e a chance de um caso virar surto. O SIR é Molloy–Reed nos links que transmitem. Demo e Python." },
-    { id: "limiar", lane: "epi", col: 2, row: 1, label: "O limiar e o maior\nautovalor de A", href: null, trails: ["epidemias"],
+    { id: "heterog", lane: "epi", col: 1, row: 0, label: "O limiar por\nclasses de grau", href: "paginas/limiar-pk.html", trails: ["epidemias"],
+      desc: "O método de Pastor-Satorras e Vespignani: o SIS separado por classe de grau, R₀ = β⟨k²⟩/(μ⟨k⟩), os hubs infectados primeiro e o limiar que some nas redes livres de escala. Demo e Python." },
+    { id: "ramif", lane: "epi", col: 2, row: 1, label: "O limiar por\nramificação", href: "paginas/ramificacao.html", trails: ["epidemias"],
+      desc: "O mesmo limiar seguindo a cadeia de contágios, à la Molloy–Reed, e a chance de um único caso virar surto. Molloy–Reed, SIS e SIR lado a lado: o SIR é Molloy–Reed nos links que transmitem. Python." },
+    { id: "limiar", lane: "epi", col: 3, row: 1, label: "O limiar e o maior\nautovalor de A", href: null, trails: ["epidemias"],
       desc: "Numa rede fixa qualquer, o começo da epidemia é uma progressão geométrica com a matriz de adjacência: o limiar é β·λ_max(A) = μ." },
-    { id: "vacina", lane: "epi", col: 2, row: 0, label: "Imunizar\nquem?", href: null, trails: ["epidemias"],
+    { id: "vacina", lane: "epi", col: 3, row: 0, label: "Imunizar\nquem?", href: null, trails: ["epidemias"],
       desc: "Vacinar ao acaso, vacinar os hubs, ou vacinar os amigos de pessoas sorteadas: o que cada estratégia faz com R₀." }
   );
 
@@ -80,7 +82,7 @@
     ["difusao", "consenso"], ["consenso", "sincr"],
     ["difusao", "comp"], ["comp", "fiedler"], ["fiedler", "desenho"], ["difusao", "modos"], ["modos", "desenho"],
     ["difusao", "passeio"], ["passeio", "pagerank"], ["passeio", "resist"],
-    ["sis", "sir"], ["sis", "heterog"], ["molloy", "heterog"], ["heterog", "limiar"], ["heterog", "vacina"],
+    ["sis", "sir"], ["sis", "heterog"], ["molloy", "heterog"], ["heterog", "ramif"], ["molloy", "ramif"], ["sir", "ramif"], ["ramif", "limiar"], ["ramif", "vacina"],
     ["sinais", "lapsinal"], ["comp", "lapsinal"], ["lapsinal", "frustr"], ["sinais", "davis"]
   ];
 

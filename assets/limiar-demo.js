@@ -1,4 +1,4 @@
-/* Demo da página "O limiar epidêmico com p_k".
+/* Demo da página "O limiar epidêmico por classes de grau".
  * SIS por classe de grau (equações de diferenças), comparado com o SIS clássico de mesmo ⟨k⟩.
  * Esquerda: fração infectada ao longo do tempo.  Direita: i_k contra k no passo escolhido.
  * Depende de epi-core.js. */

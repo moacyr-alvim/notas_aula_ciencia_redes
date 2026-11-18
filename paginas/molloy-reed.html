@@ -30,7 +30,7 @@
       <header>
         <h1>Molloy–Reed e o paradoxo da amizade</h1>
         <p class="lede">Numa rede sorteada só a partir da distribuição dos graus, quem está na ponta de um link tem, em média, mais vizinhos que um vértice qualquer: $\langle k^2\rangle/\langle k\rangle$ em vez de $\langle k\rangle$. Daí sai, numa linha, o critério de Molloy–Reed para a rede ter um pedaço conexo gigante: $\langle k^2\rangle/\langle k\rangle>2$. É a mesma conta que vai dar o limiar de uma epidemia.</p>
-        <p class="meta">Página da raia <em>Redes aleatórias</em>, preparação para <a href="limiar-pk.html">O limiar epidêmico com p<sub>k</sub></a>. Só usa médias e progressões geométricas.</p>
+        <p class="meta">Página da raia <em>Redes aleatórias</em>, preparação para <a href="limiar-pk.html">O limiar epidêmico por classes de grau</a> e <a href="ramificacao.html">O limiar epidêmico por ramificação</a>. Só usa médias e progressões geométricas.</p>
       </header>
 
       <h2 id="graus" data-toc="Redes com graus dados">Redes sorteadas com graus dados</h2>
@@ -119,7 +119,7 @@
       </ol>
 
       <h2 id="epidemias" data-toc="E as epidemias?">E as epidemias?</h2>
-      <p>Troque "explorar a rede" por "a doença se espalhar". Um infectado foi contagiado por um link; dos seus vizinhos, um é quem o contagiou, e os outros $k-1$ são alvos novos. O grau dele segue $q_k$, porque ele foi alcançado por um link. É uma ramificação do mesmo tipo, que começa num vértice alcançado por um link, com grau médio $\langle k^2\rangle/\langle k\rangle$. Só muda quanto rende cada link: em vez de ser sempre atravessado, ele transmite a doença com alguma chance. Por isso, numa rede com graus desiguais, <b>o que manda no limiar epidêmico é $\langle k^2\rangle/\langle k\rangle$, e não $\langle k\rangle$</b>. No SIS, o limiar fica $\langle k^2\rangle/\langle k\rangle>\mu/\beta$, que tem a mesma forma que $\langle k^2\rangle/\langle k\rangle>2$; a conta completa e a comparação lado a lado estão em <a href="limiar-pk.html">O limiar epidêmico com p<sub>k</sub></a>.</p>
+      <p>Troque "explorar a rede" por "a doença se espalhar". Um infectado foi contagiado por um link; dos seus vizinhos, um é quem o contagiou, e os outros $k-1$ são alvos novos. O grau dele segue $q_k$, porque ele foi alcançado por um link. É uma ramificação do mesmo tipo, que começa num vértice alcançado por um link, com grau médio $\langle k^2\rangle/\langle k\rangle$. Só muda quanto rende cada link: em vez de ser sempre atravessado, ele transmite a doença com alguma chance. Por isso, numa rede com graus desiguais, <b>o que manda no limiar epidêmico é $\langle k^2\rangle/\langle k\rangle$, e não $\langle k\rangle$</b>. No SIS, o limiar fica $\langle k^2\rangle/\langle k\rangle>\mu/\beta$, que tem a mesma forma que $\langle k^2\rangle/\langle k\rangle>2$; a conta pelas classes de grau está em <a href="limiar-pk.html">O limiar epidêmico por classes de grau</a>, e a conta por ramificação, como a desta página, com o SIS e o SIR lado a lado, em <a href="ramificacao.html">O limiar epidêmico por ramificação</a>.</p>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
       <p>A célula mede o paradoxo da amizade no clube de caratê e depois sorteia redes pelo modelo de configuração (com <code>networkx.configuration_model</code>), com graus de Poisson e com a mistura de graus $1$ e $3$, para ver o pedaço gigante aparecer nos limiares $\langle k\rangle=1$ e $a=3/4$.</p>
@@ -196,7 +196,8 @@
         <div>
           <h4>Para onde ir depois</h4>
           <ul>
-            <li><a href="limiar-pk.html">O limiar epidêmico com p<sub>k</sub></a></li>
+            <li><a href="limiar-pk.html">O limiar epidêmico por classes de grau</a></li>
+            <li><a href="ramificacao.html">O limiar epidêmico por ramificação</a></li>
           </ul>
         </div>
       </nav>

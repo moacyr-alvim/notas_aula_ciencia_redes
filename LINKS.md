@@ -8,7 +8,7 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 ### O laplaciano em redes (`index.html`)
 
-**Quem aponta para ela** (10):
+**Quem aponta para ela** (11):
 - `paginas/componentes.html`: “← Mapa de conceitos”
 - `paginas/difusao.html`: “← Mapa de conceitos”
 - `paginas/fiedler.html`: “← Mapa de conceitos”
@@ -16,11 +16,12 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 - `paginas/lapsinal.html`: “← Mapa de conceitos”
 - `paginas/limiar-pk.html`: “← Mapa de conceitos”
 - `paginas/molloy-reed.html`: “← Mapa de conceitos”
+- `paginas/ramificacao.html`: “← Mapa de conceitos”
 - `paginas/sinais.html`: “← Mapa de conceitos”
 - `paginas/sir.html`: “← Mapa de conceitos”
 - `paginas/sis.html`: “← Mapa de conceitos”
 
-**Aponta para:** `paginas/componentes.html`, `paginas/difusao.html`, `paginas/fiedler.html`, `paginas/frustracao.html`, `paginas/lapsinal.html`, `paginas/limiar-pk.html`, `paginas/molloy-reed.html`, `paginas/sinais.html`, `paginas/sir.html`, `paginas/sis.html`
+**Aponta para:** `paginas/componentes.html`, `paginas/difusao.html`, `paginas/fiedler.html`, `paginas/frustracao.html`, `paginas/lapsinal.html`, `paginas/limiar-pk.html`, `paginas/molloy-reed.html`, `paginas/ramificacao.html`, `paginas/sinais.html`, `paginas/sir.html`, `paginas/sis.html`
 
 **Links para fora do site:** https://moacyr-alvim.github.io/notas_aula_edp/
 
@@ -97,30 +98,43 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 **Aponta para:** `index.html`, `paginas/componentes.html`, `paginas/difusao.html`, `paginas/difusao.html`#euler, `paginas/difusao.html`#modos, `paginas/fiedler.html`, `paginas/frustracao.html`, `paginas/sinais.html`, `paginas/sinais.html`#definicao, `paginas/sinais.html`#exercicios, `paginas/sinais.html`#gama
 
-### O limiar epidêmico com $p_k$ (`paginas/limiar-pk.html`)
+### O limiar epidêmico por classes de grau (`paginas/limiar-pk.html`)
 
-**No mapa:** “O limiar epidêmico com pₖ”
+**No mapa:** “O limiar por classes de grau”
 
 **Quem aponta para ela** (4):
-- `index.html`: “O limiar epidêmico com pk”
-- `paginas/molloy-reed.html`: “O limiar epidêmico com pk”
-- `paginas/sir.html`: “O limiar epidêmico com pk”
-- `paginas/sis.html`: “O limiar epidêmico com pk”
+- `index.html`: “O limiar epidêmico por classes de grau”
+- `paginas/molloy-reed.html`: “O limiar epidêmico por classes de grau”
+- `paginas/ramificacao.html`: “O limiar epidêmico por classes de grau”
+- `paginas/sis.html`: “O limiar epidêmico por classes de grau”
 
-**Aponta para:** `index.html`, `paginas/molloy-reed.html`, `paginas/sir.html`, `paginas/sis.html`
+**Aponta para:** `index.html`, `paginas/molloy-reed.html`, `paginas/ramificacao.html`, `paginas/sis.html`
 
 ### Molloy–Reed e o paradoxo da amizade (`paginas/molloy-reed.html`)
 
 **No mapa:** “Molloy–Reed e o paradoxo da amizade”
 
-**Quem aponta para ela** (5):
+**Quem aponta para ela** (6):
 - `index.html`: “Molloy–Reed e o paradoxo da amizade”
 - `paginas/limiar-pk.html`: “Molloy–Reed e o paradoxo da amizade”
 - `paginas/limiar-pk.html`: “modelo de configuração”
+- `paginas/ramificacao.html`: “Molloy–Reed e o paradoxo da amizade”
 - `paginas/sir.html`: “Molloy–Reed e o paradoxo da amizade”
 - `paginas/sis.html`: “Molloy–Reed e o paradoxo da amizade”
 
-**Aponta para:** `index.html`, `paginas/fiedler.html`, `paginas/limiar-pk.html`, `paginas/sis.html`
+**Aponta para:** `index.html`, `paginas/fiedler.html`, `paginas/limiar-pk.html`, `paginas/ramificacao.html`, `paginas/sis.html`
+
+### O limiar epidêmico por ramificação (`paginas/ramificacao.html`)
+
+**No mapa:** “O limiar por ramificação”
+
+**Quem aponta para ela** (4):
+- `index.html`: “O limiar epidêmico por ramificação”
+- `paginas/limiar-pk.html`: “O limiar epidêmico por ramificação”
+- `paginas/molloy-reed.html`: “O limiar epidêmico por ramificação”
+- `paginas/sir.html`: “O limiar epidêmico por ramificação”
+
+**Aponta para:** `index.html`, `paginas/limiar-pk.html`, `paginas/molloy-reed.html`, `paginas/sir.html`, `paginas/sis.html`
 
 ### Redes com sinais e equilíbrio (`paginas/sinais.html`)
 
@@ -142,23 +156,24 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 
 **Quem aponta para ela** (4):
 - `index.html`: “O modelo SIR”
-- `paginas/limiar-pk.html`: “O modelo SIR”
-- `paginas/limiar-pk.html`: “SIR”
+- `paginas/ramificacao.html`: “O modelo SIR”
+- `paginas/ramificacao.html`: “SIR”
 - `paginas/sis.html`: “O modelo SIR”
 
-**Aponta para:** `index.html`, `paginas/limiar-pk.html`, `paginas/molloy-reed.html`, `paginas/sis.html`, `paginas/sis.html`#comeco, `paginas/sis.html`#rede
+**Aponta para:** `index.html`, `paginas/molloy-reed.html`, `paginas/ramificacao.html`, `paginas/sis.html`, `paginas/sis.html`#comeco, `paginas/sis.html`#rede
 
 ### O modelo SIS clássico (`paginas/sis.html`)
 
 **No mapa:** “O modelo SIS clássico”
 
-**Quem aponta para ela** (10):
+**Quem aponta para ela** (11):
 - `index.html`: “O modelo SIS clássico”
 - `paginas/difusao.html`: “O modelo SIS clássico”
 - `paginas/limiar-pk.html`: “O modelo SIS clássico”
 - `paginas/limiar-pk.html`: “SIS clássico”
 - `paginas/molloy-reed.html`: “O modelo SIS clássico”
 - `paginas/molloy-reed.html`: “SIS clássico”
+- `paginas/ramificacao.html`: “SIS clássico”
 - `paginas/sir.html`: “O modelo SIS clássico”
 - `paginas/sir.html`: “SIS”
 - `paginas/sir.html` → `#comeco`: “progressão geométrica”
@@ -181,10 +196,13 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 | Passeio aleatório e L normalizado (em breve) | PageRank e redes dirigidas (em breve) |
 | Passeio aleatório e L normalizado (em breve) | Circuitos e resistência efetiva (em breve) |
 | O modelo SIS clássico (`paginas/sis.html`) | O modelo SIR (`paginas/sir.html`) |
-| O modelo SIS clássico (`paginas/sis.html`) | O limiar epidêmico com pₖ (`paginas/limiar-pk.html`) |
-| Molloy–Reed e o paradoxo da amizade (`paginas/molloy-reed.html`) | O limiar epidêmico com pₖ (`paginas/limiar-pk.html`) |
-| O limiar epidêmico com pₖ (`paginas/limiar-pk.html`) | O limiar e o maior autovalor de A (em breve) |
-| O limiar epidêmico com pₖ (`paginas/limiar-pk.html`) | Imunizar quem? (em breve) |
+| O modelo SIS clássico (`paginas/sis.html`) | O limiar por classes de grau (`paginas/limiar-pk.html`) |
+| Molloy–Reed e o paradoxo da amizade (`paginas/molloy-reed.html`) | O limiar por classes de grau (`paginas/limiar-pk.html`) |
+| O limiar por classes de grau (`paginas/limiar-pk.html`) | O limiar por ramificação (`paginas/ramificacao.html`) |
+| Molloy–Reed e o paradoxo da amizade (`paginas/molloy-reed.html`) | O limiar por ramificação (`paginas/ramificacao.html`) |
+| O modelo SIR (`paginas/sir.html`) | O limiar por ramificação (`paginas/ramificacao.html`) |
+| O limiar por ramificação (`paginas/ramificacao.html`) | O limiar e o maior autovalor de A (em breve) |
+| O limiar por classes de grau (`paginas/limiar-pk.html`) | Imunizar quem? (em breve) |
 | Redes com sinais e equilíbrio (`paginas/sinais.html`) | Laplaciano com sinais (`paginas/lapsinal.html`) |
 | Laplaciano, componentes e gargalos (`paginas/componentes.html`) | Laplaciano com sinais (`paginas/lapsinal.html`) |
 | Laplaciano com sinais (`paginas/lapsinal.html`) | Frustração espectral (`paginas/frustracao.html`) |
