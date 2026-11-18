@@ -76,6 +76,7 @@ need = {
     "paginas/sis.html": ["demo-sis", "e-rede", "e-nova", "e-log", "e-beta", "e-betav", "e-k", "e-kv", "e-mu", "e-muv", "e-t", "e-tv", "e-play", "e-readout", "e-pop-canvas", "e-curva-canvas", "tema", "toc"],
     "paginas/sir.html": ["demo-sir", "r-beta", "r-betav", "r-k", "r-kv", "r-mu", "r-muv", "r-sis", "r-readout", "r-canvas", "tema", "toc"],
     "paginas/molloy-reed.html": ["demo-mr", "m-fam", "m-nova", "m-par", "m-parv", "m-parl", "m-readout", "m-dist-canvas", "m-gig-canvas", "tema", "toc"],
+    "paginas/autovalor.html": ["demo-av", "a-gama", "a-gamav", "a-n", "a-nova", "a-readout", "a-vet-canvas", "a-prev-canvas", "tema", "toc"],
     "paginas/ramificacao.html": ["tema", "toc"],
     "paginas/limiar-pk.html": ["demo-lim", "l-fam", "l-gama", "l-gamav", "l-log", "l-beta", "l-betav", "l-mu", "l-muv", "l-t", "l-tv", "l-readout", "l-curva-canvas", "l-k-canvas", "tema", "toc"],
     "index.html": ["mapa", "chips", "info", "trail-list", "tema"],

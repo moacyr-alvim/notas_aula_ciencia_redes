@@ -73,5 +73,16 @@ check("SIS por grau: β⟨k⟩/μ < 1 mas a epidemia se instala (≈ 0,131)", 0.
 check("SIS por grau: no começo i_k ∝ k", near(Sg[10][100] / Sg[10][10], 10, 0.4));
 check("SIS por grau: regular coincide com o clássico exato", (() => { const r = E.serieSISgrau(E.regularDist(6), 1e-3, 0.04, 0.2, 150), h = E.serie(E.passoExato, 1e-3, 0.04, 6, 0.2, 150); return near(r[150][6], h[150], 1e-12); })());
 
+// ---------- SIS vértice a vértice e o maior autovalor ----------
+(() => {
+  const estrela = []; for (let j = 1; j <= 100; j++) estrela.push([0, j]);
+  const Le = E.listas(101, estrela);
+  check("autovalor: estrela de 100 folhas tem λ_max = 10", near(E.autovalorMax(Le, 400).lambda, 10, 1e-6), E.autovalorMax(Le, 400).lambda);
+  const n = 3000, G = E.configuracao(n, E.leiPotencia(3.5, 3, Math.round(3 * Math.pow(n, 1 / 2.5))), E.rng(5)), L = E.listas(n, G.arestas), av = E.autovalorMax(L, 600);
+  check("autovalor: rede γ = 3,5 com n = 3000 tem λ_max ≈ 7,62 (numpy)", near(av.lambda, 7.618, 0.01), av.lambda.toFixed(3));
+  const prev = (x) => { const p = E.sisVertices(L, x * 0.2 / av.lambda, 0.2, new Float64Array(n).fill(0.5), 1500); return p.reduce((a, b) => a + b, 0) / n; };
+  check("SIS por vértice: some abaixo de 1/λ_max e fica acima", prev(0.8) < 1e-4 && prev(1.5) > 0.02, prev(0.8).toExponential(2) + " " + prev(1.5).toFixed(4));
+})();
+
 console.log("\nfalhas:", fails);
 process.exit(fails ? 1 : 0);

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O limiar e o maior autovalor de A — O laplaciano em redes</title>
+  <link rel="stylesheet" href="../assets/style.css?v=55ab22b5">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js?v=d64d5c9e"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <style>
+    #demo-av canvas { height: 320px; }
+    .tabela { border-collapse: collapse; margin: 1rem auto; font-family: var(--sans); font-size: .92rem; }
+    .tabela th, .tabela td { border-bottom: 1px solid var(--rule); padding: .35rem .8rem; text-align: center; }
+    .tabela th { color: var(--ink-soft); font-weight: 600; }
+    .tabela td:first-child { text-align: left; }
+    .refs li { margin-bottom: .45rem; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O limiar e o maior autovalor de $A$</h1>
+        <p class="lede">Numa rede fixa, o começo do SIS continua sendo uma progressão geométrica, mas agora de vetores: a razão é uma matriz montada com a matriz de adjacência $A$. Quem decide se a progressão cresce é o maior autovalor, e o limiar fica $\beta/\mu&gt;1/\lambda_{\max}(A)$. O SIS clássico e o método das classes de grau são casos particulares; o que eles não veem são os hubs funcionando como reservatórios da doença.</p>
+        <p class="meta">Trilha <em>Epidemias em redes</em>. Usa <a href="limiar-pk.html">O limiar epidêmico por classes de grau</a>, a ideia de modos de <a href="difusao.html">Difusão em redes</a> e o quociente de Rayleigh de <a href="fiedler.html">Comunidades pelo vetor de Fiedler</a>. Só equações de diferenças.</p>
+      </header>
+
+      <h2 id="vertice" data-toc="Uma equação por vértice">Uma equação por vértice</h2>
+      <p>As páginas anteriores trocaram a rede por uma média: contatos sorteados ao acaso, só respeitando os graus. Agora a rede é fixa, com matriz de adjacência $A$ ($A_{ij}=1$ se $i$ e $j$ têm um link, $0$ se não). Em vez de uma fração por grau, acompanhamos uma probabilidade por pessoa:
+      $$p_{i,t}=\text{probabilidade de o vértice }i\text{ estar infectado no passo }t.$$
+      A cada passo, cada vizinho infectado transmite com probabilidade $\beta$, e cada infectado se cura com probabilidade $\mu$. O vértice $i$ escapa de todos os vizinhos com probabilidade $\prod_j(1-\beta A_{ij}\,p_{j,t})$, tratando os vizinhos como independentes. Então
+      $$\boxed{\,p_{i,t+1}=(1-\mu)\,p_{i,t}+(1-p_{i,t})\Big[1-\prod_j\big(1-\beta A_{ij}\,p_{j,t}\big)\Big].\,}$$
+      É uma equação de diferenças para cada vértice, todas acopladas pela rede. Essa forma, em tempo discreto, é a de Wang, Chakrabarti, Wang e Faloutsos (2003), que estão entre os primeiros a ligar o limiar epidêmico ao maior autovalor de $A$ (ver <a href="#refs">Referências</a>).</p>
+
+      <h2 id="comeco" data-toc="O começo">O começo: uma progressão de vetores</h2>
+      <p>No começo, todos os $p_{i,t}$ são pequenos. Desprezando produtos de probabilidades pequenas, como no <a href="sis.html">SIS clássico</a>, o produto vira $1-\beta\sum_jA_{ij}p_{j,t}$ e $1-p_{i,t}\approx1$:
+      $$p_{i,t+1}\approx(1-\mu)\,p_{i,t}+\beta\sum_jA_{ij}\,p_{j,t},\qquad\text{isto é,}\qquad \mathbf p_{t+1}\approx M\,\mathbf p_t,\quad M=(1-\mu)\,I+\beta A.$$
+      É uma progressão geométrica, só que de vetores: $\mathbf p_t=M^t\,\mathbf p_0$. Para saber se ela cresce, usamos o truque da página <a href="difusao.html">Difusão em redes</a>: decompor em autovetores.</p>
+      <p>$A$ é simétrica, então tem autovalores reais $\lambda_1\ge\lambda_2\ge\dots\ge\lambda_n$ e autovetores $\mathbf v_1,\mathbf v_2,\dots,\mathbf v_n$ ortogonais. Os autovetores de $M$ são os mesmos, com autovalores $1-\mu+\beta\lambda_j$. Escrevendo o começo nessa base, $\mathbf p_0=\sum_jc_j\mathbf v_j$, cada parte evolui sozinha:
+      $$\mathbf p_t=\sum_j c_j\,\big(1-\mu+\beta\lambda_j\big)^t\,\mathbf v_j.$$
+      São $n$ progressões geométricas, uma por <b>modo</b>, cada uma com sua razão. A de maior razão é a do maior autovalor, $\lambda_1=\lambda_{\max}$, e com o tempo ela domina as outras.</p>
+
+      <aside class="box">
+        <p class="tag">O limiar epidêmico numa rede fixa</p>
+        <p>$$r=1-\mu+\beta\,\lambda_{\max},\qquad R_0=\frac{\beta}{\mu}\,\lambda_{\max},\qquad \text{a epidemia se instala}\iff\frac{\beta}{\mu}&gt;\frac{1}{\lambda_{\max}(A)}.$$
+        E, como sempre, $r-1=\mu(R_0-1)$.</p>
+      </aside>
+      <p>Há mais uma informação escondida aí. Pelo <b>teorema de Perron–Frobenius</b>, numa rede conexa o autovetor de $\lambda_{\max}$ pode ser escolhido com todas as entradas positivas, e é o único autovetor com essa propriedade. É por isso que ele pode ser o formato de uma epidemia: no começo, $p_{i,t}$ fica proporcional a $v_{1,i}$. As maiores componentes do autovetor mostram quem pega primeiro e quem sustenta a doença.</p>
+
+      <h2 id="casos" data-toc="Casos já vistos">O que já vimos é caso particular</h2>
+      <ul>
+        <li><b>Rede regular de grau $k$.</b> O vetor de uns é autovetor de $A$: cada linha soma $k$. E nenhum autovalor passa de $k$ (exercício 2). Então $\lambda_{\max}=k$, o limiar é $\beta/\mu&gt;1/k$, e o perfil é uniforme: é o <a href="sis.html">SIS clássico</a>.</li>
+        <li><b>A rede média do modelo de configuração.</b> Numa rede sorteada com graus $k_1,\dots,k_n$, a chance de haver um link entre $i$ e $j$ é aproximadamente $k_ik_j/(n\langle k\rangle)$: cada uma das $k_i$ pontas de $i$ cai numa das $k_j$ de $j$, entre $n\langle k\rangle$ pontas ao todo. Troque $A$ por essa média, $\bar A_{ij}=k_ik_j/(n\langle k\rangle)$. Então $\bar A\,\mathbf k=\frac{\sum_jk_j^2}{n\langle k\rangle}\,\mathbf k=\frac{\langle k^2\rangle}{\langle k\rangle}\,\mathbf k$: o vetor dos graus é autovetor, com autovalor $\langle k^2\rangle/\langle k\rangle$, e é o único não nulo. O limiar é $\beta/\mu&gt;\langle k\rangle/\langle k^2\rangle$, e o perfil é $p_i\propto k_i$. É exatamente <a href="limiar-pk.html">O limiar epidêmico por classes de grau</a>, de Pastor-Satorras e Vespignani; o $\Theta$ de lá é a projeção de $\mathbf p$ no vetor dos graus.</li>
+      </ul>
+      <p>Ou seja: o método das classes de grau acerta quando a rede se parece com a sua média. A pergunta passa a ser quando o maior autovalor da rede de verdade é diferente do da rede média.</p>
+
+      <h2 id="hubs" data-toc="Hubs como reservatórios">Hubs como reservatórios</h2>
+      <p>O maior autovalor é o máximo do <b>quociente de Rayleigh</b>, o mesmo das páginas sobre o vetor de Fiedler e a frustração:
+      $$\lambda_{\max}=\max_{\mathbf x\ne0}\frac{\mathbf x^{\mathsf T}A\,\mathbf x}{\mathbf x^{\mathsf T}\mathbf x}=\max_{\mathbf x\ne0}\frac{2\sum_{\text{links }ij}x_ix_j}{\sum_ix_i^2}.$$
+      Qualquer vetor que a gente escolher dá uma cota por baixo. Duas escolhas simples:</p>
+      <ul>
+        <li>$\mathbf x=$ vetor de uns: $\lambda_{\max}\ge\dfrac{\sum_ik_i}{n}=\langle k\rangle$. O SIS clássico nunca subestima o limiar.</li>
+        <li>$\mathbf x$ concentrado num hub de grau $k_{\max}$ e nos seus vizinhos, com $x=\sqrt{k_{\max}}$ no hub e $x=1$ em cada vizinho: $\lambda_{\max}\ge\sqrt{k_{\max}}$ (exercício 1).</li>
+      </ul>
+      <p>A segunda cota tem uma leitura epidemiológica. Um hub e seus vizinhos formam uma <b>estrela</b>, e numa estrela a doença pode se manter sozinha: o hub infecta alguns vizinhos, se cura, e os vizinhos o reinfectam, num vaivém que não precisa do resto da rede. É a reinfecção que quebrava o processo de ramificação na página <a href="ramificacao.html">O limiar epidêmico por ramificação</a>. Para redes grandes sorteadas com graus dados, Chung, Lu e Vu (2003) mostraram que vale aproximadamente
+      $$\lambda_{\max}\approx\max\Big(\frac{\langle k^2\rangle}{\langle k\rangle},\ \sqrt{k_{\max}}\Big).$$
+      O primeiro termo é a rede média; o segundo, o maior reservatório.</p>
+      <p>Isso muda a conclusão justamente onde o método das classes de grau prevê um limiar. Com uma lei de potência $p_k\propto k^{-\gamma}$ e $\gamma&gt;3$, $\langle k^2\rangle/\langle k\rangle$ fica limitado quando a rede cresce, mas o maior grau não: $k_{\max}\approx k_{\min}\,n^{1/(\gamma-1)}$. Em redes sorteadas com $\gamma=3{,}5$ e $k\ge3$:</p>
+      <table class="tabela">
+        <thead><tr><th>$n$</th><th>$\langle k^2\rangle/\langle k\rangle$</th><th>$\sqrt{k_{\max}}$</th><th>$\lambda_{\max}$</th><th>limiar $1/\lambda_{\max}$</th></tr></thead>
+        <tbody>
+          <tr><td>$10^3$</td><td>5,5</td><td>5,2</td><td>6,3</td><td>0,16</td></tr>
+          <tr><td>$10^4$</td><td>6,2</td><td>10,5</td><td>10,9</td><td>0,092</td></tr>
+          <tr><td>$10^5$</td><td>7,0</td><td>13,3</td><td>13,6</td><td>0,074</td></tr>
+        </tbody>
+      </table>
+      <p>As classes de grau preveem um limiar que quase não se mexe, perto de $1/7$. Na rede fixa, $\lambda_{\max}$ acompanha $\sqrt{k_{\max}}$ e continua crescendo: <b>o limiar do SIS vai a zero mesmo com $\gamma&gt;3$</b>. Foi o que observaram Castellano e Pastor-Satorras (2010). Logo acima desse limiar, a epidemia fica <b>localizada</b>: o autovetor se concentra em poucos vértices, os hubs e seus vizinhos, e a fração infectada da rede é minúscula. A demo mostra isso.</p>
+
+      <aside class="box atencao">
+        <p class="tag">O que é aproximação e o que é teorema</p>
+        <p>A equação por vértice trata os vizinhos como independentes, e é uma aproximação. Mas a parte que mais importa vale sem ela: Ganesh, Massoulié e Towsley (2005) provaram, para o SIS de verdade numa rede fixa, que <b>se $\beta/\mu&lt;1/\lambda_{\max}$, a epidemia morre depressa</b>, num tempo que cresce só como o logaritmo do tamanho da rede. Abaixo de $1/\lambda_{\max}$ a rede está protegida; acima, a doença pode se instalar, às vezes só num cantinho dela.</p>
+      </aside>
+
+      <h2 id="demo" data-toc="Experimente">Experimente</h2>
+      <p>A demo sorteia uma rede do modelo de configuração com graus em lei de potência ($k\ge3$, maior grau $3\,n^{1/(\gamma-1)}$) e calcula $\lambda_{\max}$ por iteração de potências. À esquerda, cada ponto é um vértice: a componente $v_i$ do autovetor de $\lambda_{\max}$ contra o grau $k_i$, em escalas log; a linha azul tracejada é a previsão da rede média, $v_i\propto k_i$. À direita, a fração infectada no equilíbrio, iterando a equação por vértice ($\mu=0{,}2$, $400$ passos), contra $\beta/\mu$; em azul tracejado, a mesma conta pelas classes de grau. As linhas verticais marcam $1/\lambda_{\max}$ (vermelho) e $\langle k\rangle/\langle k^2\rangle$ (azul).</p>
+
+      <div class="demo" id="demo-av">
+        <div class="controls">
+          <label>γ <input type="range" id="a-gama" min="2.2" max="4" step="0.05" value="3.5" aria-label="Expoente da lei de potência"> <output id="a-gamav">3,50</output></label>
+          <label>n <select id="a-n" aria-label="Número de vértices">
+            <option value="1000">1000</option>
+            <option value="3000" selected>3000</option>
+            <option value="10000">10000</option>
+          </select></label>
+          <button id="a-nova" type="button">Sortear de novo</button>
+        </div>
+        <div class="panels two">
+          <canvas id="a-vet-canvas" role="img" aria-label="Componentes do autovetor do maior autovalor contra o grau de cada vértice"></canvas>
+          <canvas id="a-prev-canvas" role="img" aria-label="Fração infectada no equilíbrio contra beta sobre mu, na rede fixa e pelas classes de grau"></canvas>
+        </div>
+        <div class="readout" id="a-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--choque)"></i>rede fixa (por vértice)</span>
+          <span><i style="border-color:var(--carac);border-top-style:dashed"></i>classes de grau / rede média</span>
+        </div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li><b>$\gamma=3{,}5$.</b> À esquerda, quase todos os pontos ficam muito abaixo da linha $v\propto k$, e uns poucos (o maior hub e seus vizinhos) ficam muito acima: o autovetor está concentrado em uma ou duas dezenas de vértices. À direita, a curva vermelha sai do zero bem antes da azul, mas sobe devagar: entre os dois limiares, a doença vive só em torno dos hubs.</li>
+        <li><b>Aumente $n$.</b> $\langle k^2\rangle/\langle k\rangle$ quase não muda, mas o maior grau cresce, e com ele $\lambda_{\max}$: o limiar vermelho se afasta para a esquerda.</li>
+        <li><b>$\gamma$ perto de $2{,}5$.</b> Agora $\langle k^2\rangle/\langle k\rangle$ é grande, os pontos acompanham melhor a linha $v\propto k$ e os dois limiares ficam próximos: a rede se parece com a sua média. Repare que $\lambda_{\max}$ fica um pouco abaixo de $\langle k^2\rangle/\langle k\rangle$: numa rede sem links repetidos, os hubs não conseguem se ligar entre si tantas vezes quanto a rede média supõe.</li>
+        <li><b>Perto do limiar,</b> a convergência para o equilíbrio é lenta, e com $400$ passos a curva vermelha ainda mostra valores muito pequenos um pouco abaixo de $1/\lambda_{\max}$. Abaixo do limiar, com tempo suficiente, eles vão a zero.</li>
+      </ol>
+
+      <h2 id="sir" data-toc="E o SIR?">E o SIR? A matriz sem retorno</h2>
+      <p>No SIR não existe o vaivém: quem se curou não pega de novo, e a doença não volta pelo link por onde chegou. A matriz que conta os caminhos certos é a <b>matriz sem retorno</b> (<em>non-backtracking</em>, também chamada matriz de Hashimoto). Ela é indexada pelos links com sentido, $i\to j$, e liga $i\to j$ a $j\to l$ sempre que $l\ne i$: de cada link, segue-se para qualquer link seguinte, menos o de volta. Karrer, Newman e Zdeborová (2014) mostraram que o limiar da percolação, e portanto do SIR com transmissibilidade $T$, é
+      $$T&gt;\frac{1}{\lambda_{\max}(B)},$$
+      onde $B$ é a matriz sem retorno. Para uma rede do modelo de configuração, $\lambda_{\max}(B)\approx\langle k^2\rangle/\langle k\rangle-1$, e voltamos a <a href="molloy-reed.html">Molloy–Reed</a>. O "$-1$" que separava o SIR do SIS na página <a href="ramificacao.html">O limiar epidêmico por ramificação</a> é exatamente a proibição de voltar pelo mesmo link. Como $B$ não deixa a doença ir e voltar, a estrela de um hub não é reservatório no SIR: lá, só $\langle k^2\rangle$ importa.</p>
+      <table class="tabela">
+        <thead><tr><th></th><th>SIS</th><th>SIR</th></tr></thead>
+        <tbody>
+          <tr><td>rede média (graus $p_k$)</td><td>$\dfrac\beta\mu&gt;\dfrac{\langle k\rangle}{\langle k^2\rangle}$ (classes de grau)</td><td>$T&gt;\dfrac{\langle k\rangle}{\langle k^2\rangle-\langle k\rangle}$ (Molloy–Reed)</td></tr>
+          <tr><td>rede fixa</td><td>$\dfrac\beta\mu&gt;\dfrac1{\lambda_{\max}(A)}$</td><td>$T&gt;\dfrac1{\lambda_{\max}(B)}$</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>A célula sorteia redes com $\gamma=3{,}5$ e compara $\lambda_{\max}$ com $\langle k^2\rangle/\langle k\rangle$ e $\sqrt{k_{\max}}$, mede em quantos vértices o autovetor se concentra e itera a equação por vértice para valores de $\beta/\mu$ em torno de $1/\lambda_{\max}$. Na versão para completar, falta o maior autovalor.</p>
+
+      <div class="pycell" data-title="O maior autovalor e o limiar"
+           data-starter="../py/autovalor_lacunas.py"
+           data-solution="../py/autovalor_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. A estrela</p>
+        <p>Uma estrela tem um centro ligado a $k$ folhas. (a) Mostre que o vetor com $\sqrt k$ no centro e $1$ em cada folha é autovetor de $A$, com autovalor $\sqrt k$. (b) Qual o limiar do SIS na estrela? (c) Calcule $\langle k^2\rangle/\langle k\rangle$ da estrela e compare os dois limiares para $k=100$. Por que as classes de grau erram tanto aqui?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) No centro, $(A\mathbf x)_{\text{centro}}=\sum_{\text{folhas}}1=k=\sqrt k\cdot\sqrt k$. Em cada folha, $(A\mathbf x)_{\text{folha}}=x_{\text{centro}}=\sqrt k=\sqrt k\cdot1$. Logo $A\mathbf x=\sqrt k\,\mathbf x$. Como o vetor é positivo, pelo teorema de Perron–Frobenius $\sqrt k$ é o maior autovalor. (b) $\beta/\mu&gt;1/\sqrt k$. (c) $\sum k_i=2k$ e $\sum k_i^2=k^2+k$, então $\langle k^2\rangle/\langle k\rangle=(k+1)/2$. Com $k=100$: $1/\sqrt k=0{,}1$ contra $2/101\approx0{,}02$. As classes de grau supõem que os contatos do centro são sorteados na população toda, e que um contato de grau alto leva a outros de grau alto; na estrela, os $100$ contatos do centro são folhas, que só conhecem o centro. A rede média é muito mais conectada que a estrela.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Entre $\langle k\rangle$ e $k_{\max}$</p>
+        <p>(a) Seja $\mathbf x$ um autovetor de $A$ com autovalor $\lambda$, e $i$ o vértice onde $|x_i|$ é máximo. Olhando a linha $i$ de $A\mathbf x=\lambda\mathbf x$, mostre que $|\lambda|\le k_i\le k_{\max}$. (b) Conclua que $\max\big(\langle k\rangle,\sqrt{k_{\max}}\big)\le\lambda_{\max}\le k_{\max}$. (c) Numa rede regular, quanto vale $\lambda_{\max}$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $|\lambda|\,|x_i|=\big|\sum_jA_{ij}x_j\big|\le\sum_jA_{ij}|x_j|\le k_i\,|x_i|$, porque cada $|x_j|\le|x_i|$ e há $k_i$ vizinhos. Dividindo por $|x_i|&gt;0$: $|\lambda|\le k_i\le k_{\max}$. (b) A cota de cima é (a); as de baixo são as duas escolhas de $\mathbf x$ no quociente de Rayleigh (vetor de uns e estrela do hub). (c) $\langle k\rangle=k_{\max}=k$, então $\lambda_{\max}=k$: o limiar do SIS clássico. Em geral o limiar fica entre $1/k_{\max}$ e $\min\big(1/\langle k\rangle,1/\sqrt{k_{\max}}\big)$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Uma epidemia num canto</p>
+        <p>Uma rede é formada por duas partes sem nenhum link entre elas: uma rede grande de Erdős–Rényi com $n=10^5$ vértices e grau médio $3$, e uma única estrela com $400$ folhas. (a) Qual o $\lambda_{\max}$ da rede toda? (Use $\lambda_{\max}\approx\langle k^2\rangle/\langle k\rangle$ para a parte de Erdős–Rényi.) (b) Com $\beta/\mu=0{,}1$, a doença se instala? Onde? Que fração da rede fica infectada, no máximo? (c) O que diria o método das classes de grau?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Os autovalores de uma rede em pedaços separados são os autovalores dos pedaços. Erdős–Rényi: $\langle k^2\rangle/\langle k\rangle=c+1=4$. Estrela: $\sqrt{400}=20$. Então $\lambda_{\max}=20$, e o limiar é $1/20=0{,}05$. (b) $0{,}1&gt;0{,}05$: a doença se mantém, mas só na estrela (na parte de Erdős–Rényi precisaria de $\beta/\mu&gt;1/4$). No máximo $401$ vértices de $100\,401$, menos de $0{,}4\%$. É uma epidemia localizada: o autovetor de $\lambda_{\max}$ vive inteiro na estrela. (c) A distribuição de graus é quase toda a de Erdős–Rényi, com um vértice de grau $400$. Na rede toda, $\sum k_i^2\approx12\cdot10^5+(400^2+400)$ e $\sum k_i\approx3\cdot10^5+800$, então $\langle k^2\rangle/\langle k\rangle\approx4{,}5$ e o limiar seria perto de $0{,}22$: as classes de grau não veem o reservatório.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. A matriz sem retorno numa rede regular</p>
+        <p>Numa rede regular de grau $k$, quantos links com sentido seguem cada link $i\to j$ na matriz sem retorno? Conclua que $\lambda_{\max}(B)=k-1$ e escreva o limiar do SIR. Compare com o critério de Molloy–Reed para a rede em que cada link é mantido com probabilidade $T$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>De $i\to j$ pode-se seguir para $j\to l$ com $l$ qualquer vizinho de $j$ menos $i$: são $k-1$. Cada linha de $B$ soma $k-1$, e o vetor de uns é autovetor com autovalor $k-1$; como ele é positivo, é o maior. Limiar do SIR: $T&gt;1/(k-1)$. Molloy–Reed com links mantidos com probabilidade $T$: cada vértice alcançado tem, em média, $T(k-1)$ saídas novas, e o pedaço gigante existe se $T(k-1)&gt;1$. É a mesma condição.</p>
+        </div>
+      </details>
+
+      <h2 id="refs" data-toc="Referências">Referências</h2>
+      <p>Quem levantou essas bolas primeiro:</p>
+      <ul class="refs">
+        <li>R. Pastor-Satorras e A. Vespignani, <em>Epidemic spreading in scale-free networks</em>, Physical Review Letters 86, 3200 (2001). O método das classes de grau e o limiar que some em redes livres de escala.</li>
+        <li>Y. Wang, D. Chakrabarti, C. Wang e C. Faloutsos, <em>Epidemic spreading in real networks: an eigenvalue viewpoint</em>, 22nd International Symposium on Reliable Distributed Systems (2003). A equação por vértice em tempo discreto e o limiar $1/\lambda_{\max}(A)$.</li>
+        <li>D. Chakrabarti, Y. Wang, C. Wang, J. Leskovec e C. Faloutsos, <em>Epidemic thresholds in real networks</em>, ACM Transactions on Information and System Security 10(4), artigo 1 (2008). A versão completa do trabalho anterior.</li>
+        <li>F. Chung, L. Lu e V. Vu, <em>Spectra of random graphs with given expected degrees</em>, Proceedings of the National Academy of Sciences 100, 6313 (2003). O maior autovalor de redes sorteadas com graus dados: $\max\big(\langle k^2\rangle/\langle k\rangle,\sqrt{k_{\max}}\big)$, aproximadamente.</li>
+        <li>A. Ganesh, L. Massoulié e D. Towsley, <em>The effect of network topology on the spread of epidemics</em>, IEEE INFOCOM (2005). A prova de que, abaixo de $1/\lambda_{\max}(A)$, o SIS morre depressa.</li>
+        <li>C. Castellano e R. Pastor-Satorras, <em>Thresholds for epidemic spreading in networks</em>, Physical Review Letters 105, 218701 (2010). O limiar do SIS vai a zero em redes livres de escala mesmo com $\gamma&gt;3$, por causa dos hubs.</li>
+        <li>B. Karrer, M. E. J. Newman e L. Zdeborová, <em>Percolation on sparse networks</em>, Physical Review Letters 113, 208702 (2014). O limiar da percolação, e do SIR, pela matriz sem retorno.</li>
+      </ul>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="limiar-pk.html">O limiar epidêmico por classes de grau</a></li>
+            <li><a href="ramificacao.html">O limiar epidêmico por ramificação</a>, para a seção sobre o SIR</li>
+            <li><a href="difusao.html">Difusão em redes</a>, para a decomposição em modos</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li>Imunizar quem? <span class="soon">(em breve)</span></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/epi-core.js?v=52364933"></script>
+  <script src="../assets/autovalor-demo.js?v=ded70f05"></script>
+  <script src="../assets/pyrunner.js?v=54fb0c98"></script>
+</body>
+</html>

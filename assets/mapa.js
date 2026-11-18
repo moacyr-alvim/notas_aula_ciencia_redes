@@ -72,8 +72,8 @@
       desc: "O método de Pastor-Satorras e Vespignani: o SIS separado por classe de grau, R₀ = β⟨k²⟩/(μ⟨k⟩), os hubs infectados primeiro e o limiar que some nas redes livres de escala. Demo e Python." },
     { id: "ramif", lane: "epi", col: 2, row: 1, label: "O limiar por\nramificação", href: "paginas/ramificacao.html", trails: ["epidemias"],
       desc: "O mesmo limiar seguindo a cadeia de contágios, à la Molloy–Reed, e a chance de um único caso virar surto. Molloy–Reed, SIS e SIR lado a lado: o SIR é Molloy–Reed nos links que transmitem. Python." },
-    { id: "limiar", lane: "epi", col: 3, row: 1, label: "O limiar e o maior\nautovalor de A", href: null, trails: ["epidemias"],
-      desc: "Numa rede fixa qualquer, o começo da epidemia é uma progressão geométrica com a matriz de adjacência: o limiar é β·λ_max(A) = μ." },
+    { id: "limiar", lane: "epi", col: 3, row: 1, label: "O limiar e o maior\nautovalor de A", href: "paginas/autovalor.html", trails: ["epidemias"],
+      desc: "Numa rede fixa, o começo do SIS é uma progressão geométrica de vetores, e o limiar é β/μ > 1/λ_max(A). As classes de grau como caso particular, os hubs como reservatórios e, no SIR, a matriz sem retorno. Demo e Python." },
     { id: "vacina", lane: "epi", col: 3, row: 0, label: "Imunizar\nquem?", href: null, trails: ["epidemias"],
       desc: "Vacinar ao acaso, vacinar os hubs, ou vacinar os amigos de pessoas sorteadas: o que cada estratégia faz com R₀." }
   );

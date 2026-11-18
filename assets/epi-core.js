@@ -125,7 +125,11 @@
   function configuracao(n, p, R) {
     var acum = [], s = 0, k, i; for (k = 0; k < p.length; k++) { s += p[k]; acum.push(s); }
     var graus = [];
-    for (i = 0; i < n; i++) { var u = R() * s; k = 0; while (k < acum.length - 1 && acum[k] < u) k++; graus.push(k); }
+    for (i = 0; i < n; i++) {   /* o primeiro k com acum[k] ≥ u (busca binária) */
+      var u = R() * s, lo = 0, hi = acum.length - 1;
+      while (lo < hi) { var md = (lo + hi) >> 1; if (acum[md] < u) lo = md + 1; else hi = md; }
+      graus.push(lo);
+    }
     var pontas = []; graus.forEach(function (g, v) { for (var c = 0; c < g; c++) pontas.push(v); });
     if (pontas.length % 2) { pontas.pop(); }
     for (i = pontas.length - 1; i > 0; i--) { var j = Math.floor(R() * (i + 1)), x = pontas[i]; pontas[i] = pontas[j]; pontas[j] = x; }
@@ -146,6 +150,38 @@
     return m / n;
   }
 
+  /* ---------- SIS vértice a vértice numa rede fixa ----------
+   * listas de vizinhos em formato compacto: os vizinhos de v são viz[ini[v] .. ini[v+1]-1]          */
+  function listas(n, arestas) {
+    var g = new Int32Array(n), i;
+    arestas.forEach(function (e) { g[e[0]]++; g[e[1]]++; });
+    var ini = new Int32Array(n + 1); for (i = 0; i < n; i++) ini[i + 1] = ini[i] + g[i];
+    var pos = ini.slice(0, n), viz = new Int32Array(ini[n]);
+    arestas.forEach(function (e) { viz[pos[e[0]]++] = e[1]; viz[pos[e[1]]++] = e[0]; });
+    return { n: n, ini: ini, viz: viz, graus: g };
+  }
+  /* maior autovalor de A e seu autovetor (norma 1, entradas ≥ 0) por iteração de potências em A + I */
+  function autovalorMax(L, iter) {
+    var n = L.n, x = new Float64Array(n), y = new Float64Array(n), i, j, it, lam = 0;
+    for (i = 0; i < n; i++) x[i] = 1 + L.graus[i];
+    for (it = 0; it < (iter || 600); it++) {
+      var nn = 0;
+      for (i = 0; i < n; i++) { var s = x[i]; for (j = L.ini[i]; j < L.ini[i + 1]; j++) s += x[L.viz[j]]; y[i] = s; nn += s * s; }
+      nn = Math.sqrt(nn); for (i = 0; i < n; i++) x[i] = y[i] / nn;
+    }
+    for (i = 0; i < n; i++) { var t = 0; for (j = L.ini[i]; j < L.ini[i + 1]; j++) t += x[L.viz[j]]; lam += x[i] * t; }
+    return { lambda: lam, v: x };
+  }
+  /* p_i' = (1 − μ) p_i + (1 − p_i)(1 − Π_j (1 − β p_j)), j vizinho de i; devolve p depois de T passos */
+  function sisVertices(L, beta, mu, p0, T) {
+    var n = L.n, p = Float64Array.from(p0), q = new Float64Array(n), i, j, t;
+    for (t = 0; t < T; t++) {
+      for (i = 0; i < n; i++) { var esc = 1; for (j = L.ini[i]; j < L.ini[i + 1]; j++) esc *= 1 - beta * p[L.viz[j]]; q[i] = (1 - mu) * p[i] + (1 - p[i]) * (1 - esc); }
+      var z = p; p = q; q = z;
+    }
+    return p;
+  }
+
   /* ---------- SIS por classe de grau (campo médio heterogêneo) ----------
    * i[k] = fração infectada entre os de grau k; Θ = Σ k p_k i_k / ⟨k⟩ (chance de a ponta de um link estar infectada)
    * i_k' = (1 − μ) i_k + (1 − i_k)(1 − (1 − βΘ)^k)                                                    */
@@ -163,6 +199,7 @@
 
   return { poisson: poisson, regularDist: regularDist, doisGraus: doisGraus, leiPotencia: leiPotencia, momento: momento,
            pontaDeLink: pontaDeLink, molloyReed: molloyReed, configuracao: configuracao, maiorComponente: maiorComponente,
+           listas: listas, autovalorMax: autovalorMax, sisVertices: sisVertices,
            theta: theta, passoSISgrau: passoSISgrau, serieSISgrau: serieSISgrau, media: media,
            passoSIR: passoSIR, serieSIR: serieSIR,
            rng: rng, passoClassico: passoClassico, passoExato: passoExato, serie: serie,
