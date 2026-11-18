@@ -202,7 +202,7 @@ com que texto, e confira também o rótulo no mapa (`assets/mapa.js`) e a lista 
 | Molloy–Reed e o paradoxo da amizade (`paginas/molloy-reed.html`) | O limiar por ramificação (`paginas/ramificacao.html`) |
 | O modelo SIR (`paginas/sir.html`) | O limiar por ramificação (`paginas/ramificacao.html`) |
 | O limiar por ramificação (`paginas/ramificacao.html`) | O limiar e o maior autovalor de A (em breve) |
-| O limiar por classes de grau (`paginas/limiar-pk.html`) | Imunizar quem? (em breve) |
+| O limiar por ramificação (`paginas/ramificacao.html`) | Imunizar quem? (em breve) |
 | Redes com sinais e equilíbrio (`paginas/sinais.html`) | Laplaciano com sinais (`paginas/lapsinal.html`) |
 | Laplaciano, componentes e gargalos (`paginas/componentes.html`) | Laplaciano com sinais (`paginas/lapsinal.html`) |
 | Laplaciano com sinais (`paginas/lapsinal.html`) | Frustração espectral (`paginas/frustracao.html`) |
