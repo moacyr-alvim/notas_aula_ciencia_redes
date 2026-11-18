@@ -42,7 +42,7 @@
       <ul>
         <li><b>Indivíduo:</b> um <em>episódio de infecção</em>. Se a mesma pessoa se infecta duas vezes, são dois indivíduos.</li>
         <li><b>Grau:</b> quem se infectou pegou a doença de um contato, isto é, foi alcançado pela ponta de um link; seu grau $k$ segue $q_k=k\,p_k/\langle k\rangle$, como em Molloy–Reed.</li>
-        <li><b>Duração:</b> a cada passo, o infectado se cura com probabilidade $\mu$. A duração $D$ da infecção tem $P(D=d)=\mu(1-\mu)^{d-1}$, com média $1/\mu$, como no <a href="sis.html">SIS clássico</a>.</li>
+        <li><b>Duração:</b> a cada passo, o infectado se cura com probabilidade $\mu$, independentemente dos passos anteriores. A duração $D$ da infecção é, então, o número de tentativas até o primeiro sucesso (a cura): uma <b>distribuição geométrica</b> de parâmetro $\mu$, com $P(D=d)=\mu(1-\mu)^{d-1}$ para $d=1,2,\dots$ e média $1/\mu$, como no <a href="sis.html">SIS clássico</a>.</li>
         <li><b>Filhos:</b> em cada passo, o infectado tem $k$ contatos, e cada um vira um contágio com probabilidade $\beta$. No começo quase todos são suscetíveis, e os contatos são sorteados de novo a cada passo, como nas equações por classe de grau (é a mesma hipótese). Em $D$ passos são $kD$ tentativas: o número de filhos é $N\sim\text{Binomial}(kD,\beta)$, com média $\beta\,k/\mu$.</li>
         <li><b>Grau dos filhos:</b> cada filho também foi alcançado por um contato; seu grau segue $q_k$ de novo. O processo se repete.</li>
       </ul>
